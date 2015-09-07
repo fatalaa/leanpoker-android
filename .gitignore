@@ -119,3 +119,4 @@ gradle-app.setting
 !gradle-wrapper.jar
 
 /captures
+app/fabric.properties
