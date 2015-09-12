@@ -1,20 +1,26 @@
 package org.leanpoker.data;
 
+import java.util.List;
+
 /**
  * Created by tbalogh on 06/09/15.
  */
 public class Event {
-	private final String mName;
-	private final Date mDate;
+	private final long        mEventId;
+	private final String      mName;
+	private final Date        mDate;
 	private final Facilitator mFacilitator;
-	private final Address mAddress;
+	private final Address     mAddress;
+	private final List<Team>  mTeams;
 
-	public Event(final String name, final Date date, final Facilitator facilitator,
-	             final Address address) {
+	public Event(final long eventId, final String name, final Date date,
+	             final Facilitator facilitator, final Address address, final List<Team> teams) {
+		mEventId = eventId;
 		mName = name;
 		mDate = date;
 		mFacilitator = facilitator;
 		mAddress = address;
+		mTeams = teams;
 	}
 
 	public String getName() {
