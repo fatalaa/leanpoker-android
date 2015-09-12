@@ -1,5 +1,7 @@
 package org.leanpoker.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.leanpoker.data.Event;
@@ -7,6 +9,7 @@ import org.leanpoker.data.Event;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
@@ -24,10 +27,13 @@ public class NetworkManager implements LeanPokerApi{
     private final LeanPokerService mLeanPokerService;
 
     private NetworkManager() {
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl(LEANPOKER_BASE_URL)
-                .client(new OkHttpClient())
-                .build();
+        final Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(LEANPOKER_BASE_URL);
+        builder.client(new OkHttpClient());
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        builder.addConverterFactory(GsonConverterFactory.create(gson));
+
+        mRetrofit = builder.build();
 
         mLeanPokerService = mRetrofit.create(LeanPokerService.class);
     }
