@@ -9,36 +9,52 @@ import org.leanpoker.data.model.Event;
 import org.leanpoker.data.response.EventListResponseModel;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Observer;
+import java.util.concurrent.Executor;
 
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
+import rx.observers.Observers;
 
 /**
  * Created by tmolnar on 12/09/15.
  */
-public class NetworkManager implements LeanPokerApi {
+public class NetworkManager implements LeanPokerApi, UploadCareApi {
 
-	private static final String LEANPOKER_BASE_URL = "http://live.leanpoker.org";
+	private static final String LEANPOKER_BASE_URL  = "http://live.leanpoker.org";
+	private static final String UPLOADCARE_BASE_URL = "https://upload.uploadcare.com";
 
 	private static NetworkManager mInstance = new NetworkManager();
 
-	private final Retrofit         mRetrofit;
-	private final LeanPokerService mLeanPokerService;
+	private final LeanPokerService  mLeanPokerService;
+	private final UploadCareService mUploadCareService;
 
 	private NetworkManager() {
-		final Retrofit.Builder builder = new Retrofit.Builder();
-		builder.baseUrl(LEANPOKER_BASE_URL);
-		builder.client(new OkHttpClient());
+
 		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		builder.addConverterFactory(GsonConverterFactory.create(gson));
+		final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
 
-		mRetrofit = builder.build();
+		final Retrofit.Builder leanPokerBuilder = new Retrofit.Builder();
+		leanPokerBuilder.baseUrl(LEANPOKER_BASE_URL);
+		leanPokerBuilder.client(new OkHttpClient());
+		leanPokerBuilder.addConverterFactory(gsonConverterFactory);
 
-		mLeanPokerService = mRetrofit.create(LeanPokerService.class);
+		mLeanPokerService = leanPokerBuilder.build().create(LeanPokerService.class);
+
+		final Retrofit.Builder uploadCareBuilder = new Retrofit.Builder();
+		uploadCareBuilder.baseUrl(UPLOADCARE_BASE_URL);
+		uploadCareBuilder.client(new OkHttpClient());
+		uploadCareBuilder.addConverterFactory(gsonConverterFactory);
+		uploadCareBuilder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+
+		mUploadCareService = uploadCareBuilder.build().create(UploadCareService.class);
 	}
 
 	public static NetworkManager getInstance() {
