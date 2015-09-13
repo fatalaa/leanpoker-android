@@ -11,7 +11,7 @@ import android.os.Bundle;
  * Created by tmolnar on 13/09/15.
  */
 public class GithubAuthenticator extends AbstractAccountAuthenticator {
-    
+
     public GithubAuthenticator(final Context context) {
         super(context);
     }
