@@ -1,5 +1,9 @@
 package org.leanpoker.data;
 
+import org.leanpoker.data.model.Address;
+import org.leanpoker.data.model.Date;
+import org.leanpoker.data.model.Facilitator;
+
 import java.util.List;
 
 /**

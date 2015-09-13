@@ -1,6 +1,6 @@
 package org.leanpoker.leanpokerandroid.modelmapper;
 
-import org.leanpoker.data.Event;
+import org.leanpoker.data.model.Event;
 import org.leanpoker.leanpokerandroid.model.EventModel;
 
 import java.util.ArrayList;

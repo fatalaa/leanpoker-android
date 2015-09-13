@@ -1,4 +1,4 @@
-package org.leanpoker.data;
+package org.leanpoker.data.model;
 
 /**
  * Created by tbalogh on 06/09/15.

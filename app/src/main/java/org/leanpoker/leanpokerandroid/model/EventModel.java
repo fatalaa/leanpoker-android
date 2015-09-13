@@ -1,10 +1,10 @@
 package org.leanpoker.leanpokerandroid.model;
 
 
-import org.leanpoker.data.Address;
-import org.leanpoker.data.Date;
-import org.leanpoker.data.Event;
-import org.leanpoker.data.Facilitator;
+import org.leanpoker.data.model.Address;
+import org.leanpoker.data.model.Date;
+import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.Facilitator;
 
 /**
  * Created by tbalogh on 06/09/15.
