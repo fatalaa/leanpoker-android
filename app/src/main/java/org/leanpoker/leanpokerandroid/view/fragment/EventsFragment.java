@@ -91,7 +91,7 @@ public class EventsFragment extends BaseFragment implements EventListView {
 	}
 
 	private void loadEvents() {
-		mEventListPresenter.loadEvents();
+		mEventListPresenter.getEventList();
 	}
 
 	private void setupUI() {

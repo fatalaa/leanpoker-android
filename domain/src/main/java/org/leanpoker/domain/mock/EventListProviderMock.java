@@ -1,11 +1,11 @@
 package org.leanpoker.domain.mock;
 
-import org.leanpoker.data.Address;
-import org.leanpoker.data.Date;
-import org.leanpoker.data.Event;
-import org.leanpoker.data.Facilitator;
 import org.leanpoker.data.ProgrammingLanguage;
 import org.leanpoker.data.Team;
+import org.leanpoker.data.model.Address;
+import org.leanpoker.data.model.Date;
+import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.Facilitator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public final class EventListProviderMock {
 		final List<Event> events = new ArrayList<>();
 		for (int i = 0; i < eventCount; i++) {
 			final Event event = new Event(getMockId(i), getMockName(i), getMockDate(i), getMockFacilitator(i),
-			                              getMockAddress(i), getMockTeams(i));
+			                              getMockAddress(i));
 			events.add(event);
 		}
 		return events;
@@ -62,8 +62,8 @@ public final class EventListProviderMock {
 		return i;
 	}
 
-	private static long getMockId(final int i) {
-		return i;
+	private static String getMockId(final int i) {
+		return String.valueOf(i);
 	}
 
 	private static String getMockName(final int i) {
