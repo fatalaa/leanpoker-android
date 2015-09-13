@@ -1,8 +1,6 @@
 package org.leanpoker.api;
 
-import org.leanpoker.data.Event;
-
-import java.util.List;
+import org.leanpoker.data.response.EventListResponseModel;
 
 import retrofit.Call;
 import retrofit.http.GET;
@@ -13,6 +11,5 @@ import retrofit.http.GET;
 public interface LeanPokerService {
 
     @GET("/api/tournament")
-    Call<List<Event>> events();
-
+    Call<EventListResponseModel> events();
 }

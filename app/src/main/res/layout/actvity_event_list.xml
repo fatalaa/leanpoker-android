@@ -4,11 +4,18 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/fragment_eventsfragemtn"
-        android:name="org.leanpoker.leanpokerandroid.view.fragment.EventsFragment"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_events_by_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
 
-    </fragment>
+    <!--<fragment-->
+        <!--android:id="@+id/fragment_eventsfragemtn"-->
+        <!--android:name="org.leanpoker.leanpokerandroid.view.fragment.EventsFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+    <!--</fragment>-->
+
 </LinearLayout>
