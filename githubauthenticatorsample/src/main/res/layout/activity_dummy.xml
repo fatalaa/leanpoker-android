@@ -3,8 +3,13 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <TextView
-        android:text="FUCKYEAAAAHHHH"
+
+    <WebView
+        android:id="@+id/dummy_webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"></WebView>
+    <!--<TextView-->
+        <!--android:text="FUCKYEAAAAHHHH"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 </LinearLayout>
