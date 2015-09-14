@@ -4,11 +4,10 @@ import com.squareup.okhttp.RequestBody;
 
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
 
-import retrofit.http.Header;
+import retrofit.Call;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
-import rx.Observable;
 
 /**
  * Created by tmolnar on 13/09/15.
@@ -21,10 +20,7 @@ public interface UploadCareService {
 
     @Multipart
     @POST("/base/")
-    Observable<UploadCareFileUploadResponseModel> upload(
-            @Header("Accept") String acceptContentType,
-            @Header("Date") String date,
-            @Header("Authorization") String authorization,
+    Call<UploadCareFileUploadResponseModel> upload(
             @Part(UPLOADCARE_PUB_KEY) String uploadCarePublicKey,
             @Part(UPLOADCARE_STORE) int store,
             @Part("file") RequestBody file

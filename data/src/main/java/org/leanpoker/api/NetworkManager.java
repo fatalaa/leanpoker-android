@@ -1,19 +1,24 @@
 package org.leanpoker.api;
 
+import android.net.Uri;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.RequestBody;
 
 import org.leanpoker.data.datamapper.EventDataMapper;
+import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
 import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
+import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
+import org.leanpoker.util.MimeTypeHelper;
 
+import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Observer;
-import java.util.concurrent.Executor;
 
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -21,15 +26,15 @@ import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
-import rx.observers.Observers;
 
 /**
  * Created by tmolnar on 12/09/15.
  */
 public class NetworkManager implements LeanPokerApi, UploadCareApi {
 
-	private static final String LEANPOKER_BASE_URL  = "http://live.leanpoker.org";
-	private static final String UPLOADCARE_BASE_URL = "https://upload.uploadcare.com";
+	private static final String LEANPOKER_BASE_URL  	= "http://live.leanpoker.org";
+	private static final String UPLOADCARE_BASE_URL 	= "https://upload.uploadcare.com";
+	private static final String UPLOADCARE_PUBLIC_KEY   = "6d77b63f7f9937dc3383";
 
 	private static NetworkManager mInstance = new NetworkManager();
 
@@ -52,7 +57,6 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi {
 		uploadCareBuilder.baseUrl(UPLOADCARE_BASE_URL);
 		uploadCareBuilder.client(new OkHttpClient());
 		uploadCareBuilder.addConverterFactory(gsonConverterFactory);
-		uploadCareBuilder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
 
 		mUploadCareService = uploadCareBuilder.build().create(UploadCareService.class);
 	}
@@ -84,5 +88,35 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi {
 	@Override
 	public Observable<Event> event(final long id) {
 		throw new RuntimeException("Not implmeneted yet");
+	}
+
+	@Override
+	public Observable<UploadedFile> upload(final File file) {
+		Observable<UploadedFile> fileUploadObservable =
+				Observable.create(new OnSubscribe<UploadedFile>() {
+			@Override
+			public void call(final Subscriber<? super UploadedFile> subscriber) {
+				String uriString = Uri.fromFile(file).toString();
+				String mimeType = MimeTypeHelper.getMimeType(uriString);
+				MediaType mediaType = MediaType.parse(mimeType);
+				try {
+					final UploadCareFileUploadResponseModel fileUploadResponse =
+                            mUploadCareService.upload(
+                                    UPLOADCARE_PUBLIC_KEY,
+                                    UploadCareService.STORE_FILES,
+                                    RequestBody.create(mediaType, file)
+                            )
+                            .execute()
+                            .body();
+
+					UploadedFile uploadedFile = new UploadCareFileUploadDataMapper()
+							.transform(fileUploadResponse);
+					subscriber.onNext(uploadedFile);
+				} catch (IOException e) {
+					subscriber.onError(e);
+				}
+			}
+		});
+		return fileUploadObservable;
 	}
 }
