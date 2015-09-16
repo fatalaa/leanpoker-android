@@ -43,16 +43,16 @@ public class DummyActivity extends Activity {
             String accessCode = query.substring(query.indexOf("code="));
             TokenStorer.setAccessCode(accessCode);
 
-            mWebView = (WebView) findViewById(R.id.dummy_webview);
-            mWebView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-                    if (url.startsWith("leanpoker://")) {
-                        Log.d(TAG, "That's something");
-                    }
-                    return super.shouldOverrideUrlLoading(view, url);
-                }
-            });
+//            mWebView = (WebView) findViewById(R.id.dummy_webview);
+//            mWebView.setWebViewClient(new WebViewClient() {
+//                @Override
+//                public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
+//                    if (url.startsWith("leanpoker://")) {
+//                        Log.d(TAG, "That's something");
+//                    }
+//                    return super.shouldOverrideUrlLoading(view, url);
+//                }
+//            });
 
             String queryString = "client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&" + accessCode;
 //            mWebView.postUrl(OAUTH_ACCESS_TOKEN_URL, queryString.getBytes());

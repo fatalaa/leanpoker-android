@@ -8,11 +8,14 @@ import com.squareup.okhttp.RequestBody;
 
 import org.leanpoker.EventsCache;
 import org.leanpoker.EventsCache.ValidationStrategy;
+import org.leanpoker.data.datamapper.AccessTokenDataMapper;
 import org.leanpoker.data.datamapper.EventDataMapper;
 import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
+import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.model.Event;
 import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
+import org.leanpoker.data.response.GithubAccessTokenResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
 
 import java.io.File;
@@ -28,16 +31,21 @@ import rx.Subscriber;
 /**
  * Created by tmolnar on 12/09/15.
  */
-public class NetworkManager implements LeanPokerApi, UploadCareApi {
+public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
-	private static final String LEANPOKER_BASE_URL    = "http://live.leanpoker.org";
-	private static final String UPLOADCARE_BASE_URL   = "https://upload.uploadcare.com";
-	private static final String UPLOADCARE_PUBLIC_KEY = "6d77b63f7f9937dc3383";
+	private static final String LEANPOKER_BASE_URL    		= "http://live.leanpoker.org";
+	private static final String UPLOADCARE_BASE_URL   		= "https://upload.uploadcare.com";
+	private static final String UPLOADCARE_PUBLIC_KEY 		= "6d77b63f7f9937dc3383";
+	private static final String GITHUB_API_BASE_URL   		= "https://github.com";
+	private static final String GITHUB_API_CLIENT_ID		= "3826c0b84ae756bb1e5f";
+	private static final String GITHUB_API_CLIENT_SECRET 	= "24d2417f9c803bb03fb20190ca439d92d1a5f6d3";
 
-	private static NetworkManager mInstance = new NetworkManager();
+	private static NetworkManager mInstance 		= new NetworkManager();
+	private static final OkHttpClient mHttpClient 	= new OkHttpClient();
 
 	private final LeanPokerService  mLeanPokerService;
 	private final UploadCareService mUploadCareService;
+	private final GithubService		mGithubService;
 
 	private NetworkManager() {
 
@@ -46,17 +54,24 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi {
 
 		final Retrofit.Builder leanPokerBuilder = new Retrofit.Builder();
 		leanPokerBuilder.baseUrl(LEANPOKER_BASE_URL);
-		leanPokerBuilder.client(new OkHttpClient());
+		leanPokerBuilder.client(mHttpClient);
 		leanPokerBuilder.addConverterFactory(gsonConverterFactory);
 
 		mLeanPokerService = leanPokerBuilder.build().create(LeanPokerService.class);
 
 		final Retrofit.Builder uploadCareBuilder = new Retrofit.Builder();
 		uploadCareBuilder.baseUrl(UPLOADCARE_BASE_URL);
-		uploadCareBuilder.client(new OkHttpClient());
+		uploadCareBuilder.client(mHttpClient);
 		uploadCareBuilder.addConverterFactory(gsonConverterFactory);
 
 		mUploadCareService = uploadCareBuilder.build().create(UploadCareService.class);
+
+		final Retrofit.Builder githubBuilder = new Retrofit.Builder();
+		githubBuilder.baseUrl(GITHUB_API_BASE_URL);
+		githubBuilder.client(mHttpClient);
+		githubBuilder.addConverterFactory(gsonConverterFactory);
+
+		mGithubService = githubBuilder.build().create(GithubService.class);
 	}
 
 	public static NetworkManager getInstance() {
@@ -114,5 +129,31 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi {
 					}
 				});
 		return fileUploadObservable;
+	}
+
+	@Override
+	public Observable<AccessToken> getToken(final String accessCode, final String state) {
+		Observable<AccessToken> accessTokenObservable = Observable.create(
+				new OnSubscribe<AccessToken>() {
+					@Override
+					public void call(final Subscriber<? super AccessToken> subscriber) {
+						try {
+							final GithubAccessTokenResponseModel accessTokenResponseModel =
+									mGithubService.getToken(
+											GITHUB_API_CLIENT_ID,
+											GITHUB_API_CLIENT_SECRET,
+											accessCode,
+											state
+									).execute().body();
+							final AccessToken accessToken = new AccessTokenDataMapper()
+									.transform(accessTokenResponseModel);
+							subscriber.onNext(accessToken);
+						} catch (IOException e) {
+							subscriber.onError(e);
+						}
+					}
+				}
+		);
+		return accessTokenObservable;
 	}
 }
