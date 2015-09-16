@@ -53,7 +53,12 @@ public class EventListPresenter implements Presenter {
 		mEventListInteractor.unsubscribe();
 	}
 
+	public void getPastEvents() {
+
+	}
+
 	final class EventListSubscriber extends Subscriber<List<Event>> {
+
 		@Override
 		public void onCompleted() {
 			EventListPresenter.this.hideViewLoading();

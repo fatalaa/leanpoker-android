@@ -23,14 +23,17 @@ import butterknife.ButterKnife;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public class EventsFragment extends BaseFragment implements EventListView {
+public abstract class EventsFragment extends BaseFragment implements EventListView {
 
 	private EventsLayoutManager mEventsLayoutManager;
-	private EventListPresenter mEventListPresenter;
-	private EventsAdapter mEventsAdapter;
+	private EventListPresenter  mEventListPresenter;
+
+	protected EventsAdapter mEventsAdapter;
 
 	@Bind(R.id.recyclerview_events)
 	RecyclerView mEventsRecyclerView;
+
+
 
 	@Nullable
 	@Override
@@ -50,25 +53,26 @@ public class EventsFragment extends BaseFragment implements EventListView {
 		this.loadEvents();
 	}
 
-	@Override public void onResume() {
+	@Override
+	public void onResume() {
 		super.onResume();
 		mEventListPresenter.resume();
 	}
 
-	@Override public void onPause() {
+	@Override
+	public void onPause() {
 		super.onPause();
 		mEventListPresenter.pause();
 	}
 
-	@Override public void onDestroy() {
+	@Override
+	public void onDestroy() {
 		super.onDestroy();
 		mEventListPresenter.destroy();
 	}
 
 	@Override
-	public void renderEventList(final List<EventModel> eventModelList) {
-		mEventsAdapter.setEventModels(eventModelList);
-	}
+	public abstract void renderEventList(final List<EventModel> eventModelList);
 
 	@Override
 	public void showLoading() {
@@ -90,14 +94,13 @@ public class EventsFragment extends BaseFragment implements EventListView {
 		mEventListPresenter.setView(this);
 	}
 
-	private void loadEvents() {
+	protected void loadEvents() {
 		mEventListPresenter.getEventList();
 	}
 
 	private void setupUI() {
 		mEventsLayoutManager = new EventsLayoutManager(getActivity());
 		mEventsRecyclerView.setLayoutManager(mEventsLayoutManager);
-
 
 		mEventsAdapter = new EventsAdapter(getActivity(), new ArrayList<EventModel>());
 		mEventsRecyclerView.setAdapter(mEventsAdapter);

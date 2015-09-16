@@ -22,9 +22,11 @@ public abstract class Interactor {
 		mSubscription = Subscriptions.empty();
 	}
 
-	public void execute(final Subscriber UseCaseSubscriber) {
-		mSubscription = this.buildInteractorObservable().subscribeOn(Schedulers.io()).observeOn(
-				AndroidSchedulers.mainThread()).subscribe(UseCaseSubscriber);
+	public void execute(final Subscriber useCaseSubscriber) {
+		mSubscription = this.buildInteractorObservable()
+		                    .subscribeOn(Schedulers.io())
+		                    .observeOn(AndroidSchedulers.mainThread())
+		                    .subscribe(useCaseSubscriber);
 	}
 
 	public void unsubscribe() {

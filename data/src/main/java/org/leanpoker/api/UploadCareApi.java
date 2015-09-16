@@ -10,5 +10,5 @@ import rx.Observable;
  * Created by tmolnar on 14/09/15.
  */
 public interface UploadCareApi {
-    Observable<UploadedFile> upload(File file);
+    Observable<UploadedFile> upload(final File file, final String mimeType);
 }

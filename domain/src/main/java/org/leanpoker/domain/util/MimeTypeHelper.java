@@ -1,4 +1,4 @@
-package org.leanpoker.util;
+package org.leanpoker.domain.util;
 
 import android.webkit.MimeTypeMap;
 

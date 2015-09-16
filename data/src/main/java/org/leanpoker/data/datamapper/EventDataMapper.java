@@ -14,17 +14,17 @@ import java.util.List;
  * Created by tbalogh on 12/09/15.
  */
 public class EventDataMapper {
-	public List<Event> transformDate(final EventListResponseModel eventListResponseModel) {
+	public List<Event> transform(final EventListResponseModel eventListResponseModel) {
 		List<Event> events = new ArrayList<>();
 		for (final EventResponseModel eventResponseModel : eventListResponseModel) {
-			events.add(transformDate(eventResponseModel));
+			events.add(transform(eventResponseModel));
 		}
 		return events;
 	}
 
-	public Event transformDate(final EventResponseModel eventResponseModel) {
+	public Event transform(final EventResponseModel eventResponseModel) {
 		return new Event(eventResponseModel.getId(), eventResponseModel.getHost(), transformDate(
-				eventResponseModel.getDate()), new Facilitator(eventResponseModel.getOwner()), new Address(eventResponseModel.getCity()));
+				eventResponseModel.getDate()), new Facilitator(eventResponseModel.getOwner()), new Address(eventResponseModel.getCity()), eventResponseModel.getStatus());
 	}
 
 	private Date transformDate(final String dateString) {
