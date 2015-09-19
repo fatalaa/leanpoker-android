@@ -20,13 +20,21 @@ import butterknife.ButterKnife;
  */
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
-	private List<EventModel> mEventModels;
-	private final LayoutInflater mInflater;
+	private       List<EventModel> mEventModels;
+	private final LayoutInflater   mInflater;
+
+	private OnEventClickListener mOnEventClickListener;
 
 	public EventsAdapter(final Context context, final List<EventModel> eventModels) {
 		validateEvents(eventModels);
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mEventModels = eventModels;
+	}
+
+	public void setOnEventClickListener(final OnEventClickListener onEventClickListener) {
+		if (mOnEventClickListener == null) {
+			mOnEventClickListener = onEventClickListener;
+		}
 	}
 
 	@Override
@@ -58,7 +66,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 		}
 	}
 
-	public class ViewHolder extends RecyclerView.ViewHolder {
+	private String getEventId(final int position) {
+		return mEventModels.get(position).getEventId();
+	}
+
+	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 		@Bind(R.id.textview_city)
 		TextView mCityTextView;
 		@Bind(R.id.textview_date_day)
@@ -75,6 +87,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 		public ViewHolder(final View itemView) {
 			super(itemView);
 			ButterKnife.bind(this, itemView);
+			itemView.setOnClickListener(this);
 		}
 
 		public void update(final EventModel eventModel) {
@@ -85,5 +98,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 			mEventNameView.setText(eventModel.getName());
 			mFacilitatorView.setText(eventModel.getFacilitator().getName());
 		}
+
+		@Override
+		public void onClick(final View view) {
+			if (EventsAdapter.this.mOnEventClickListener != null) {
+				EventsAdapter.this.mOnEventClickListener.onEventClick(getEventId(
+						getAdapterPosition()));
+			}
+		}
+	}
+
+	public interface OnEventClickListener {
+		void onEventClick(final String eventId);
 	}
 }

@@ -3,6 +3,7 @@ package org.leanpoker;
 import org.leanpoker.data.model.Event;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,23 +11,33 @@ import java.util.List;
  */
 public class EventsCache {
 	private static EventsCache mInstance = new EventsCache();
-	private List<Event>        mEvents;
-	private ValidationStrategy mValidationStrategy;
-	private boolean            mIsValid;
+	private HashMap<String, Event> mEventHashMap;
+	private ValidationStrategy     mValidationStrategy;
+	private boolean                mIsValid;
 
 	public static EventsCache getInstance() {
 		return mInstance;
 	}
 
 	private EventsCache() {
-		mEvents = new ArrayList<>();
+		mEventHashMap = new HashMap<>();
 		mIsValid = false;
 	}
 
 	public void cacheEvents(final List<Event> events, final ValidationStrategy validationStrategy) {
-		mEvents = events;
+		mEventHashMap = cacheAsMapWithIdKey(events);
 		mValidationStrategy = validationStrategy;
 		mIsValid = true;
+	}
+
+	private HashMap<String, Event> cacheAsMapWithIdKey(final List<Event> events) {
+		final HashMap<String, Event> eventHashMap = new HashMap<>(events.size());
+		for(final Event event : events) {
+			if (event != null) {
+				eventHashMap.put(event.getEventId(), event);
+			}
+		}
+		return eventHashMap;
 	}
 
 	public boolean isValid() {
@@ -37,7 +48,14 @@ public class EventsCache {
 		if (ValidationStrategy.ALWAYS_INVALIDATE.equals(mValidationStrategy)) {
 			mIsValid = false;
 		}
-		return mEvents;
+		return new ArrayList<>(mEventHashMap.values());
+	}
+
+	public Event getEvent(final String eventId) {
+		if (eventId == null || eventId.isEmpty()) {
+			throw new RuntimeException("Trying to retrieve item with null id!");
+		}
+		return mEventHashMap.get(eventId);
 	}
 
 	public enum ValidationStrategy {

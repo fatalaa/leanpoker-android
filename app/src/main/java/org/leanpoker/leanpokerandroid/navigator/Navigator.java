@@ -1,7 +1,9 @@
 package org.leanpoker.leanpokerandroid.navigator;
 
 import android.app.Activity;
+import android.content.Context;
 
+import org.leanpoker.leanpokerandroid.view.activity.EventActivity;
 import org.leanpoker.leanpokerandroid.view.activity.EventsActivity;
 
 /**
@@ -23,4 +25,11 @@ public class Navigator {
             from.finish();
         }
     }
+
+	public void navigateToEventActivity(final Context context, final String eventId) {
+		if (context == null || eventId == null) {
+			return;
+		}
+		context.startActivity(EventActivity.createIntent(context, eventId));
+	}
 }

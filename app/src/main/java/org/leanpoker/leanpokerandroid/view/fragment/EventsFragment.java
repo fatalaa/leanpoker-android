@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.EventModel;
+import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.presenter.EventListPresenter;
 import org.leanpoker.leanpokerandroid.view.EventListView;
 import org.leanpoker.leanpokerandroid.view.adapter.EventsAdapter;
+import org.leanpoker.leanpokerandroid.view.adapter.EventsAdapter.OnEventClickListener;
 import org.leanpoker.leanpokerandroid.view.adapter.EventsLayoutManager;
 
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ import butterknife.ButterKnife;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public abstract class EventsFragment extends BaseFragment implements EventListView {
+public abstract class EventsFragment extends BaseFragment implements EventListView,
+		OnEventClickListener {
 
 	private EventsLayoutManager mEventsLayoutManager;
 	private EventListPresenter  mEventListPresenter;
@@ -32,8 +35,6 @@ public abstract class EventsFragment extends BaseFragment implements EventListVi
 
 	@Bind(R.id.recyclerview_events)
 	RecyclerView mEventsRecyclerView;
-
-
 
 	@Nullable
 	@Override
@@ -89,6 +90,11 @@ public abstract class EventsFragment extends BaseFragment implements EventListVi
 		showToastMessage(message);
 	}
 
+	@Override
+	public void onEventClick(final String eventId) {
+		Navigator.getInstance().navigateToEventActivity(getActivity(), eventId);
+	}
+
 	private void initialize() {
 		mEventListPresenter = new EventListPresenter();
 		mEventListPresenter.setView(this);
@@ -103,6 +109,7 @@ public abstract class EventsFragment extends BaseFragment implements EventListVi
 		mEventsRecyclerView.setLayoutManager(mEventsLayoutManager);
 
 		mEventsAdapter = new EventsAdapter(getActivity(), new ArrayList<EventModel>());
+		mEventsAdapter.setOnEventClickListener(this);
 		mEventsRecyclerView.setAdapter(mEventsAdapter);
 	}
 }

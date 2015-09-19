@@ -21,6 +21,9 @@ public class Event {
 		mEventStatus = EventStatus.valueOf(eventStatus.toUpperCase());
 	}
 
+	public String getEventId() {
+		return mEventId;
+	}
 
 	public String getName() {
 		return mName;

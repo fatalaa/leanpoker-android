@@ -11,5 +11,5 @@ import rx.Observable;
  */
 public interface LeanPokerApi {
 	Observable<List<Event>> events();
-	Observable<Event> event(final long id);
+	Observable<Event> event(final String eventId);
 }

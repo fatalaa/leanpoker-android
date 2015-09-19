@@ -11,6 +11,7 @@ import org.leanpoker.data.model.Facilitator;
  * Created by tbalogh on 06/09/15.
  */
 public class EventModel {
+	private final String      mEventId;
 	private final String      mName;
 	private final Date        mDate;
 	private final Facilitator mFacilitator;
@@ -18,11 +19,16 @@ public class EventModel {
 	private final EventStatus mEventStatus;
 
 	public EventModel(final Event event) {
+		mEventId = event.getEventId();
 		mName = event.getName();
 		mDate = event.getDate();
 		mFacilitator = event.getFacilitator();
 		mAddress = event.getAddress();
 		mEventStatus = event.getEventStatus();
+	}
+
+	public String getEventId() {
+		return mEventId;
 	}
 
 	public String getName() {

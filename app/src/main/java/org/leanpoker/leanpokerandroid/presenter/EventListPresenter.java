@@ -35,7 +35,6 @@ public class EventListPresenter implements Presenter {
 		getEventList();
 	}
 
-
 	public void getEventList() {
 		mEventListInteractor.execute(new EventListSubscriber());
 	}
@@ -51,10 +50,6 @@ public class EventListPresenter implements Presenter {
 	@Override
 	public void destroy() {
 		mEventListInteractor.unsubscribe();
-	}
-
-	public void getPastEvents() {
-
 	}
 
 	final class EventListSubscriber extends Subscriber<List<Event>> {
