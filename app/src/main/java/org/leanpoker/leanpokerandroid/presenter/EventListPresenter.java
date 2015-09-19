@@ -15,7 +15,7 @@ import rx.Subscriber;
 public class EventListPresenter implements Presenter {
 
 	private static final int M_MOCK_EVENT_COUNT = 50;
-	private final EventListInteractor  mEventListInteractor;
+	private final EventListInteractor mEventListInteractor;
 	private final EventModelDataMapper mEventModelDataMapper;
 
 

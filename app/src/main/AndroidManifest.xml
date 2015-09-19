@@ -11,9 +11,17 @@
         <activity
             android:name=".view.activity.EventsActivity"
             android:label="@string/events_activity_label" >
+        </activity>
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:label="@string/login_activity_label">
+            <intent-filter>
+                <data android:scheme="leanpoker"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -17,6 +17,7 @@ import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
+import org.leanpoker.util.GithubUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	private static final String GITHUB_API_CLIENT_SECRET 	= "24d2417f9c803bb03fb20190ca439d92d1a5f6d3";
 
 	private static NetworkManager mInstance 		= new NetworkManager();
-	private static final OkHttpClient mHttpClient 	= new OkHttpClient();
+	private final OkHttpClient mHttpClient;
 
 	private final LeanPokerService  mLeanPokerService;
 	private final UploadCareService mUploadCareService;
@@ -49,6 +50,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
 	private NetworkManager() {
 
+		mHttpClient 	= new OkHttpClient();
 		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
 
@@ -140,6 +142,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 						try {
 							final GithubAccessTokenResponseModel accessTokenResponseModel =
 									mGithubService.getToken(
+											GithubUtils.ACCEPT_HEADER_VALUE,
 											GITHUB_API_CLIENT_ID,
 											GITHUB_API_CLIENT_SECRET,
 											accessCode,

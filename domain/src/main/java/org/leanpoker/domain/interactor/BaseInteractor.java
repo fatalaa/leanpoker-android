@@ -14,11 +14,11 @@ import rx.subscriptions.Subscriptions;
 /*
 Abstract base class of Interactors. Interactors are not generalized yet but they could be later.
  */
-public abstract class Interactor {
+public abstract class BaseInteractor {
 
 	private Subscription mSubscription;
 
-	protected Interactor() {
+	protected BaseInteractor() {
 		mSubscription = Subscriptions.empty();
 	}
 

@@ -11,7 +11,7 @@ import rx.Observable;
  * Created by tbalogh on 06/09/15.
  */
 
-public class EventListInteractor extends Interactor {
+public class EventListInteractor extends BaseInteractor {
 
 	public List<Event> loadMockedEvents(final int eventCount) {
 		return EventListProviderMock.getMockEvents(eventCount);
