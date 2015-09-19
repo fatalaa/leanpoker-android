@@ -17,7 +17,11 @@ public class EventDataMapper {
 	public List<Event> transform(final EventListResponseModel eventListResponseModel) {
 		List<Event> events = new ArrayList<>();
 		for (final EventResponseModel eventResponseModel : eventListResponseModel) {
-			events.add(transform(eventResponseModel));
+			try {
+				events.add(transform(eventResponseModel));
+			} catch (final Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 		return events;
 	}
