@@ -7,12 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.view.adapter.EventsViewPagerAdapter;
-
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by tbalogh on 06/09/15.
@@ -25,7 +21,6 @@ public class EventsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Fabric.with(this, new Crashlytics());
 		setContentView(R.layout.actvity_event_list);
 		mViewPager = (ViewPager) findViewById(R.id.pager_events_by_time);
 		mViewPagerAdapter = new EventsViewPagerAdapter(getSupportFragmentManager());
