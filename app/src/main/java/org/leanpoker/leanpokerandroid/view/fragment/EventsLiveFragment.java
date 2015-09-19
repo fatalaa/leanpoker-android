@@ -19,7 +19,7 @@ public class EventsLiveFragment extends EventsFragment {
 	private List<EventModel> filter(final List<EventModel> eventModelList) {
 		final List<EventModel> filteredEventModelList = new ArrayList<>();
 		for (final EventModel eventModel : eventModelList) {
-			if (eventModel.getEventStatus().equals(EventStatus.LIVE)) {
+			if (eventModel.getEventStatus().equals(EventStatus.RUNNING)) {
 				filteredEventModelList.add(eventModel);
 			}
 		}

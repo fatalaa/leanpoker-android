@@ -45,7 +45,9 @@ public class Event {
 	public enum EventStatus {
 		FUTURE("future"),
 		LIVE("live"),
-		ENDED("ended");
+		ENDED("ended"),
+		STAND_BY("stand_by"),
+		RUNNING("running");
 
 		private final String mValue;
 
