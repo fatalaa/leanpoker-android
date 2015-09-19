@@ -25,4 +25,8 @@ public class EventsUpcomingsFragment extends EventsFragment {
 		}
 		return filteredEventModelList;
 	}
+
+	public static EventsUpcomingsFragment newInstance() {
+		return new EventsUpcomingsFragment();
+	}
 }
