@@ -25,4 +25,8 @@ public class EventsPastFragment extends EventsFragment {
 		}
 		return filteredEventModelList;
 	}
+
+	public static EventsPastFragment newInstance() {
+		return new EventsPastFragment();
+	}
 }

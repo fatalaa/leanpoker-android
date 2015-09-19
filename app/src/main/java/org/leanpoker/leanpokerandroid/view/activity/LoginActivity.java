@@ -15,12 +15,13 @@ import butterknife.ButterKnife;
  */
 public class LoginActivity extends BaseActivity {
 
-    @Bind(R.id.login_webview)
-    private WebView             mWebView;
     private WebViewClient       mWebViewClient;
     private static final String APP_URI_SCHEME      = "leanpoker://github-login";
     private static final String ACCESS_CODE_KEY     = "code=";
     private static final String ACCESS_TOKEN_KEY    = "access_token=";
+
+    @Bind(R.id.login_webview)
+    protected WebView           mWebView;
 
     public static final String TAG = LoginActivity.class.getSimpleName();
 

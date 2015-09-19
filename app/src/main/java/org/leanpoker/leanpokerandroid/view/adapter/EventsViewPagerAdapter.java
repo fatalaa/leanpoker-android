@@ -30,9 +30,9 @@ public class EventsViewPagerAdapter extends FragmentPagerAdapter {
 	@NonNull
 	private List<EventsFragment> createEventFragments() {
 		final List<EventsFragment> eventsFragments = new ArrayList<>(M_EVENTS_FRAGMENT_COUNT);
-		eventsFragments.add(new EventsUpcomingsFragment());
-		eventsFragments.add(new EventsLiveFragment());
-		eventsFragments.add(new EventsPastFragment());
+		eventsFragments.add(EventsUpcomingsFragment.newInstance());
+		eventsFragments.add(EventsLiveFragment.newInstance());
+		eventsFragments.add(EventsPastFragment.newInstance());
 		return eventsFragments;
 	}
 

@@ -25,4 +25,8 @@ public class EventsLiveFragment extends EventsFragment {
 		}
 		return filteredEventModelList;
 	}
+
+	public static EventsLiveFragment newInstance() {
+		return new EventsLiveFragment();
+	}
 }
