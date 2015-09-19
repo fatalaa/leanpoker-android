@@ -5,10 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.leanpoker.leanpokerandroid.view.fragment.EventsFragment;
-import org.leanpoker.leanpokerandroid.view.fragment.EventsLiveFragment;
-import org.leanpoker.leanpokerandroid.view.fragment.EventsPastFragment;
-import org.leanpoker.leanpokerandroid.view.fragment.EventsUpcomingsFragment;
+import org.leanpoker.leanpokerandroid.view.fragment.EventListFragment;
+import org.leanpoker.leanpokerandroid.view.fragment.EventListLiveFragment;
+import org.leanpoker.leanpokerandroid.view.fragment.EventListPastFragment;
+import org.leanpoker.leanpokerandroid.view.fragment.EventListUpcomingsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +19,26 @@ import java.util.List;
 public class EventsViewPagerAdapter extends FragmentPagerAdapter {
 
 	private static final int M_EVENTS_FRAGMENT_COUNT = 3;
-	private final List<EventsFragment> mEventsFragments;
+	private final List<EventListFragment> mEventListFragments;
 	private String tabTitles[] = new String[]{"UPCOMING", "LIVE", "PAST"};
 
 	public EventsViewPagerAdapter(final FragmentManager fragmentManager) {
 		super(fragmentManager);
-		mEventsFragments = createEventFragments();
+		mEventListFragments = createEventFragments();
 	}
 
 	@NonNull
-	private List<EventsFragment> createEventFragments() {
-		final List<EventsFragment> eventsFragments = new ArrayList<>();
-		eventsFragments.add(EventsUpcomingsFragment.newInstance());
-		eventsFragments.add(EventsLiveFragment.newInstance());
-		eventsFragments.add(EventsPastFragment.newInstance());
-		return eventsFragments;
+	private List<EventListFragment> createEventFragments() {
+		final List<EventListFragment> eventListFragments = new ArrayList<>();
+		eventListFragments.add(EventListUpcomingsFragment.newInstance());
+		eventListFragments.add(EventListLiveFragment.newInstance());
+		eventListFragments.add(EventListPastFragment.newInstance());
+		return eventListFragments;
 	}
 
 	@Override
 	public Fragment getItem(final int position) {
-		return mEventsFragments.get(position);
+		return mEventListFragments.get(position);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by tbalogh on 15/09/15.
  */
-public class EventsPastFragment extends EventsFragment {
+public class EventListUpcomingsFragment extends EventListFragment {
 
 	@Override
 	public void renderEventList(final List<EventModel> eventModelList) {
@@ -19,14 +19,14 @@ public class EventsPastFragment extends EventsFragment {
 	private List<EventModel> filter(final List<EventModel> eventModelList) {
 		final List<EventModel> filteredEventModelList = new ArrayList<>();
 		for (final EventModel eventModel : eventModelList) {
-			if (eventModel.getEventStatus().equals(EventStatus.ENDED)) {
+			if (eventModel.getEventStatus() == EventStatus.FUTURE) {
 				filteredEventModelList.add(eventModel);
 			}
 		}
 		return filteredEventModelList;
 	}
 
-	public static EventsPastFragment newInstance() {
-		return new EventsPastFragment();
+	public static EventListUpcomingsFragment newInstance() {
+		return new EventListUpcomingsFragment();
 	}
 }

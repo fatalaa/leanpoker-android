@@ -13,7 +13,7 @@ import org.leanpoker.leanpokerandroid.view.adapter.EventsViewPagerAdapter;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public class EventsActivity extends BaseActivity {
+public class EventListActivity extends BaseActivity {
 
 	private ViewPager              mViewPager;
 	private EventsViewPagerAdapter mViewPagerAdapter;
@@ -40,6 +40,6 @@ public class EventsActivity extends BaseActivity {
 	}
 
 	public static Intent createIntent(final Context context) {
-		return new Intent(context, EventsActivity.class);
+		return new Intent(context, EventListActivity.class);
 	}
 }

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import org.leanpoker.leanpokerandroid.view.activity.EventActivity;
-import org.leanpoker.leanpokerandroid.view.activity.EventsActivity;
+import org.leanpoker.leanpokerandroid.view.activity.EventListActivity;
 
 /**
  * Created by tmolnar on 07/09/15.
@@ -21,7 +21,7 @@ public class Navigator {
 
     public void naviateToEventListActivity(Activity from) {
         if (from != null) {
-            from.startActivity(EventsActivity.createIntent(from));
+            from.startActivity(EventListActivity.createIntent(from));
             from.finish();
         }
     }

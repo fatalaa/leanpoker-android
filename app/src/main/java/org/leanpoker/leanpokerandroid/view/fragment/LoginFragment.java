@@ -9,18 +9,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import org.leanpoker.Utils;
-import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.presenter.LoginPresenter;
 import org.leanpoker.leanpokerandroid.view.LoginView;
-import org.leanpoker.util.GithubUtils;
+import org.leanpoker.api.constants.GithubConstants;
 
 import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 
 /**
  * Created by tmolnar on 19/09/15.
@@ -74,9 +72,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mWebViewClient = new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-                if (url.startsWith(GithubUtils.APP_URI_SCHEME)) {
+                if (url.startsWith(GithubConstants.APP_URI_SCHEME)) {
                     //code=asd19023klas2108asflj2
-                    String accessCodeAsKeyValue = url.substring(url.indexOf(GithubUtils.ACCESS_CODE_KEY));
+                    String accessCodeAsKeyValue = url.substring(url.indexOf(GithubConstants.ACCESS_CODE_KEY));
                     String accessCode = Utils.getValueFromKeyValuePair(accessCodeAsKeyValue);
                     mPresenter.delegateTokenRequest(accessCode, UUID.randomUUID().toString());
                     return true;
@@ -85,7 +83,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             }
         };
         mWebView.setWebViewClient(mWebViewClient);
-        mWebView.loadUrl(GithubUtils.GITHUB_OAUTH_URL);
+        mWebView.loadUrl(GithubConstants.OAUTH_URL);
     }
 
     public static LoginFragment newInstance() {

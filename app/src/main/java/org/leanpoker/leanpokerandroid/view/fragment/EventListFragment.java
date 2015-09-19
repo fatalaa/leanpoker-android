@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public abstract class EventsFragment extends BaseFragment implements EventListView,
+public abstract class EventListFragment extends BaseFragment implements EventListView,
 		OnEventClickListener {
 
 	private EventsLayoutManager mEventsLayoutManager;

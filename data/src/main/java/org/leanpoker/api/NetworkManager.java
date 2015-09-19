@@ -8,6 +8,8 @@ import com.squareup.okhttp.RequestBody;
 
 import org.leanpoker.EventsCache;
 import org.leanpoker.EventsCache.ValidationStrategy;
+import org.leanpoker.api.constants.LeanPokerConstants;
+import org.leanpoker.api.constants.UploadCareConstants;
 import org.leanpoker.data.datamapper.AccessTokenDataMapper;
 import org.leanpoker.data.datamapper.EventDataMapper;
 import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
@@ -17,7 +19,7 @@ import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
-import org.leanpoker.util.GithubUtils;
+import org.leanpoker.api.constants.GithubConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,13 +36,6 @@ import rx.Subscriber;
  */
 public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
-	private static final String LEANPOKER_BASE_URL    		= "http://live.leanpoker.org";
-	private static final String UPLOADCARE_BASE_URL   		= "https://upload.uploadcare.com";
-	private static final String UPLOADCARE_PUBLIC_KEY 		= "66685300d808b85eb39e";
-	private static final String GITHUB_API_BASE_URL   		= "https://github.com";
-	private static final String GITHUB_API_CLIENT_ID		= "3826c0b84ae756bb1e5f";
-	private static final String GITHUB_API_CLIENT_SECRET 	= "24d2417f9c803bb03fb20190ca439d92d1a5f6d3";
-
 	private static NetworkManager mInstance 		= new NetworkManager();
 	private final OkHttpClient mHttpClient;
 
@@ -55,21 +50,21 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
 
 		final Retrofit.Builder leanPokerBuilder = new Retrofit.Builder();
-		leanPokerBuilder.baseUrl(LEANPOKER_BASE_URL);
+		leanPokerBuilder.baseUrl(LeanPokerConstants.BASE_URL);
 		leanPokerBuilder.client(mHttpClient);
 		leanPokerBuilder.addConverterFactory(gsonConverterFactory);
 
 		mLeanPokerService = leanPokerBuilder.build().create(LeanPokerService.class);
 
 		final Retrofit.Builder uploadCareBuilder = new Retrofit.Builder();
-		uploadCareBuilder.baseUrl(UPLOADCARE_BASE_URL);
+		uploadCareBuilder.baseUrl(UploadCareConstants.BASE_URL);
 		uploadCareBuilder.client(mHttpClient);
 		uploadCareBuilder.addConverterFactory(gsonConverterFactory);
 
 		mUploadCareService = uploadCareBuilder.build().create(UploadCareService.class);
 
 		final Retrofit.Builder githubBuilder = new Retrofit.Builder();
-		githubBuilder.baseUrl(GITHUB_API_BASE_URL);
+		githubBuilder.baseUrl(GithubConstants.GITHUB_API_BASE_URL);
 		githubBuilder.client(mHttpClient);
 		githubBuilder.addConverterFactory(gsonConverterFactory);
 
@@ -140,8 +135,11 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 						MediaType mediaType = MediaType.parse(mimeType);
 						try {
 							final UploadCareFileUploadResponseModel fileUploadResponse = mUploadCareService
-									.upload(UPLOADCARE_PUBLIC_KEY, UploadCareService.STORE_FILES,
-									        RequestBody.create(mediaType, file)).execute().body();
+									.upload(
+											UploadCareConstants.PUBLIC_KEY,
+											UploadCareConstants.STORE_FILES,
+									        RequestBody.create(mediaType, file)
+									).execute().body();
 
 							UploadedFile uploadedFile = new UploadCareFileUploadDataMapper()
 									.transform(fileUploadResponse);
@@ -162,10 +160,13 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 					public void call(final Subscriber<? super AccessToken> subscriber) {
 						try {
 							final GithubAccessTokenResponseModel accessTokenResponseModel =
-									mGithubService.getToken(GithubUtils.ACCEPT_HEADER_VALUE,
-									                        GITHUB_API_CLIENT_ID,
-									                        GITHUB_API_CLIENT_SECRET, accessCode,
-									                        state).execute().body();
+									mGithubService.getToken(
+											GithubConstants.ACCEPT_HEADER_VALUE,
+											GithubConstants.CLIENT_ID,
+											GithubConstants.CLIENT_SECRET,
+											accessCode,
+											state
+									).execute().body();
 							final AccessToken accessToken = new AccessTokenDataMapper()
 									.transform(accessTokenResponseModel);
 							subscriber.onNext(accessToken);

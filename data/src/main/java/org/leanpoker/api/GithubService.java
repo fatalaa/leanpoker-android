@@ -1,6 +1,7 @@
 package org.leanpoker.api;
 
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
+import org.leanpoker.api.constants.GithubConstants;
 
 import retrofit.Call;
 import retrofit.http.Header;
@@ -12,12 +13,12 @@ import retrofit.http.Query;
  */
 public interface GithubService {
 
-    @POST("/login/oauth/access_token")
+    @POST(GithubConstants.ACCESS_TOKEN_ENDPOINT)
     Call<GithubAccessTokenResponseModel> getToken(
-            @Header("Accept") String format,
-            @Query("client_id") String clientId,
-            @Query("client_secret") String clientSecret,
-            @Query("code") String accessCode,
-            @Query("state") String state
+            @Header(GithubConstants.ACCEPT_HEADER) String format,
+            @Query(GithubConstants.CLIENT_ID_PARAM) String clientId,
+            @Query(GithubConstants.CLIENT_SECRET_PARAM) String clientSecret,
+            @Query(GithubConstants.ACCESS_CODE_PARAM) String accessCode,
+            @Query(GithubConstants.STATE_PARAM) String state
     );
 }
