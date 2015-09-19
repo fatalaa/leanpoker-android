@@ -22,8 +22,12 @@ public class EventsActivity extends BaseActivity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.actvity_event_list);
-		mViewPager = (ViewPager) findViewById(R.id.pager_events_by_time);
+		setupUI();
+	}
+
+	private void setupUI() {
 		mViewPagerAdapter = new EventsViewPagerAdapter(getSupportFragmentManager());
+		mViewPager = (ViewPager) findViewById(R.id.pager_events_by_time);
 		mViewPager.setAdapter(mViewPagerAdapter);
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 		tabLayout.setupWithViewPager(mViewPager);

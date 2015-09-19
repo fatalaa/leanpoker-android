@@ -24,6 +24,4 @@ public class BaseActivity extends AppCompatActivity {
 		fragmentTransaction.add(containerViewId, fragment);
 		fragmentTransaction.commit();
 	}
-
-
 }
