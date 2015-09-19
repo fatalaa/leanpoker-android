@@ -36,7 +36,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
 	private static final String LEANPOKER_BASE_URL    		= "http://live.leanpoker.org";
 	private static final String UPLOADCARE_BASE_URL   		= "https://upload.uploadcare.com";
-	private static final String UPLOADCARE_PUBLIC_KEY 		= "6d77b63f7f9937dc3383";
+	private static final String UPLOADCARE_PUBLIC_KEY 		= "66685300d808b85eb39e";
 	private static final String GITHUB_API_BASE_URL   		= "https://github.com";
 	private static final String GITHUB_API_CLIENT_ID		= "3826c0b84ae756bb1e5f";
 	private static final String GITHUB_API_CLIENT_SECRET 	= "24d2417f9c803bb03fb20190ca439d92d1a5f6d3";
