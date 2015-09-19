@@ -20,7 +20,7 @@ public class TokenStore {
 
     private TokenStore(Context context) {
         Hawk.init(context)
-                .setEncryptionMethod(HawkBuilder.EncryptionMethod.HIGHEST)
+                .setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
                 .setLogLevel(LogLevel.FULL)
                 .setStorage(HawkBuilder.newSharedPrefStorage(context))
                 .build();
