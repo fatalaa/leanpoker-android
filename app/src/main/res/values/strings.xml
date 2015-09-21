@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LeanPoker for Android</string>
+    <string name="app_name">LeanPoker</string>
     <string name="action_search">search</string>
     <string name="events_activity_label">Events</string>
     <string name="login_activity_label">Login</string>
