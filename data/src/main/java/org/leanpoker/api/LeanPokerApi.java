@@ -1,6 +1,7 @@
 package org.leanpoker.api;
 
 import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.Photo;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ import rx.Observable;
 public interface LeanPokerApi {
 	Observable<List<Event>> events();
 	Observable<Event> event(final String eventId);
+	Observable<List<Photo>> photos(final String eventId);
 }

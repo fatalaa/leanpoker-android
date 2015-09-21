@@ -1,5 +1,7 @@
 package org.leanpoker.data.response.submodel;
 
+import java.net.URL;
+
 /**
  * Created by tmolnar on 12/09/15.
  */
@@ -8,7 +10,7 @@ public class MediaResponseModel {
 
     private String uploaded;
 
-    private String url;
+    private URL url;
 
     public String getOwner() {
         return owner;
@@ -18,7 +20,7 @@ public class MediaResponseModel {
         return uploaded;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 }

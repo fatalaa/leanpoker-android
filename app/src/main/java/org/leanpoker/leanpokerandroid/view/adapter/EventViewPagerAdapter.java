@@ -4,8 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.leanpoker.leanpokerandroid.view.fragment.BaseFragment;
 import org.leanpoker.leanpokerandroid.view.fragment.EventDetailsFragment;
 import org.leanpoker.leanpokerandroid.view.fragment.EventFragment;
+import org.leanpoker.leanpokerandroid.view.fragment.EventPhotoGridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class EventViewPagerAdapter extends FragmentPagerAdapter {
 
 	private final String[] mPageTitles = {"Details", "Wall", "Scores", "Gallery"};
 
-	private final List<EventFragment> mEventFragments;
+	private final List<BaseFragment> mEventFragments;
 
 	public EventViewPagerAdapter(final FragmentManager fragmentManager, final String eventId) {
 		super(fragmentManager);
@@ -28,12 +30,12 @@ public class EventViewPagerAdapter extends FragmentPagerAdapter {
 		mEventFragments = createFragments();
 	}
 
-	private List<EventFragment> createFragments() {
-		final List<EventFragment> eventFragments = new ArrayList<>(M_EVENT_FRAGMENTS_COUNT);
+	private List<BaseFragment> createFragments() {
+		final List<BaseFragment> eventFragments = new ArrayList<>(M_EVENT_FRAGMENTS_COUNT);
 		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
 		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
 		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
-		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
+		eventFragments.add(EventPhotoGridFragment.newInstance(mEventId));
 		return eventFragments;
 	}
 

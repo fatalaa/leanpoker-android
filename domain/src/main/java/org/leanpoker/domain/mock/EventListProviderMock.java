@@ -4,8 +4,12 @@ import org.leanpoker.data.model.Address;
 import org.leanpoker.data.model.Date;
 import org.leanpoker.data.model.Event;
 import org.leanpoker.data.model.Facilitator;
+import org.leanpoker.data.model.Photo;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,8 +23,15 @@ public final class EventListProviderMock {
 	public static List<Event> getMockEvents(final int eventCount) {
 		final List<Event> events = new ArrayList<>();
 		for (int i = 0; i < eventCount; i++) {
-			final Event event = new Event(getMockId(i), getMockName(i), getMockDate(i), getMockFacilitator(i),
-			                              getMockAddress(i), getMockEventStatus(i));
+			final Event event = new Event(
+					getMockId(i),
+					getMockName(i),
+					getMockDate(i),
+					getMockFacilitator(i),
+					getMockAddress(i),
+					getMockEventStatus(i),
+					getMockPhotos(i)
+			);
 			events.add(event);
 		}
 		return events;
@@ -60,5 +71,15 @@ public final class EventListProviderMock {
 
 	private static Address getMockAddress(final int i) {
 		return new Address("Budapest");
+	}
+
+	private static List<Photo> getMockPhotos(final int i) {
+		return Arrays.asList(
+				new Photo(
+						"DeVill",
+						"2015. 09. 19",
+						"http://www.ucarecdn.com/8311772e-5a59-424c-a14f-985a88f272a2~6/nth/2/"
+				)
+		);
 	}
 }

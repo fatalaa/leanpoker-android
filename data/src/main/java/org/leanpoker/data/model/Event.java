@@ -1,5 +1,7 @@
 package org.leanpoker.data.model;
 
+import java.util.List;
+
 /**
  * Created by tbalogh on 06/09/15.
  */
@@ -10,15 +12,18 @@ public class Event {
 	private final Facilitator mFacilitator;
 	private final Address     mAddress;
 	private final EventStatus mEventStatus;
+	private final List<Photo> mPhotos;
 
 	public Event(final String eventId, final String name, final Date date,
-	             final Facilitator facilitator, final Address address, final String eventStatus) {
+	             final Facilitator facilitator, final Address address, final String eventStatus,
+				 final List<Photo> photos) {
 		mEventId = eventId;
 		mName = name;
 		mDate = date;
 		mFacilitator = facilitator;
 		mAddress = address;
 		mEventStatus = EventStatus.valueOf(eventStatus.toUpperCase());
+		mPhotos = photos;
 	}
 
 	public String getEventId() {
@@ -43,6 +48,10 @@ public class Event {
 
 	public EventStatus getEventStatus() {
 		return mEventStatus;
+	}
+
+	public List<Photo> getPhotos() {
+		return mPhotos;
 	}
 
 	public enum EventStatus {

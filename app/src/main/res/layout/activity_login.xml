@@ -2,7 +2,7 @@
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
     <fragment
-        android:name="org.leanpoker.leanpokerandroid.view.fragment.LoginFragment"
+        android:name="org.leanpoker.leanpokerandroid.eventPhotoGridView.fragment.LoginFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </merge>

@@ -15,6 +15,7 @@ import org.leanpoker.data.datamapper.EventDataMapper;
 import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
 import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.Photo;
 import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
@@ -125,6 +126,33 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		});
 		return myObservable;
 	}
+
+	@Override
+	public Observable<List<Photo>> photos(final String eventId) {
+		Observable<List<Photo>> myObservable = Observable.create(new OnSubscribe<List<Photo>>() {
+			@Override
+			public void call(final Subscriber<? super List<Photo>> subscriber) {
+				try {
+					if (EventsCache.getInstance().isValid()) {
+						subscriber.onNext(EventsCache.getInstance().getEvent(eventId).getPhotos());
+					} else {
+						final EventListResponseModel eventResponseModels = mLeanPokerService
+								.events().execute().body();
+						final List<Event> events = new EventDataMapper().transform(
+								eventResponseModels);
+						EventsCache.getInstance().cacheEvents(events,
+								ValidationStrategy.NEVER_INVALIDATE);
+						subscriber.onNext(EventsCache.getInstance().getEvent(eventId).getPhotos());
+						// TODO(tb): 19/09/15  Retrieve and cache only the specific event with the given id instead of retrieving all the events.
+					}
+				} catch (final IOException ex){
+					subscriber.onError(ex);
+				}
+			}
+		});
+		return myObservable;
+	}
+
 
 	@Override
 	public Observable<UploadedFile> upload(final File file, final String mimeType) {

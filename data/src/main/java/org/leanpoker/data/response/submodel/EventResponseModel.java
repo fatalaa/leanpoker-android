@@ -3,6 +3,7 @@ package org.leanpoker.data.response.submodel;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tmolnar on 12/09/15.
@@ -39,7 +40,7 @@ public class EventResponseModel {
 
     private List<TeamResponseModel> teams;
 
-    private List<MediaResponseModel> images;
+    private List<Map<String,String>> images;
 
     private String type;
 
@@ -105,7 +106,7 @@ public class EventResponseModel {
         return teams;
     }
 
-    public List<MediaResponseModel> getImages() {
+    public List<Map<String, String>> getImages() {
         return images;
     }
 

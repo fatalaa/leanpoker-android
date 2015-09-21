@@ -1,6 +1,9 @@
 package org.leanpoker;
 
+import android.text.TextUtils;
+
 import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.Photo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +59,13 @@ public class EventsCache {
 			throw new RuntimeException("Trying to retrieve item with null id!");
 		}
 		return mEventHashMap.get(eventId);
+	}
+
+	public List<Photo> getPhotosForEvent(final String eventId) {
+		if (TextUtils.isEmpty(eventId)) {
+			throw new RuntimeException("Trying to retrieve item with null id!");
+		}
+		return mEventHashMap.get(eventId).getPhotos();
 	}
 
 	public enum ValidationStrategy {
