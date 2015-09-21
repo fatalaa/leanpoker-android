@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public class EventsLayoutManager extends LinearLayoutManager {
-	public EventsLayoutManager(final Context context) {
+public class EventListLayoutManager extends LinearLayoutManager {
+	public EventListLayoutManager(final Context context) {
 		super(context);
 	}
 }

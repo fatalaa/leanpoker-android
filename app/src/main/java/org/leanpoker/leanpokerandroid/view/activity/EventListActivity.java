@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
 import org.leanpoker.leanpokerandroid.R;
-import org.leanpoker.leanpokerandroid.view.adapter.EventsViewPagerAdapter;
+import org.leanpoker.leanpokerandroid.view.adapter.EventListViewPagerAdapter;
 
 /**
  * Created by tbalogh on 06/09/15.
@@ -16,7 +16,7 @@ import org.leanpoker.leanpokerandroid.view.adapter.EventsViewPagerAdapter;
 public class EventListActivity extends BaseActivity {
 
 	private ViewPager              mViewPager;
-	private EventsViewPagerAdapter mViewPagerAdapter;
+	private EventListViewPagerAdapter mViewPagerAdapter;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class EventListActivity extends BaseActivity {
 	}
 
 	private void setupUI() {
-		mViewPagerAdapter = new EventsViewPagerAdapter(getSupportFragmentManager());
+		mViewPagerAdapter = new EventListViewPagerAdapter(getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager_events_by_time);
 		mViewPager.setAdapter(mViewPagerAdapter);
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

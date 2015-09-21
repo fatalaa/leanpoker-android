@@ -16,13 +16,13 @@ import java.util.List;
 /**
  * Created by tbalogh on 12/09/15.
  */
-public class EventsViewPagerAdapter extends FragmentPagerAdapter {
+public class EventListViewPagerAdapter extends FragmentPagerAdapter {
 
 	private static final int M_EVENTS_FRAGMENT_COUNT = 3;
 	private final List<EventListFragment> mEventListFragments;
 	private String tabTitles[] = new String[]{"UPCOMING", "LIVE", "PAST"};
 
-	public EventsViewPagerAdapter(final FragmentManager fragmentManager) {
+	public EventListViewPagerAdapter(final FragmentManager fragmentManager) {
 		super(fragmentManager);
 		mEventListFragments = createEventFragments();
 	}

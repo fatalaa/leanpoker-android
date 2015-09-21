@@ -13,7 +13,7 @@ public class EventListLiveFragment extends EventListFragment {
 
 	@Override
 	public void renderEventList(final List<EventModel> eventModelList) {
-		mEventsAdapter.setEventModels(filter(eventModelList));
+		mEventListAdapter.setEventModels(filter(eventModelList));
 	}
 
 	private List<EventModel> filter(final List<EventModel> eventModelList) {

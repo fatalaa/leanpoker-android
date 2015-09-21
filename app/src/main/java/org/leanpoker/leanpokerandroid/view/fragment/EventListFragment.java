@@ -12,9 +12,9 @@ import org.leanpoker.leanpokerandroid.model.EventModel;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.presenter.EventListPresenter;
 import org.leanpoker.leanpokerandroid.view.EventListView;
-import org.leanpoker.leanpokerandroid.view.adapter.EventsAdapter;
-import org.leanpoker.leanpokerandroid.view.adapter.EventsAdapter.OnEventClickListener;
-import org.leanpoker.leanpokerandroid.view.adapter.EventsLayoutManager;
+import org.leanpoker.leanpokerandroid.view.adapter.EventListAdapter;
+import org.leanpoker.leanpokerandroid.view.adapter.EventListAdapter.OnEventClickListener;
+import org.leanpoker.leanpokerandroid.view.adapter.EventListLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +28,10 @@ import butterknife.ButterKnife;
 public abstract class EventListFragment extends BaseFragment implements EventListView,
 		OnEventClickListener {
 
-	private EventsLayoutManager mEventsLayoutManager;
+	private EventListLayoutManager mEventListLayoutManager;
 	private EventListPresenter  mEventListPresenter;
 
-	protected EventsAdapter mEventsAdapter;
+	protected EventListAdapter mEventListAdapter;
 
 	@Bind(R.id.recyclerview_events)
 	RecyclerView mEventsRecyclerView;
@@ -105,11 +105,11 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 	}
 
 	private void setupUI() {
-		mEventsLayoutManager = new EventsLayoutManager(getActivity());
-		mEventsRecyclerView.setLayoutManager(mEventsLayoutManager);
+		mEventListLayoutManager = new EventListLayoutManager(getActivity());
+		mEventsRecyclerView.setLayoutManager(mEventListLayoutManager);
 
-		mEventsAdapter = new EventsAdapter(getActivity(), new ArrayList<EventModel>());
-		mEventsAdapter.setOnEventClickListener(this);
-		mEventsRecyclerView.setAdapter(mEventsAdapter);
+		mEventListAdapter = new EventListAdapter(getActivity(), new ArrayList<EventModel>());
+		mEventListAdapter.setOnEventClickListener(this);
+		mEventsRecyclerView.setAdapter(mEventListAdapter);
 	}
 }

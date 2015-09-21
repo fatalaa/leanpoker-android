@@ -18,14 +18,14 @@ import butterknife.ButterKnife;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
 
 	private       List<EventModel> mEventModels;
 	private final LayoutInflater   mInflater;
 
 	private OnEventClickListener mOnEventClickListener;
 
-	public EventsAdapter(final Context context, final List<EventModel> eventModels) {
+	public EventListAdapter(final Context context, final List<EventModel> eventModels) {
 		validateEvents(eventModels);
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mEventModels = eventModels;
@@ -101,8 +101,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
 		@Override
 		public void onClick(final View view) {
-			if (EventsAdapter.this.mOnEventClickListener != null) {
-				EventsAdapter.this.mOnEventClickListener.onEventClick(getEventId(
+			if (EventListAdapter.this.mOnEventClickListener != null) {
+				EventListAdapter.this.mOnEventClickListener.onEventClick(getEventId(
 						getAdapterPosition()));
 			}
 		}
