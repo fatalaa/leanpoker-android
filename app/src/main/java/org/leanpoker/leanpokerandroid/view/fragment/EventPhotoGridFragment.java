@@ -1,5 +1,6 @@
 package org.leanpoker.leanpokerandroid.view.fragment;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -89,6 +90,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
                 new ArrayList<PhotoModel>()
         );
         mPhotoGridRecyclerView.setAdapter(mEventPhotoGridAdapter);
+        mPhotoGridRecyclerView.addItemDecoration(new ZeroSpaceItemDecoration());
     }
 
     private void loadPhotos() {
@@ -113,6 +115,20 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     @Override
     public void showError(final String message) {
 
+    }
+
+    class ZeroSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent, final RecyclerView.State state) {
+            outRect.left = 0;
+            outRect.right = 0;
+            outRect.bottom = 0;
+
+            if (parent.getChildLayoutPosition(view) == 0) {
+                outRect.top = 0;
+            }
+        }
     }
 
     public static EventPhotoGridFragment newInstance(final String eventId) {

@@ -32,6 +32,6 @@ public class ImageLoader {
     }
 
     public void load(String url, ImageView imageView) {
-        mPicasso.load(url).resize(300, 300).into(imageView);
+        mPicasso.load(url).resize(400, 300).into(imageView);
     }
 }
