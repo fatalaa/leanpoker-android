@@ -1,5 +1,6 @@
 package org.leanpoker.leanpokerandroid.view.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -91,7 +92,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     @Override
-    public void navigateToEventsAcitivity() {
+    public void navigateToEventListAcitivity() {
         Navigator.getInstance().naviateToEventListActivity(getActivity());
+    }
+
+    @Override
+    public void navigateToPreviousActivity() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
     }
 }

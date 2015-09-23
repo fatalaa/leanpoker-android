@@ -52,7 +52,7 @@ public class LoginPresenter implements Presenter {
         @Override
         public void onNext(final AccessToken accessToken) {
             TokenStore.getInstance(mLoginView.getContext()).setAccessToken(accessToken);
-            mLoginView.navigateToEventsAcitivity();
+            mLoginView.navigateToPreviousActivity();
         }
     }
 

@@ -3,6 +3,7 @@ package org.leanpoker;
 import android.content.Context;
 
 import org.leanpoker.data.model.AccessToken;
+import org.leanpoker.data.model.GithubUser;
 import org.leanpoker.data.store.TokenStore;
 
 import rx.Observable;

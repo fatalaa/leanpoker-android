@@ -1,5 +1,7 @@
 package org.leanpoker.api;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.MediaType;
@@ -10,17 +12,20 @@ import org.leanpoker.EventsCache;
 import org.leanpoker.EventsCache.ValidationStrategy;
 import org.leanpoker.api.constants.LeanPokerConstants;
 import org.leanpoker.api.constants.UploadCareConstants;
-import org.leanpoker.data.datamapper.AccessTokenDataMapper;
+import org.leanpoker.data.datamapper.GithubDataMapper;
 import org.leanpoker.data.datamapper.EventDataMapper;
 import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
 import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.model.Event;
+import org.leanpoker.data.model.GithubUser;
 import org.leanpoker.data.model.Photo;
 import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
+import org.leanpoker.data.response.GithubAuthenticatedUserResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
 import org.leanpoker.api.constants.GithubConstants;
+import org.leanpoker.data.store.TokenStore;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +48,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	private final LeanPokerService  mLeanPokerService;
 	private final UploadCareService mUploadCareService;
 	private final GithubService		mGithubService;
+	private Context					mContext;
 
 	private NetworkManager() {
 
@@ -70,6 +76,17 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		githubBuilder.addConverterFactory(gsonConverterFactory);
 
 		mGithubService = githubBuilder.build().create(GithubService.class);
+	}
+
+	public void init(final Context context) {
+		mContext = context;
+	}
+
+	private Context getContextOrThrow() {
+		if (mContext == null) {
+			throw new IllegalStateException("Trying to access NetworkManager in non-initialized state");
+		}
+		return mContext;
 	}
 
 	public static NetworkManager getInstance() {
@@ -195,7 +212,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 											accessCode,
 											state
 									).execute().body();
-							final AccessToken accessToken = new AccessTokenDataMapper()
+							final AccessToken accessToken = new GithubDataMapper()
 									.transform(accessTokenResponseModel);
 							subscriber.onNext(accessToken);
 						} catch (IOException e) {
@@ -205,5 +222,26 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 				}
 		);
 		return accessTokenObservable;
+	}
+
+	@Override
+	public Observable<GithubUser> getUser(final String accessToken) {
+		Observable<GithubUser> githubUserObservable = Observable.create(new OnSubscribe<GithubUser>() {
+			@Override
+			public void call(final Subscriber<? super GithubUser> subscriber) {
+				String token = String.format("%s %s", "token", accessToken);
+				try {
+					GithubAuthenticatedUserResponseModel userResponse =
+                            mGithubService.getUser(GithubConstants.ACCEPT_HEADER_VALUE, token)
+                                    .execute()
+                                    .body();
+					GithubUser githubUser = new GithubDataMapper().transform(userResponse);
+					subscriber.onNext(githubUser);
+				} catch (IOException e) {
+					subscriber.onError(e);
+				}
+			}
+		});
+		return githubUserObservable;
 	}
 }

@@ -12,6 +12,7 @@ import com.parse.ParsePush;
 import com.parse.SaveCallback;
 
 import org.leanpoker.UserManager;
+import org.leanpoker.api.NetworkManager;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -28,14 +29,15 @@ public class MainApplication extends Application {
         FlurryAgent.init(this, "6F94F8GCZZ2Q3NFJ4PB2");
         FlurryAgent.setCaptureUncaughtExceptions(false);
         Parse.initialize(this, "LzrBjiRx1KJeuD6q5kAYVd0JioPEj20ZGhPZ752F",
-                         "Tp249eqGUk8p4rqbCjSsKzae7bCS9zKt5laPOc3i");
+                "Tp249eqGUk8p4rqbCjSsKzae7bCS9zKt5laPOc3i");
         ParsePush.subscribeInBackground("default", new SaveCallback() {
-	        @Override
-	        public void done(ParseException e) {
-		        Log.d(TAG, "done() called with: " + "e = [" + e + "]");
-	        }
+            @Override
+            public void done(ParseException e) {
+                Log.d(TAG, "done() called with: " + "e = [" + e + "]");
+            }
         });
         ParseInstallation.getCurrentInstallation().saveInBackground();
 	    UserManager.getInstance().init(this);
+        NetworkManager.getInstance().init(this);
     }
 }
