@@ -1,39 +1,56 @@
 package org.leanpoker.leanpokerandroid.view.dialog;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+
 
 /**
- * Created by tmolnar on 23/09/15.
+ * Created by tbalogh on 22/09/15.
  */
-public class LoginDialog extends AlertDialog {
+public class LoginDialog extends DialogFragment implements Dialog.OnClickListener {
+	public interface LoginDialogListener {
+		void onSignUpClicked();
+	}
 
-    private Context             mContext;
-    private LoginDialogListener mListener;
+	private LoginDialogListener mListener;
+	private Context             mContext;
 
-    protected LoginDialog(final Context context) {
-        super(context);
-    }
+	public void setLoginDialogListener(final LoginDialogListener listener) {
+		mListener = listener;
+	}
 
-    protected LoginDialog(final Context context, final int theme) {
-        super(context, theme);
-    }
+	@Override
+	public Dialog onCreateDialog(final Bundle savedInstanceState) {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		builder.setTitle("Login");
+		builder.setMessage("You have to be signed in to upload photos.");
+		builder.setPositiveButton("Sign in", this);
+		builder.setNegativeButton("Cancel", this);
+		return builder.create();
+	}
 
-    protected LoginDialog(final Context context, final boolean cancelable, final OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-    }
+	@Override
+	public void onAttach(final Activity activity) {
+		super.onAttach(activity);
+	}
 
-    public static LoginDialog createDialog(final Context context, final LoginDialogListener loginDialogListener) {
-        LoginDialog dialog = new LoginDialog(context);
-        dialog.setListener(loginDialogListener);
-        return dialog;
-    }
-
-    public void setListener(final LoginDialogListener listener) {
-        this.mListener = listener;
-    }
-
-    public interface LoginDialogListener {
-        void onSuccess();
-    }
+	@Override
+	public void onClick(final DialogInterface dialog, final int which) {
+		switch (which) {
+			case DialogInterface.BUTTON_POSITIVE:
+				if (mListener != null) {
+					mListener.onSignUpClicked();
+				}
+				break;
+			default:
+				break;
+		}
+	}
 }

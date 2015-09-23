@@ -15,6 +15,9 @@ import org.leanpoker.leanpokerandroid.presenter.EventPhotoGridPresenter;
 import org.leanpoker.leanpokerandroid.view.EventPhotoGridView;
 import org.leanpoker.leanpokerandroid.view.adapter.EventPhotoGridAdapter;
 import org.leanpoker.leanpokerandroid.view.adapter.EventPhotoGridLayoutManager;
+import org.leanpoker.leanpokerandroid.view.dialog.ChoosePhotoAppDialog.ChoosePhotoAppDialogListener;
+import org.leanpoker.leanpokerandroid.view.dialog.LoginDialog;
+import org.leanpoker.leanpokerandroid.view.dialog.LoginDialog.LoginDialogListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +28,8 @@ import butterknife.ButterKnife;
 /**
  * Created by tmolnar on 21/09/15.
  */
-public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView, FloatingActionButton.OnClickListener{
+public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView, FloatingActionButton.OnClickListener,
+		LoginDialogListener {
 
     private static final int ADAPTER_COLUMN_COUNT = 2;
 
@@ -33,6 +37,9 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     private EventPhotoGridPresenter     mEventPhotoGridPresenter;
     private EventPhotoGridAdapter       mEventPhotoGridAdapter;
     private String                      mEventId;
+
+	private LoginDialogListener             mLoginDialogListener;
+	private ChoosePhotoAppDialogListener    mChoosePhotoAppDialogListener;
 
     @Bind(R.id.recyclerview_photos)
     RecyclerView mPhotoGridRecyclerView;
@@ -85,6 +92,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     private void initialize() {
         mEventPhotoGridPresenter = new EventPhotoGridPresenter(mEventId);
         mEventPhotoGridPresenter.setEventPhotoGridView(this);
+	    mUploadPhotosButton.setOnClickListener(this);
     }
 
     private void setupUI() {
@@ -115,12 +123,14 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void showChoosePhotoAppDialog() {
-
+	    // Todo
     }
 
     @Override
     public void showLoginDialog() {
-
+	    final LoginDialog loginDialog = new LoginDialog();
+	    loginDialog.setLoginDialogListener(this);
+	    loginDialog.show(getActivity().getFragmentManager(), "Lofasz");
     }
 
     @Override
@@ -140,17 +150,15 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void onClick(final View v) {
-        //TODO: if user logged in, show ChoosePhotoAppDialog
-        if (false) {
-
-        } else {
-
-        }
-
-
+        mEventPhotoGridPresenter.uploadPhotos();
     }
 
-    class ZeroSpaceItemDecoration extends RecyclerView.ItemDecoration {
+	@Override
+	public void onSignUpClicked() {
+		mEventPhotoGridPresenter.navigateToLoginActivity();
+	}
+
+	class ZeroSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
         @Override
         public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent, final RecyclerView.State state) {

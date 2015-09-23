@@ -5,6 +5,7 @@ import android.content.Context;
 
 import org.leanpoker.leanpokerandroid.view.activity.EventActivity;
 import org.leanpoker.leanpokerandroid.view.activity.EventListActivity;
+import org.leanpoker.leanpokerandroid.view.activity.LoginActivity;
 
 /**
  * Created by tmolnar on 07/09/15.
@@ -31,5 +32,12 @@ public class Navigator {
 			return;
 		}
 		context.startActivity(EventActivity.createIntent(context, eventId));
+	}
+
+	public void navigateToLoginActivity(final Context context) {
+		if (context == null) {
+			return;
+		}
+		context.startActivity(LoginActivity.createIntent(context));
 	}
 }

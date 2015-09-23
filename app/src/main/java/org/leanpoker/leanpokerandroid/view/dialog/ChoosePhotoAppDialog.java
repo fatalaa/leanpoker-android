@@ -8,7 +8,7 @@ import android.support.v7.app.AlertDialog;
  */
 public class ChoosePhotoAppDialog extends AlertDialog {
 
-    public enum PhotoAppType {
+	public enum PhotoAppType {
         GALLERY,
         CAMERA
     }
