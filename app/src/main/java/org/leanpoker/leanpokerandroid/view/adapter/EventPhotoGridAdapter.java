@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.PhotoModel;
@@ -71,6 +72,10 @@ public class EventPhotoGridAdapter extends RecyclerView.Adapter<EventPhotoGridAd
 
         @Bind(R.id.imageview_photo)
         ImageView mPhotoView;
+        @Bind(R.id.textview_upload_date)
+        TextView mUploadDate;
+        @Bind(R.id.textview_uploaded_by)
+        TextView mUploadedBy;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -80,6 +85,8 @@ public class EventPhotoGridAdapter extends RecyclerView.Adapter<EventPhotoGridAd
 
         public void update(final PhotoModel photoModel) {
             ImageLoader.getInstance(mContext).load(photoModel.getUrl(), mPhotoView);
+            mUploadDate.setText(String.format("Uploaded at: %s",photoModel.getUploaded()));
+            mUploadedBy.setText(String.format("Uploaded by: %s",photoModel.getOwner()));
         }
 
         @Override

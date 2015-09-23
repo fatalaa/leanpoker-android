@@ -3,6 +3,7 @@ package org.leanpoker.leanpokerandroid.view.fragment;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,9 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Bind(R.id.recyclerview_photos)
     RecyclerView mPhotoGridRecyclerView;
+
+    @Bind(R.id.add_photos_fab)
+    FloatingActionButton mUploadPhotosButton;
 
     public EventPhotoGridFragment() {
     }
@@ -82,7 +86,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     }
 
     private void setupUI() {
-        mEventPhotoGridLayoutManager = new EventPhotoGridLayoutManager(getActivity(), 2);
+        mEventPhotoGridLayoutManager = new EventPhotoGridLayoutManager(getActivity(), 1);
         mPhotoGridRecyclerView.setLayoutManager(mEventPhotoGridLayoutManager);
 
         mEventPhotoGridAdapter = new EventPhotoGridAdapter(

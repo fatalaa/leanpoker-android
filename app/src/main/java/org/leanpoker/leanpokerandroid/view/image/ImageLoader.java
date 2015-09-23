@@ -4,9 +4,6 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-
-import org.leanpoker.leanpokerandroid.R;
 
 /**
  * Created by tmolnar on 21/09/15.
@@ -32,6 +29,6 @@ public class ImageLoader {
     }
 
     public void load(String url, ImageView imageView) {
-        mPicasso.load(url).resize(400, 300).into(imageView);
+        mPicasso.load(url).fit().into(imageView);
     }
 }
