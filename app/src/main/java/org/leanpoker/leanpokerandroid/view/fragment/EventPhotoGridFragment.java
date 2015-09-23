@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by tmolnar on 21/09/15.
  */
-public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView {
+public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView, FloatingActionButton.OnClickListener{
 
     private static final int ADAPTER_COLUMN_COUNT = 2;
 
@@ -100,6 +100,8 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
         );
         mPhotoGridRecyclerView.setAdapter(mEventPhotoGridAdapter);
         mPhotoGridRecyclerView.addItemDecoration(new ZeroSpaceItemDecoration());
+
+
     }
 
     private void loadPhotos() {
@@ -109,6 +111,16 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     @Override
     public void renderPhotoList(final List<PhotoModel> photoModelList) {
         mEventPhotoGridAdapter.setPhotoModels(photoModelList);
+    }
+
+    @Override
+    public void showChoosePhotoAppDialog() {
+
+    }
+
+    @Override
+    public void showLoginDialog() {
+
     }
 
     @Override
@@ -123,6 +135,18 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void showError(final String message) {
+
+    }
+
+    @Override
+    public void onClick(final View v) {
+        //TODO: if user logged in, show ChoosePhotoAppDialog
+        if (false) {
+
+        } else {
+
+        }
+
 
     }
 
