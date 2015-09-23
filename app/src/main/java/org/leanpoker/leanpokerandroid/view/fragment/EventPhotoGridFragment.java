@@ -27,6 +27,8 @@ import butterknife.ButterKnife;
  */
 public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView {
 
+    private static final int ADAPTER_COLUMN_COUNT = 2;
+
     private EventPhotoGridLayoutManager mEventPhotoGridLayoutManager;
     private EventPhotoGridPresenter     mEventPhotoGridPresenter;
     private EventPhotoGridAdapter       mEventPhotoGridAdapter;
@@ -86,7 +88,10 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     }
 
     private void setupUI() {
-        mEventPhotoGridLayoutManager = new EventPhotoGridLayoutManager(getActivity(), 1);
+        mEventPhotoGridLayoutManager = new EventPhotoGridLayoutManager(
+                getActivity(),
+                ADAPTER_COLUMN_COUNT
+        );
         mPhotoGridRecyclerView.setLayoutManager(mEventPhotoGridLayoutManager);
 
         mEventPhotoGridAdapter = new EventPhotoGridAdapter(

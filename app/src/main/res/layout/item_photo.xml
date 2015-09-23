@@ -4,34 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="4dp"
     android:background="@color/light_grey">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cardview_photo">
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageview_photo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageview_photo"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"/>
-            <TextView
-                android:id="@+id/textview_upload_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|left"/>
-            <TextView
-                android:id="@+id/textview_uploaded_by"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|left"/>
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+            android:layout_height="100dp"/>
 
 </FrameLayout>
