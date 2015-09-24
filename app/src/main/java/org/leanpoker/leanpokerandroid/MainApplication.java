@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.HawkBuilder;
+import com.orhanobut.hawk.LogLevel;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -25,7 +28,17 @@ public class MainApplication extends Application {
 
     public void onCreate() {
         super.onCreate();
-	    Fabric.with(this, new Crashlytics());
+        init();
+    }
+
+    private void init() {
+        initAnalytics();
+        initManagers();
+        initHawk();
+    }
+
+    private void initAnalytics() {
+        Fabric.with(this, new Crashlytics());
         FlurryAgent.init(this, "6F94F8GCZZ2Q3NFJ4PB2");
         FlurryAgent.setCaptureUncaughtExceptions(false);
         Parse.initialize(this, "LzrBjiRx1KJeuD6q5kAYVd0JioPEj20ZGhPZ752F",
@@ -37,7 +50,18 @@ public class MainApplication extends Application {
             }
         });
         ParseInstallation.getCurrentInstallation().saveInBackground();
-	    UserManager.getInstance().init(this);
+    }
+
+    private void initHawk() {
+        Hawk.init(this)
+                .setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
+                .setLogLevel(LogLevel.FULL)
+                .setStorage(HawkBuilder.newSharedPrefStorage(this))
+                .build();
+    }
+
+    private void initManagers() {
+        UserManager.getInstance().init(this);
         NetworkManager.getInstance().init(this);
     }
 }

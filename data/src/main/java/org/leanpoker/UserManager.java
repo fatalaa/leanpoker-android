@@ -3,7 +3,6 @@ package org.leanpoker;
 import android.content.Context;
 
 import org.leanpoker.data.model.AccessToken;
-import org.leanpoker.data.model.GithubUser;
 import org.leanpoker.data.store.TokenStore;
 
 import rx.Observable;
@@ -32,7 +31,7 @@ public class UserManager {
 		Observable<Boolean> userLoggedInObservable = Observable.create(new OnSubscribe<Boolean>() {
 			@Override
 			public void call(final Subscriber<? super Boolean> subscriber) {
-				AccessToken token = TokenStore.getInstance(getContextOrThrow()).getAccessToken();
+				AccessToken token = TokenStore.getInstance().getAccessToken();
 				subscriber.onNext(token != null);
 			}
 		});

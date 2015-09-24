@@ -10,5 +10,5 @@ import rx.Observable;
  */
 public interface GithubApi {
     Observable<AccessToken> getToken(String accessCode, String state);
-    Observable<GithubUser> getUser(String accessToken);
+    Observable<GithubUser> getUser(boolean fetchEmailsOnly);
 }

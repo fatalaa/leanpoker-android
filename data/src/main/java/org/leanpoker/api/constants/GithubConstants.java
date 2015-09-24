@@ -15,12 +15,16 @@ public class GithubConstants {
     public static final String ACCEPT_HEADER_VALUE          = "application/json";
 
     public static final String OAUTH_URL                    = BASE_OAUTH_URL + "?client_id=" + CLIENT_ID +
-                                                                "&callback_uri=" + APP_URI_SCHEME;
-    public static final String GITHUB_API_BASE_URL          = "https://github.com";
+                                                                "&callback_uri=" + APP_URI_SCHEME
+            + "&scope=user";
+    public static final String GITHUB_OAUTH_API_BASE_URL    = "https://github.com";
+    public static final String GITHUB_API_BASE_URL          = "https://api.github.com";
 
     //ENDPOINTS
     public static final String ACCESS_TOKEN_ENDPOINT        = "/login/oauth/access_token";
     public static final String AUTHENTICATED_USER_ENDPOINT  = "/user";
+    public static final String EMAILS_ENDPOINT              = AUTHENTICATED_USER_ENDPOINT
+                                                                + "/emails";
 
     //PARAMETER KEYS
     public static final String CLIENT_ID_PARAM              = "client_id";

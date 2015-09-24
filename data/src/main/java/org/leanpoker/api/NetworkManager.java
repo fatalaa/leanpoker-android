@@ -3,13 +3,13 @@ package org.leanpoker.api;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.RequestBody;
 
 import org.leanpoker.EventsCache;
 import org.leanpoker.EventsCache.ValidationStrategy;
+import org.leanpoker.JsonMapper;
 import org.leanpoker.api.constants.LeanPokerConstants;
 import org.leanpoker.api.constants.UploadCareConstants;
 import org.leanpoker.data.datamapper.GithubDataMapper;
@@ -18,14 +18,17 @@ import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
 import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.model.Event;
 import org.leanpoker.data.model.GithubUser;
+import org.leanpoker.data.model.GithubUserEmail;
 import org.leanpoker.data.model.Photo;
 import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.response.EventListResponseModel;
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
 import org.leanpoker.data.response.GithubAuthenticatedUserResponseModel;
+import org.leanpoker.data.response.GithubEmailsResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
 import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.data.store.TokenStore;
+import org.leanpoker.data.store.UserStore;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,13 +50,14 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
 	private final LeanPokerService  mLeanPokerService;
 	private final UploadCareService mUploadCareService;
-	private final GithubService		mGithubService;
+	private final GithubService 	mGithubOauthService;
+	private final GithubService		mGithubApiService;
 	private Context					mContext;
 
 	private NetworkManager() {
 
 		mHttpClient 	= new OkHttpClient();
-		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		final Gson gson = JsonMapper.GSON;
 		final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
 
 		final Retrofit.Builder leanPokerBuilder = new Retrofit.Builder();
@@ -71,11 +75,18 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		mUploadCareService = uploadCareBuilder.build().create(UploadCareService.class);
 
 		final Retrofit.Builder githubBuilder = new Retrofit.Builder();
-		githubBuilder.baseUrl(GithubConstants.GITHUB_API_BASE_URL);
+		githubBuilder.baseUrl(GithubConstants.GITHUB_OAUTH_API_BASE_URL);
 		githubBuilder.client(mHttpClient);
 		githubBuilder.addConverterFactory(gsonConverterFactory);
 
-		mGithubService = githubBuilder.build().create(GithubService.class);
+		mGithubOauthService = githubBuilder.build().create(GithubService.class);
+
+		final Retrofit.Builder githubApiBuilder = new Retrofit.Builder();
+		githubApiBuilder.baseUrl(GithubConstants.GITHUB_API_BASE_URL);
+		githubApiBuilder.client(mHttpClient);
+		githubApiBuilder.addConverterFactory(gsonConverterFactory);
+
+		mGithubApiService = githubApiBuilder.build().create(GithubService.class);
 	}
 
 	public void init(final Context context) {
@@ -183,7 +194,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 									.upload(
 											UploadCareConstants.PUBLIC_KEY,
 											UploadCareConstants.STORE_FILES,
-									        RequestBody.create(mediaType, file)
+											RequestBody.create(mediaType, file)
 									).execute().body();
 
 							UploadedFile uploadedFile = new UploadCareFileUploadDataMapper()
@@ -205,7 +216,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 					public void call(final Subscriber<? super AccessToken> subscriber) {
 						try {
 							final GithubAccessTokenResponseModel accessTokenResponseModel =
-									mGithubService.getToken(
+									mGithubOauthService.getToken(
 											GithubConstants.ACCEPT_HEADER_VALUE,
 											GithubConstants.CLIENT_ID,
 											GithubConstants.CLIENT_SECRET,
@@ -225,23 +236,62 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	}
 
 	@Override
-	public Observable<GithubUser> getUser(final String accessToken) {
-		Observable<GithubUser> githubUserObservable = Observable.create(new OnSubscribe<GithubUser>() {
+	public Observable<GithubUser> getUser(final boolean fetchEmailsOnly) {
+		Observable<GithubUser> githubUserObservable =
+				Observable.create(new OnSubscribe<GithubUser>() {
 			@Override
 			public void call(final Subscriber<? super GithubUser> subscriber) {
-				String token = String.format("%s %s", "token", accessToken);
 				try {
-					GithubAuthenticatedUserResponseModel userResponse =
-                            mGithubService.getUser(GithubConstants.ACCEPT_HEADER_VALUE, token)
-                                    .execute()
-                                    .body();
-					GithubUser githubUser = new GithubDataMapper().transform(userResponse);
-					subscriber.onNext(githubUser);
+					GithubUser user = getUserFromStore();
+					if (user == null) {
+						user = getUserFromNetwork();
+					}
+					if (fetchEmailsOnly) {
+						List<GithubUserEmail> emails = getEmailsFromNetwork();
+						user.updateEmails(emails);
+					} else {
+						user = getUserFromNetwork();
+						List<GithubUserEmail> emails = getEmailsFromNetwork();
+						user.updateEmails(emails);
+					}
+					subscriber.onNext(user);
 				} catch (IOException e) {
 					subscriber.onError(e);
 				}
 			}
 		});
 		return githubUserObservable;
+	}
+
+	private String getAccessToken() {
+		AccessToken accessToken =
+				TokenStore.getInstance().getAccessToken();
+		String token = String.format("%s %s", "token", accessToken.getAccessToken());
+		return token;
+	}
+
+	private GithubUser getUserFromNetwork() throws IOException {
+		GithubDataMapper dataMapper = new GithubDataMapper();
+		GithubAuthenticatedUserResponseModel userResponse =
+				mGithubApiService
+						.getUser(GithubConstants.ACCEPT_HEADER_VALUE, getAccessToken())
+						.execute()
+						.body();
+		GithubUser githubUser = dataMapper.transform(userResponse);
+		return githubUser;
+	}
+
+	private List<GithubUserEmail> getEmailsFromNetwork() throws IOException {
+		GithubDataMapper dataMapper = new GithubDataMapper();
+		GithubEmailsResponseModel emailsResponseModel = mGithubApiService
+				.getEmails(GithubConstants.ACCEPT_HEADER_VALUE, getAccessToken())
+				.execute()
+				.body();
+		List<GithubUserEmail> emails = dataMapper.transform(emailsResponseModel);
+		return emails;
+	}
+
+	private GithubUser getUserFromStore() {
+		return UserStore.getInstance().getUser();
 	}
 }

@@ -1,7 +1,11 @@
 package org.leanpoker.leanpokerandroid.presenter;
 
+import org.leanpoker.data.model.GithubUser;
 import org.leanpoker.data.model.Photo;
+import org.leanpoker.data.store.UserStore;
 import org.leanpoker.domain.interactor.EventPhotoGridInteractor;
+import org.leanpoker.domain.interactor.GithubUserEmailsInteractor;
+import org.leanpoker.domain.interactor.GithubUserInteractor;
 import org.leanpoker.domain.interactor.IsUserLoggedInInteractor;
 import org.leanpoker.leanpokerandroid.modelmapper.EventPhotoGridDataMapper;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
@@ -16,15 +20,19 @@ import rx.Subscriber;
  */
 public class EventPhotoGridPresenter implements Presenter {
 
-	private final EventPhotoGridInteractor mEventPhotoGridInteractor;
-	private final IsUserLoggedInInteractor mIsUserLoggedInInteractor;
+	private final EventPhotoGridInteractor 		mEventPhotoGridInteractor;
+	private final IsUserLoggedInInteractor 		mIsUserLoggedInInteractor;
+	private final GithubUserInteractor	   		mGithubUserInteractor;
+	private final GithubUserEmailsInteractor 	mGithubUserEmailsInteractor;
 	private final EventPhotoGridDataMapper mEventPhotoGridDataMapper;
 	private       EventPhotoGridView       mEventPhotoGridView;
 
 	public EventPhotoGridPresenter(final String eventId) {
-		mEventPhotoGridInteractor = new EventPhotoGridInteractor(eventId);
-		mEventPhotoGridDataMapper = new EventPhotoGridDataMapper();
-		mIsUserLoggedInInteractor = new IsUserLoggedInInteractor();
+		mEventPhotoGridInteractor 	= new EventPhotoGridInteractor(eventId);
+		mEventPhotoGridDataMapper 	= new EventPhotoGridDataMapper();
+		mIsUserLoggedInInteractor 	= new IsUserLoggedInInteractor();
+		mGithubUserInteractor	  	= new GithubUserInteractor();
+		mGithubUserEmailsInteractor = new GithubUserEmailsInteractor();
 	}
 
 	public void setEventPhotoGridView(final EventPhotoGridView eventPhotoGridView) {
@@ -62,6 +70,30 @@ public class EventPhotoGridPresenter implements Presenter {
 		Navigator.getInstance().navigateToLoginActivity(mEventPhotoGridView.getContext());
 	}
 
+	public void delegateGithubUserFetch() {
+		mGithubUserInteractor.execute(new GithubUserSubscriber());
+		
+	}
+
+	final class GithubUserSubscriber extends Subscriber<GithubUser> {
+
+		@Override
+		public void onCompleted() {
+
+		}
+
+		@Override
+		public void onError(final Throwable e) {
+			mEventPhotoGridView.showError(e.getMessage());
+		}
+
+		@Override
+		public void onNext(final GithubUser githubUser) {
+			UserStore.getInstance().setUser(githubUser);
+			mEventPhotoGridView.showChoosePhotoAppDialog();
+		}
+	}
+
 	final class IsUserLoggedInSubscriber extends Subscriber<Boolean> {
 		@Override
 		public void onCompleted() {
@@ -76,7 +108,12 @@ public class EventPhotoGridPresenter implements Presenter {
 		@Override
 		public void onNext(final Boolean isLoggedIn) {
 			if (isLoggedIn) {
-				mEventPhotoGridView.showChoosePhotoAppDialog();
+				GithubUser loggedInUser =
+						UserStore.getInstance().getUser();
+				if (loggedInUser == null) {
+					EventPhotoGridPresenter.this.mGithubUserInteractor
+							.execute(new GithubUserSubscriber());
+				}
 			} else {
 				mEventPhotoGridView.showLoginDialog();
 			}

@@ -1,5 +1,7 @@
 package org.leanpoker.leanpokerandroid.view.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -89,6 +91,14 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
         mEventPhotoGridPresenter.destroy();
     }
 
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == Activity.RESULT_OK) {
+            mEventPhotoGridPresenter.delegateGithubUserFetch();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initialize() {
         mEventPhotoGridPresenter = new EventPhotoGridPresenter(mEventId);
         mEventPhotoGridPresenter.setEventPhotoGridView(this);
@@ -107,9 +117,6 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
                 new ArrayList<PhotoModel>()
         );
         mPhotoGridRecyclerView.setAdapter(mEventPhotoGridAdapter);
-        mPhotoGridRecyclerView.addItemDecoration(new ZeroSpaceItemDecoration());
-
-
     }
 
     private void loadPhotos() {
@@ -145,7 +152,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void showError(final String message) {
-
+        super.showToastMessage(message);
     }
 
     @Override
@@ -157,20 +164,6 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 	public void onSignUpClicked() {
 		mEventPhotoGridPresenter.navigateToLoginActivity();
 	}
-
-	class ZeroSpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        @Override
-        public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent, final RecyclerView.State state) {
-            outRect.left = 0;
-            outRect.right = 0;
-            outRect.bottom = 0;
-
-            if (parent.getChildLayoutPosition(view) == 0) {
-                outRect.top = 0;
-            }
-        }
-    }
 
     public static EventPhotoGridFragment newInstance(final String eventId) {
         EventPhotoGridFragment eventPhotoGridFragment = new EventPhotoGridFragment();
