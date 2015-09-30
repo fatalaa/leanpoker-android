@@ -45,6 +45,7 @@ public class FullScreenPhotoActivity extends BaseActivity {
                 clickedIndex
         );
         mViewPager.setAdapter(mFullScreenPhotoPagerAdapter);
+        mViewPager.setCurrentItem(clickedIndex);
     }
 
     public static Intent createIntent(final Context context, final ArrayList<PhotoModel> photoModels,
