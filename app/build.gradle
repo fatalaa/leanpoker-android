@@ -58,6 +58,7 @@ dependencies {
 
     //UI
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.commit451:PhotoView:1.2.4'
 
     //Analytics
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 
+import org.leanpoker.leanpokerandroid.P;
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.view.adapter.EventViewPagerAdapter;
 
@@ -14,7 +16,6 @@ import org.leanpoker.leanpokerandroid.view.adapter.EventViewPagerAdapter;
  */
 public class EventActivity extends BaseActivity {
 
-	private static final String M_EVENT_ID_KEY = "event_id_key";
 	private ViewPager             mViewPager;
 	private EventViewPagerAdapter mEventViewPagerAdapter;
 
@@ -22,11 +23,11 @@ public class EventActivity extends BaseActivity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event);
-		setupUI(getIntent().getStringExtra(M_EVENT_ID_KEY));
+		setupUI(getIntent().getStringExtra(P.Common.EVENT_ID_KEY));
 	}
 
 	private void setupUI(final String eventId) {
-		if (eventId == null || eventId.isEmpty()) {
+		if (TextUtils.isEmpty(eventId)) {
 			throw new RuntimeException("Invalid event id has been given!");
 		}
 		mEventViewPagerAdapter = new EventViewPagerAdapter(getSupportFragmentManager(), eventId);
@@ -38,7 +39,7 @@ public class EventActivity extends BaseActivity {
 
 	public static Intent createIntent(final Context context, final String eventId) {
 		final Intent intent = new Intent(context, EventActivity.class);
-		intent.putExtra(M_EVENT_ID_KEY, eventId);
+		intent.putExtra(P.Common.EVENT_ID_KEY, eventId);
 		return intent;
 	}
 }

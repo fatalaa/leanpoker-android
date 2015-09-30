@@ -7,10 +7,12 @@ import org.leanpoker.domain.interactor.EventPhotoGridInteractor;
 import org.leanpoker.domain.interactor.GithubUserEmailsInteractor;
 import org.leanpoker.domain.interactor.GithubUserInteractor;
 import org.leanpoker.domain.interactor.IsUserLoggedInInteractor;
+import org.leanpoker.leanpokerandroid.model.PhotoModel;
 import org.leanpoker.leanpokerandroid.modelmapper.EventPhotoGridDataMapper;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.view.EventPhotoGridView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
@@ -24,8 +26,9 @@ public class EventPhotoGridPresenter implements Presenter {
 	private final IsUserLoggedInInteractor 		mIsUserLoggedInInteractor;
 	private final GithubUserInteractor	   		mGithubUserInteractor;
 	private final GithubUserEmailsInteractor 	mGithubUserEmailsInteractor;
-	private final EventPhotoGridDataMapper mEventPhotoGridDataMapper;
-	private       EventPhotoGridView       mEventPhotoGridView;
+	private final EventPhotoGridDataMapper 		mEventPhotoGridDataMapper;
+	private       EventPhotoGridView       		mEventPhotoGridView;
+	private ArrayList<PhotoModel> 				mPhotoModels;
 
 	public EventPhotoGridPresenter(final String eventId) {
 		mEventPhotoGridInteractor 	= new EventPhotoGridInteractor(eventId);
@@ -37,10 +40,6 @@ public class EventPhotoGridPresenter implements Presenter {
 
 	public void setEventPhotoGridView(final EventPhotoGridView eventPhotoGridView) {
 		mEventPhotoGridView = eventPhotoGridView;
-	}
-
-	public void initialize() {
-
 	}
 
 	public void getPhotosGrid() {
@@ -60,6 +59,7 @@ public class EventPhotoGridPresenter implements Presenter {
     @Override
     public void destroy() {
         mEventPhotoGridInteractor.unsubscribe();
+		mGithubUserEmailsInteractor.unsubscribe();
     }
 
 	public void uploadPhotos() {
@@ -73,6 +73,15 @@ public class EventPhotoGridPresenter implements Presenter {
 	public void delegateGithubUserFetch() {
 		mGithubUserInteractor.execute(new GithubUserSubscriber());
 		
+	}
+
+	public void navigateToFullScreenPhotoActivity(final String eventId,
+												  final int clickedPhotoIndex) {
+		Navigator.getInstance().navigateToFullScreenPhotoActivity(
+				mEventPhotoGridView.getContext(),
+				mPhotoModels,
+				clickedPhotoIndex
+		);
 	}
 
 	final class GithubUserSubscriber extends Subscriber<GithubUser> {
@@ -113,6 +122,8 @@ public class EventPhotoGridPresenter implements Presenter {
 				if (loggedInUser == null) {
 					EventPhotoGridPresenter.this.mGithubUserInteractor
 							.execute(new GithubUserSubscriber());
+				} else {
+					mEventPhotoGridView.showChoosePhotoAppDialog();
 				}
 			} else {
 				mEventPhotoGridView.showLoginDialog();
@@ -140,7 +151,8 @@ public class EventPhotoGridPresenter implements Presenter {
     }
 
     private void showPhotos(List<Photo> photos) {
-        mEventPhotoGridView.renderPhotoList(mEventPhotoGridDataMapper.transform(photos));
+		mPhotoModels = (ArrayList<PhotoModel>) mEventPhotoGridDataMapper.transform(photos);
+		mEventPhotoGridView.renderPhotoList(mPhotoModels);
     }
 
     private void hideViewLoading() {

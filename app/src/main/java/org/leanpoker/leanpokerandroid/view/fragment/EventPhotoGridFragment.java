@@ -2,7 +2,6 @@ package org.leanpoker.leanpokerandroid.view.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +16,7 @@ import org.leanpoker.leanpokerandroid.presenter.EventPhotoGridPresenter;
 import org.leanpoker.leanpokerandroid.view.EventPhotoGridView;
 import org.leanpoker.leanpokerandroid.view.adapter.EventPhotoGridAdapter;
 import org.leanpoker.leanpokerandroid.view.adapter.EventPhotoGridLayoutManager;
+import org.leanpoker.leanpokerandroid.view.dialog.ChoosePhotoAppDialog;
 import org.leanpoker.leanpokerandroid.view.dialog.ChoosePhotoAppDialog.ChoosePhotoAppDialogListener;
 import org.leanpoker.leanpokerandroid.view.dialog.LoginDialog;
 import org.leanpoker.leanpokerandroid.view.dialog.LoginDialog.LoginDialogListener;
@@ -30,8 +30,11 @@ import butterknife.ButterKnife;
 /**
  * Created by tmolnar on 21/09/15.
  */
-public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView, FloatingActionButton.OnClickListener,
-		LoginDialogListener {
+public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGridView,
+        FloatingActionButton.OnClickListener,
+		LoginDialogListener,
+        ChoosePhotoAppDialogListener,
+        EventPhotoGridAdapter.OnPhotoClickListener {
 
     private static final int ADAPTER_COLUMN_COUNT = 2;
 
@@ -93,7 +96,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             mEventPhotoGridPresenter.delegateGithubUserFetch();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,6 +106,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
         mEventPhotoGridPresenter = new EventPhotoGridPresenter(mEventId);
         mEventPhotoGridPresenter.setEventPhotoGridView(this);
 	    mUploadPhotosButton.setOnClickListener(this);
+        mEventPhotoGridAdapter.setOnPhotoClickListener(this);
     }
 
     private void setupUI() {
@@ -131,6 +135,9 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     @Override
     public void showChoosePhotoAppDialog() {
 	    // Todo
+        final ChoosePhotoAppDialog choosePhotoAppDialog = new ChoosePhotoAppDialog();
+        choosePhotoAppDialog.setListener(this);
+        choosePhotoAppDialog.show(getActivity().getSupportFragmentManager(), "Lofasz");
     }
 
     @Override
@@ -169,5 +176,15 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
         EventPhotoGridFragment eventPhotoGridFragment = new EventPhotoGridFragment();
         eventPhotoGridFragment.setEventId(eventId);
         return eventPhotoGridFragment;
+    }
+
+    @Override
+    public void onClick(final ChoosePhotoAppDialog.PhotoAppType appType) {
+
+    }
+
+    @Override
+    public void onPhotoClick(final int clickedPhotoIndex) {
+        mEventPhotoGridPresenter.navigateToFullScreenPhotoActivity(mEventId, clickedPhotoIndex);
     }
 }

@@ -1,7 +1,5 @@
 package org.leanpoker.data.model;
 
-import java.net.URL;
-
 /**
  * Created by tmolnar on 21/09/15.
  */

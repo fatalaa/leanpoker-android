@@ -21,6 +21,9 @@
         <activity android:name=".view.activity.EventActivity">
         </activity>
 
+        <activity android:name=".view.activity.FullScreenPhotoActivity">
+        </activity>
+
         <activity
             android:name=".view.activity.LoginActivity"
             android:label="@string/login_activity_label">

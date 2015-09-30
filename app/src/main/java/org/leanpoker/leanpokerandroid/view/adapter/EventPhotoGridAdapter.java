@@ -79,14 +79,13 @@ public class EventPhotoGridAdapter extends RecyclerView.Adapter<EventPhotoGridAd
         }
 
         public void update(final PhotoModel photoModel) {
-            ImageLoader.getInstance(mContext).load(photoModel.getUrl(), mPhotoView);
+            ImageLoader.getInstance().load(photoModel.getUrl(), mPhotoView);
         }
 
         @Override
         public void onClick(final View v) {
             if (EventPhotoGridAdapter.this.mOnPhotoClickListener != null) {
-                EventPhotoGridAdapter.this.mOnPhotoClickListener.onPhotoClick(getPhotoUrl(
-                        getAdapterPosition()));
+                EventPhotoGridAdapter.this.mOnPhotoClickListener.onPhotoClick(getAdapterPosition());
             }
         }
     }
@@ -98,6 +97,6 @@ public class EventPhotoGridAdapter extends RecyclerView.Adapter<EventPhotoGridAd
     }
 
     public interface OnPhotoClickListener {
-        void onPhotoClick(final String photoUrl);
+        void onPhotoClick(final int clickedPhotoIndex);
     }
 }

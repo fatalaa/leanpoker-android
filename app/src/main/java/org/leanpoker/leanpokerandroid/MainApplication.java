@@ -16,6 +16,7 @@ import com.parse.SaveCallback;
 
 import org.leanpoker.UserManager;
 import org.leanpoker.api.NetworkManager;
+import org.leanpoker.leanpokerandroid.view.image.ImageLoader;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -35,6 +36,7 @@ public class MainApplication extends Application {
         initAnalytics();
         initManagers();
         initHawk();
+        initImageLoader();
     }
 
     private void initAnalytics() {
@@ -63,5 +65,9 @@ public class MainApplication extends Application {
     private void initManagers() {
         UserManager.getInstance().init(this);
         NetworkManager.getInstance().init(this);
+    }
+
+    private void initImageLoader() {
+        ImageLoader.getInstance().init(this);
     }
 }

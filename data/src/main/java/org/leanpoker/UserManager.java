@@ -37,11 +37,4 @@ public class UserManager {
 		});
 		return userLoggedInObservable;
 	}
-
-	private Context getContextOrThrow() {
-		if (mContext == null) {
-			throw new RuntimeException("Trying to access uninitialized UserManager!");
-		}
-		return mContext;
-	}
 }

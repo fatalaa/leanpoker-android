@@ -93,13 +93,6 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		mContext = context;
 	}
 
-	private Context getContextOrThrow() {
-		if (mContext == null) {
-			throw new IllegalStateException("Trying to access NetworkManager in non-initialized state");
-		}
-		return mContext;
-	}
-
 	public static NetworkManager getInstance() {
 		return mInstance;
 	}
