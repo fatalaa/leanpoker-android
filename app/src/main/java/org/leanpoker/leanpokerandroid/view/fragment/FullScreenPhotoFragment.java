@@ -1,5 +1,7 @@
 package org.leanpoker.leanpokerandroid.view.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -58,6 +60,7 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
     private void setupUI() {
         final PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mPhotoView);
         photoViewAttacher.setOnPhotoTapListener(this);
+        mOverlay.setVisibility(View.GONE);
     }
 
     @Override
@@ -128,7 +131,23 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
 
     @Override
     public void showOverlay(final boolean showOverlay) {
-        mOverlay.setAlpha((float) (showOverlay ? 1.0 : 0.0));
+        if (showOverlay) {
+            mOverlay.setVisibility(View.VISIBLE);
+            mOverlay.animate()
+                    .alpha(1f)
+                    .setDuration(1000)
+                    .setListener(null);
+        } else {
+            mOverlay.animate()
+                    .alpha(0f)
+                    .setDuration(1000)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(final Animator animation) {
+                            mOverlay.setVisibility(View.GONE);
+                        }
+                    });
+        }
     }
 
     @Override

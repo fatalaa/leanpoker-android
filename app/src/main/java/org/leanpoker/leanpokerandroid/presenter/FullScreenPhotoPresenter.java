@@ -14,6 +14,7 @@ public class FullScreenPhotoPresenter implements Presenter {
 
     public FullScreenPhotoPresenter(final PhotoModel photoModel) {
         mPhotoModel = photoModel;
+        mShowOverlay = false;
     }
 
     public void loadPhoto() {
