@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.leanpoker.leanpokerandroid.R;
@@ -16,11 +17,13 @@ import org.leanpoker.leanpokerandroid.view.image.ImageLoader;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by tmolnar on 29/09/15.
  */
-public class FullScreenPhotoFragment extends BaseFragment implements FullScreenPhotoView {
+public class FullScreenPhotoFragment extends BaseFragment implements FullScreenPhotoView,
+        PhotoViewAttacher.OnPhotoTapListener {
 
     private FullScreenPhotoPresenter    mFullScreenPhotoPresenter;
     private PhotoModel                  mPhotoModel;
@@ -28,11 +31,14 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
     @Bind(R.id.fullscreen_photo)
     PhotoView mPhotoView;
 
+    @Bind(R.id.fullscreen_photo_overlay)
+    LinearLayout mOverlay;
+
     @Bind(R.id.fullscreen_photo_uploaded_at)
-    TextView uploadedAt;
+    TextView mUploadedAt;
 
     @Bind(R.id.fullscreen_photo_uploaded_by)
-    TextView uploadedBy;
+    TextView mUploadedBy;
 
     public FullScreenPhotoFragment() {}
 
@@ -45,7 +51,13 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
                 container,
                 false);
         ButterKnife.bind(this, fragmentView);
+        setupUI();
         return fragmentView;
+    }
+
+    private void setupUI() {
+        final PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mPhotoView);
+        photoViewAttacher.setOnPhotoTapListener(this);
     }
 
     @Override
@@ -109,6 +121,18 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
 
     @Override
     public void renderPhoto(final PhotoModel photoModel) {
+        mUploadedAt.setText(photoModel.getUploaded());
+        mUploadedBy.setText(photoModel.getOwner());
         ImageLoader.getInstance().aspectedLoad(photoModel.getUrl(), mPhotoView);
+    }
+
+    @Override
+    public void showOverlay(final boolean showOverlay) {
+        mOverlay.setAlpha((float) (showOverlay ? 1.0 : 0.0));
+    }
+
+    @Override
+    public void onPhotoTap(final View view, final float x, final float y) {
+        mFullScreenPhotoPresenter.toggleOverlayVisibility();
     }
 }

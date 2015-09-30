@@ -10,6 +10,7 @@ public class FullScreenPhotoPresenter implements Presenter {
 
     private FullScreenPhotoView         mFullScreenPhotoView;
     private final PhotoModel            mPhotoModel;
+    private boolean                     mShowOverlay;
 
     public FullScreenPhotoPresenter(final PhotoModel photoModel) {
         mPhotoModel = photoModel;
@@ -36,5 +37,10 @@ public class FullScreenPhotoPresenter implements Presenter {
 
     public void setFullScreenPhotoView(final FullScreenPhotoView mFullScreenPhotoView) {
         this.mFullScreenPhotoView = mFullScreenPhotoView;
+    }
+
+    public void toggleOverlayVisibility() {
+        mShowOverlay = !mShowOverlay;
+        mFullScreenPhotoView.showOverlay(mShowOverlay);
     }
 }

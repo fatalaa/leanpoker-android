@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface FullScreenPhotoView extends LoadDataView {
     void renderPhoto(final PhotoModel photoModel);
+
+    void showOverlay(boolean showOverlay);
 }

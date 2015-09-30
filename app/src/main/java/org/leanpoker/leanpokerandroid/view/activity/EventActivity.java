@@ -34,7 +34,7 @@ public class EventActivity extends BaseActivity {
 		mViewPager = (ViewPager) findViewById(R.id.pager_event_pages);
 		mViewPager.setAdapter(mEventViewPagerAdapter);
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_activity_details);
-		tabLayout.setTabsFromPagerAdapter(mEventViewPagerAdapter);
+		tabLayout.setupWithViewPager(mViewPager);
 	}
 
 	public static Intent createIntent(final Context context, final String eventId) {
