@@ -71,7 +71,10 @@
         </receiver>
     </application>
 
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- Flurry can use gather more relevant data if we give him the following 3 permissions-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>

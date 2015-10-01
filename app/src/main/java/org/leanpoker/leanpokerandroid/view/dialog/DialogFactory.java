@@ -16,7 +16,7 @@ public class DialogFactory {
 	                                            final OnClickListener onClickListener) {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Login");
-		builder.setMessage("To upload pictures you have to be signed in!");
+		builder.setMessage("To uploadPhotoToUploadCare pictures you have to be signed in!");
 		builder.setPositiveButton("Sign in", onClickListener);
 		builder.setNegativeButton(context.getString(android.R.string.cancel), onClickListener);
 		return builder.create();

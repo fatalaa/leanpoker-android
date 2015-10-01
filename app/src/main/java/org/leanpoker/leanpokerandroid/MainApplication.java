@@ -64,7 +64,6 @@ public class MainApplication extends Application {
 
     private void initManagers() {
         UserManager.getInstance().init(this);
-        NetworkManager.getInstance().init(this);
     }
 
     private void initImageLoader() {

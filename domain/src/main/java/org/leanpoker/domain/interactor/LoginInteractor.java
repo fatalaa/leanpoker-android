@@ -8,8 +8,13 @@ import rx.Observable;
  * Created by tmolnar on 19/09/15.
  */
 public class LoginInteractor extends BaseInteractor {
+
     private String mAccessCode;
     private String mState;
+
+    public LoginInteractor() {
+        super();
+    }
 
     @Override
     protected Observable buildInteractorObservable() {

@@ -12,6 +12,7 @@ public class EventPhotoGridInteractor extends BaseInteractor {
     private final String mEventId;
 
     public EventPhotoGridInteractor(final String mEventId) {
+        super();
         this.mEventId = mEventId;
     }
 

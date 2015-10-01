@@ -23,4 +23,15 @@ public class GithubUser {
     public void updateEmails(List<GithubUserEmail> emails) {
         this.emails = emails;
     }
+
+    public GithubUserEmail getPrimaryEmail() {
+        if (emails != null && emails.size() > 0) {
+            for (GithubUserEmail email : emails) {
+                if (email.isPrimary()) {
+                    return email;
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -24,7 +24,7 @@ public class GithubUserEmail {
         this.email = email;
     }
 
-    public Boolean getVerified() {
+    public Boolean isVerified() {
         return verified;
     }
 
@@ -32,7 +32,7 @@ public class GithubUserEmail {
         this.verified = verified;
     }
 
-    public Boolean getPrimary() {
+    public Boolean isPrimary() {
         return primary;
     }
 

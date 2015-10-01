@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,15 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
         EventPhotoGridAdapter.OnPhotoClickListener {
 
     private static final int ADAPTER_COLUMN_COUNT = 2;
+    private static final String TAG = EventPhotoGridFragment.class.getSimpleName();
 
     private EventPhotoGridLayoutManager mEventPhotoGridLayoutManager;
     private EventPhotoGridPresenter     mEventPhotoGridPresenter;
     private EventPhotoGridAdapter       mEventPhotoGridAdapter;
     private String                      mEventId;
 
-	private LoginDialogListener             mLoginDialogListener;
-	private ChoosePhotoAppDialogListener    mChoosePhotoAppDialogListener;
+    public static final int REQUEST_IMAGE_CAPTURE   = 1;
+    public static final int REQUEST_GALLERY_CAPTURE = 2;
 
     @Bind(R.id.recyclerview_photos)
     RecyclerView mPhotoGridRecyclerView;
@@ -97,7 +99,15 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            mEventPhotoGridPresenter.delegateGithubUserFetch();
+            switch (requestCode) {
+                case REQUEST_IMAGE_CAPTURE:
+                case REQUEST_GALLERY_CAPTURE:
+                    mEventPhotoGridPresenter.delegatePhotoUpload(data.getData());
+                    break;
+                default:
+                    mEventPhotoGridPresenter.delegateGithubUserFetch();
+                    break;
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -180,7 +190,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void onClick(final ChoosePhotoAppDialog.PhotoAppType appType) {
-
+        mEventPhotoGridPresenter.navigateToApp(getActivity(), appType);
     }
 
     @Override

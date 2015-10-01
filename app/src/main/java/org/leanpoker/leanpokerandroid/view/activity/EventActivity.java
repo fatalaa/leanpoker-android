@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import org.leanpoker.leanpokerandroid.P;
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.view.adapter.EventViewPagerAdapter;
+import org.leanpoker.leanpokerandroid.view.fragment.BaseFragment;
 
 /**
  * Created by tbalogh on 19/09/15.
@@ -35,6 +36,17 @@ public class EventActivity extends BaseActivity {
 		mViewPager.setAdapter(mEventViewPagerAdapter);
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_activity_details);
 		tabLayout.setupWithViewPager(mViewPager);
+	}
+
+	@Override
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+		BaseFragment currentFragment =
+				(BaseFragment) mEventViewPagerAdapter.getItem(mViewPager.getCurrentItem());
+		if (currentFragment != null) {
+			currentFragment.onActivityResult(requestCode, resultCode, data);
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	public static Intent createIntent(final Context context, final String eventId) {

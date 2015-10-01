@@ -1,19 +1,22 @@
 package org.leanpoker.api;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import org.leanpoker.EventsCache;
 import org.leanpoker.EventsCache.ValidationStrategy;
 import org.leanpoker.JsonMapper;
+import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.api.constants.LeanPokerConstants;
 import org.leanpoker.api.constants.UploadCareConstants;
-import org.leanpoker.data.datamapper.GithubDataMapper;
 import org.leanpoker.data.datamapper.EventDataMapper;
+import org.leanpoker.data.datamapper.GithubDataMapper;
 import org.leanpoker.data.datamapper.UploadCareFileUploadDataMapper;
 import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.model.Event;
@@ -26,7 +29,6 @@ import org.leanpoker.data.response.GithubAccessTokenResponseModel;
 import org.leanpoker.data.response.GithubAuthenticatedUserResponseModel;
 import org.leanpoker.data.response.GithubEmailsResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
-import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.data.store.TokenStore;
 import org.leanpoker.data.store.UserStore;
 
@@ -49,10 +51,8 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	private final OkHttpClient mHttpClient;
 
 	private final LeanPokerService  mLeanPokerService;
-	private final UploadCareService mUploadCareService;
 	private final GithubService 	mGithubOauthService;
 	private final GithubService		mGithubApiService;
-	private Context					mContext;
 
 	private NetworkManager() {
 
@@ -67,13 +67,6 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
 		mLeanPokerService = leanPokerBuilder.build().create(LeanPokerService.class);
 
-		final Retrofit.Builder uploadCareBuilder = new Retrofit.Builder();
-		uploadCareBuilder.baseUrl(UploadCareConstants.BASE_URL);
-		uploadCareBuilder.client(mHttpClient);
-		uploadCareBuilder.addConverterFactory(gsonConverterFactory);
-
-		mUploadCareService = uploadCareBuilder.build().create(UploadCareService.class);
-
 		final Retrofit.Builder githubBuilder = new Retrofit.Builder();
 		githubBuilder.baseUrl(GithubConstants.GITHUB_OAUTH_API_BASE_URL);
 		githubBuilder.client(mHttpClient);
@@ -87,10 +80,6 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		githubApiBuilder.addConverterFactory(gsonConverterFactory);
 
 		mGithubApiService = githubApiBuilder.build().create(GithubService.class);
-	}
-
-	public void init(final Context context) {
-		mContext = context;
 	}
 
 	public static NetworkManager getInstance() {
@@ -174,25 +163,92 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 		return myObservable;
 	}
 
+	@Override
+	public Observable<Boolean> uploadPhotoToLeanPoker(final String tournamentId,
+													  final String email,
+													  final String accessToken,
+													  final String uploadedImageUrl) {
+		Observable<Boolean> urlUploadObservable = Observable.create(
+				new OnSubscribe<Boolean>() {
+					@Override
+					public void call(final Subscriber<? super Boolean> subscriber) {
+						String url = String.format(
+								"%s%s%s%s",
+								LeanPokerConstants.BASE_URL,
+								"/api/tournament/",
+								tournamentId,
+								"image"
+						);
+						RequestBody requestBody = new FormEncodingBuilder()
+								.add(LeanPokerConstants.LOGIN_FIELD_KEY, email)
+								.add(LeanPokerConstants.TOKEN_FIELD_KEY, accessToken)
+								.add(LeanPokerConstants.IMAGE_FIELD_KEY, uploadedImageUrl)
+								.build();
+						Request request = new Request.Builder()
+								.url(url)
+								.post(requestBody)
+								.build();
+						try {
+							Response response = mHttpClient.newCall(request).execute();
+							if (response.isSuccessful()) {
+								subscriber.onNext(Boolean.TRUE);
+							} else {
+								if (response.code() == 403) {
+									throw new Exception("Not a valid access token/email/member");
+								} else {
+									throw new Exception("Unsuccessful request");
+								}
+							}
+						} catch (Exception e) {
+							subscriber.onError(e);
+						}
+					}
+				}
+		);
+		return urlUploadObservable;
+	}
+
 
 	@Override
-	public Observable<UploadedFile> upload(final File file, final String mimeType) {
+	public Observable<UploadedFile> uploadPhotoToUploadCare(final File file, final String mimeType) {
 		Observable<UploadedFile> fileUploadObservable = Observable.create(
 				new OnSubscribe<UploadedFile>() {
 					@Override
 					public void call(final Subscriber<? super UploadedFile> subscriber) {
 						MediaType mediaType = MediaType.parse(mimeType);
 						try {
-							final UploadCareFileUploadResponseModel fileUploadResponse = mUploadCareService
-									.upload(
-											UploadCareConstants.PUBLIC_KEY,
-											UploadCareConstants.STORE_FILES,
+							RequestBody requestBody = new MultipartBuilder()
+									.type(MultipartBuilder.FORM)
+									.addFormDataPart(
+											UploadCareConstants.PUBLIC_KEY_PARAM,
+											UploadCareConstants.PUBLIC_KEY)
+									.addFormDataPart(
+											UploadCareConstants.UPLOADCARE_STORE,
+											String.valueOf(UploadCareConstants.STORE_FILES))
+									.addFormDataPart(
+											"file",
+											file.getName(),
 											RequestBody.create(mediaType, file)
-									).execute().body();
-
-							UploadedFile uploadedFile = new UploadCareFileUploadDataMapper()
-									.transform(fileUploadResponse);
-							subscriber.onNext(uploadedFile);
+									)
+									.build();
+							Request request = new Request.Builder()
+									.post(requestBody)
+									.url(UploadCareConstants.BASE_URL + UploadCareConstants.UPLOAD_ENDPOINT)
+									.build();
+							com.squareup.okhttp.Response response =
+									mHttpClient.newCall(request).execute();
+							if (response.isSuccessful()) {
+								UploadCareFileUploadResponseModel uploadResponse =
+										JsonMapper.GSON.fromJson(
+												response.body().string(),
+												UploadCareFileUploadResponseModel.class);
+								subscriber.onNext(
+										new UploadCareFileUploadDataMapper()
+												.transform(uploadResponse)
+								);
+							} else {
+								subscriber.onError(new Exception("Unsuccessful uploadPhotoToUploadCare request"));
+							}
 						} catch (IOException e) {
 							subscriber.onError(e);
 						}

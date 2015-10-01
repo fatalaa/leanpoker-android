@@ -2,13 +2,19 @@ package org.leanpoker.leanpokerandroid.navigator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import org.leanpoker.leanpokerandroid.model.PhotoModel;
+import org.leanpoker.leanpokerandroid.util.GraphicsUtil;
+import org.leanpoker.leanpokerandroid.util.IntentFactory;
 import org.leanpoker.leanpokerandroid.view.activity.EventActivity;
 import org.leanpoker.leanpokerandroid.view.activity.EventListActivity;
 import org.leanpoker.leanpokerandroid.view.activity.FullScreenPhotoActivity;
 import org.leanpoker.leanpokerandroid.view.activity.LoginActivity;
+import org.leanpoker.leanpokerandroid.view.fragment.EventPhotoGridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +67,22 @@ public class Navigator {
 						photoModels,
 						clickedPhotoIndex
 				)
+		);
+	}
+
+	public void navigateToCameraApp(final Activity activity, final Uri outputImageUri) {
+		Intent takePictureIntent = IntentFactory.createImageChooserIntent(activity, outputImageUri);
+		activity.startActivityForResult(
+				takePictureIntent,
+				EventPhotoGridFragment.REQUEST_IMAGE_CAPTURE
+		);
+	}
+
+	public void navigateToGalleryApp(final Activity activity) {
+		Intent galleryIntent = IntentFactory.createGalleryIntent();
+		activity.startActivityForResult(
+				galleryIntent,
+				EventPhotoGridFragment.REQUEST_GALLERY_CAPTURE
 		);
 	}
 }

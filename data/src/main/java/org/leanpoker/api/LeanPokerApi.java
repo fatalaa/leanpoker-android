@@ -14,4 +14,10 @@ public interface LeanPokerApi {
 	Observable<List<Event>> events();
 	Observable<Event> event(final String eventId);
 	Observable<List<Photo>> photos(final String eventId);
+	Observable<Boolean> uploadPhotoToLeanPoker(
+			final String tournamentId,
+			final String email,
+			final String accessToken,
+			final String uploadedImageUrl
+	);
 }

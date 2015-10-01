@@ -38,7 +38,7 @@ public class ChoosePhotoAppDialog extends DialogFragment implements Dialog.OnCli
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final String [] options = new String[]{"Gallery", "Camera"};
         builder.setTitle("Choose an app");
-//        builder.setMessage("You have to choose an app to upload photos!");
+//        builder.setMessage("You have to choose an app to uploadPhotoToUploadCare photos!");
 //        builder.setPositiveButton("Sign in", this);
         builder.setItems(options, this);
         builder.setNegativeButton("Cancel", this);
@@ -48,8 +48,11 @@ public class ChoosePhotoAppDialog extends DialogFragment implements Dialog.OnCli
     @Override
     public void onClick(final DialogInterface dialog, final int which) {
         switch (which) {
+            case 0:
+                mListener.onClick(PhotoAppType.GALLERY);
+                break;
             case 1:
-                Log.e("ASD", "ADSD");
+                mListener.onClick(PhotoAppType.CAMERA);
                 break;
         }
     }

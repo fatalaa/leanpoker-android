@@ -12,6 +12,7 @@ public class EventWithDetailsInteractor extends BaseInteractor {
 	private final String mEventId;
 
 	public EventWithDetailsInteractor(final String eventId) {
+		super();
 		mEventId = eventId;
 	}
 
