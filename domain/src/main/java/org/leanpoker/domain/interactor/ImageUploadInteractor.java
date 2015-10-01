@@ -54,9 +54,9 @@ public class ImageUploadInteractor extends BaseInteractor {
                         return String.format("https://ucarecdn.com/%s/nth/", uploadedFile.getUuid());
                     }
                 })
-                .map(new Func1<String, Observable>() {
+                .map(new Func1<String, Boolean>() {
                     @Override
-                    public Observable call(final String imageUrl) {
+                    public Boolean call(final String imageUrl) {
                         GithubUser githubUser = UserStore.getInstance().getUser();
                         return NetworkManager.getInstance().uploadPhotoToLeanPoker(
                                 mEventId,

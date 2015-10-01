@@ -100,10 +100,10 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_IMAGE_CAPTURE:
                 case REQUEST_GALLERY_CAPTURE:
                     mEventPhotoGridPresenter.delegatePhotoUpload(data.getData());
                     break;
+                case REQUEST_IMAGE_CAPTURE:
                 default:
                     mEventPhotoGridPresenter.delegateGithubUserFetch();
                     break;

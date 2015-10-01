@@ -71,7 +71,7 @@ public class Navigator {
 	}
 
 	public void navigateToCameraApp(final Activity activity, final Uri outputImageUri) {
-		Intent takePictureIntent = IntentFactory.createImageChooserIntent(activity, outputImageUri);
+		Intent takePictureIntent = IntentFactory.createCameraIntent(activity, outputImageUri);
 		activity.startActivityForResult(
 				takePictureIntent,
 				EventPhotoGridFragment.REQUEST_IMAGE_CAPTURE

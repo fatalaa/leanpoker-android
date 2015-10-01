@@ -164,48 +164,32 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	}
 
 	@Override
-	public Observable<Boolean> uploadPhotoToLeanPoker(final String tournamentId,
+	public Boolean uploadPhotoToLeanPoker(final String tournamentId,
 													  final String email,
 													  final String accessToken,
 													  final String uploadedImageUrl) {
-		Observable<Boolean> urlUploadObservable = Observable.create(
-				new OnSubscribe<Boolean>() {
-					@Override
-					public void call(final Subscriber<? super Boolean> subscriber) {
-						String url = String.format(
-								"%s%s%s%s",
-								LeanPokerConstants.BASE_URL,
-								"/api/tournament/",
-								tournamentId,
-								"image"
-						);
-						RequestBody requestBody = new FormEncodingBuilder()
-								.add(LeanPokerConstants.LOGIN_FIELD_KEY, email)
-								.add(LeanPokerConstants.TOKEN_FIELD_KEY, accessToken)
-								.add(LeanPokerConstants.IMAGE_FIELD_KEY, uploadedImageUrl)
-								.build();
-						Request request = new Request.Builder()
-								.url(url)
-								.post(requestBody)
-								.build();
-						try {
-							Response response = mHttpClient.newCall(request).execute();
-							if (response.isSuccessful()) {
-								subscriber.onNext(Boolean.TRUE);
-							} else {
-								if (response.code() == 403) {
-									throw new Exception("Not a valid access token/email/member");
-								} else {
-									throw new Exception("Unsuccessful request");
-								}
-							}
-						} catch (Exception e) {
-							subscriber.onError(e);
-						}
-					}
-				}
+		String url = String.format(
+				"%s%s%s%s",
+				LeanPokerConstants.BASE_URL,
+				"/api/tournament/",
+				tournamentId,
+				"/image"
 		);
-		return urlUploadObservable;
+		RequestBody requestBody = new FormEncodingBuilder()
+				.add(LeanPokerConstants.LOGIN_FIELD_KEY, email)
+				.add(LeanPokerConstants.TOKEN_FIELD_KEY, accessToken)
+				.add(LeanPokerConstants.IMAGE_FIELD_KEY, uploadedImageUrl)
+				.build();
+		Request request = new Request.Builder()
+				.url(url)
+				.post(requestBody)
+				.build();
+		try {
+			Response response = mHttpClient.newCall(request).execute();
+			return response.isSuccessful();
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 

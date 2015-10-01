@@ -63,6 +63,10 @@ public class IntentFactory {
         return cameraIntents;
     }
 
+    public static Intent createCameraIntent(Context c, Uri file) {
+        return createCameraIntents(c, file).get(0);
+    }
+
     /**
      * Create an intent for image galleries
      *
