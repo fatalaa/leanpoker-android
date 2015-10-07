@@ -18,6 +18,6 @@ public class EventWithDetailsInteractor extends BaseInteractor {
 
 	@Override
 	protected Observable buildInteractorObservable() {
-		return NetworkManager.getInstance().event(mEventId);
+		return NetworkManager.getInstance().getEvent(mEventId);
 	}
 }

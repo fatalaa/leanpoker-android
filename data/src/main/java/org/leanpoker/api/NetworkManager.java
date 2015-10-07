@@ -1,7 +1,10 @@
 package org.leanpoker.api;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -36,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import okio.Buffer;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import rx.Observable;
@@ -47,6 +51,7 @@ import rx.Subscriber;
  */
 public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
+	private static final String TAG = NetworkManager.class.getSimpleName();
 	private static NetworkManager mInstance 		= new NetworkManager();
 	private final OkHttpClient mHttpClient;
 
@@ -54,9 +59,28 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	private final GithubService 	mGithubOauthService;
 	private final GithubService		mGithubApiService;
 
+	private static String bodyToString(final Request request){
+
+		try {
+			final Request copy = request.newBuilder().build();
+			final Buffer buffer = new Buffer();
+			copy.body().writeTo(buffer);
+			return buffer.readUtf8();
+		} catch (final IOException e) {
+			return "did not work";
+		}
+	}
+
 	private NetworkManager() {
 
 		mHttpClient 	= new OkHttpClient();
+		mHttpClient.interceptors().add(new Interceptor() {
+			@Override
+			public Response intercept(final Chain chain) throws IOException {
+//				Log.d(TAG, bodyToString(chain.request()));
+				return chain.proceed(chain.request());
+			}
+		});
 		final Gson gson = JsonMapper.GSON;
 		final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
 
@@ -87,7 +111,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	}
 
 	@Override
-	public Observable<List<Event>> events() {
+	public Observable<List<Event>> getEvents() {
 		Observable<List<Event>> myObservable = Observable.create(new OnSubscribe<List<Event>>() {
 			@Override
 			public void call(final Subscriber<? super List<Event>> subscriber) {
@@ -102,6 +126,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 						EventsCache.getInstance().cacheEvents(events,
 						                                      ValidationStrategy.NEVER_INVALIDATE);
 						subscriber.onNext(events);
+						subscriber.onCompleted();
 					}
 				} catch (IOException e) {
 					subscriber.onError(e);
@@ -112,7 +137,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	}
 
 	@Override
-	public Observable<Event> event(final String eventId) {
+	public Observable<Event> getEvent(final String eventId) {
 		Observable<Event> myObservable = Observable.create(new OnSubscribe<Event>() {
 			@Override
 			public void call(final Subscriber<? super Event> subscriber) {
@@ -127,7 +152,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 						EventsCache.getInstance().cacheEvents(events,
 						                                      ValidationStrategy.NEVER_INVALIDATE);
 						subscriber.onNext(EventsCache.getInstance().getEvent(eventId));
-						// TODO(tb): 19/09/15  Retrieve and cache only the specific event with the given id instead of retrieving all the events.
+						// TODO(tb): 19/09/15  Retrieve and cache only the specific getEvent with the given id instead of retrieving all the getEvents.
 					}
 				} catch (final IOException ex){
 					subscriber.onError(ex);
@@ -138,7 +163,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 	}
 
 	@Override
-	public Observable<List<Photo>> photos(final String eventId) {
+	public Observable<List<Photo>> getPhotos(final String eventId) {
 		Observable<List<Photo>> myObservable = Observable.create(new OnSubscribe<List<Photo>>() {
 			@Override
 			public void call(final Subscriber<? super List<Photo>> subscriber) {
@@ -153,7 +178,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 						EventsCache.getInstance().cacheEvents(events,
 								ValidationStrategy.NEVER_INVALIDATE);
 						subscriber.onNext(EventsCache.getInstance().getEvent(eventId).getPhotos());
-						// TODO(tb): 19/09/15  Retrieve and cache only the specific event with the given id instead of retrieving all the events.
+						// TODO(tb): 19/09/15  Retrieve and cache only the specific getEvent with the given id instead of retrieving all the getEvents.
 					}
 				} catch (final IOException ex){
 					subscriber.onError(ex);
@@ -165,9 +190,9 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
 	@Override
 	public Boolean uploadPhotoToLeanPoker(final String tournamentId,
-													  final String email,
-													  final String accessToken,
-													  final String uploadedImageUrl) {
+										  final String login,
+										  final String accessToken,
+										  final String uploadedImageUrl) {
 		String url = String.format(
 				"%s%s%s%s",
 				LeanPokerConstants.BASE_URL,
@@ -176,7 +201,7 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 				"/image"
 		);
 		RequestBody requestBody = new FormEncodingBuilder()
-				.add(LeanPokerConstants.LOGIN_FIELD_KEY, email)
+				.add(LeanPokerConstants.LOGIN_FIELD_KEY, login)
 				.add(LeanPokerConstants.TOKEN_FIELD_KEY, accessToken)
 				.add(LeanPokerConstants.IMAGE_FIELD_KEY, uploadedImageUrl)
 				.build();

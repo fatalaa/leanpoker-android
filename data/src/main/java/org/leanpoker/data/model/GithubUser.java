@@ -24,14 +24,19 @@ public class GithubUser {
         this.emails = emails;
     }
 
-    public GithubUserEmail getPrimaryEmail() {
-        if (emails != null && emails.size() > 0) {
-            for (GithubUserEmail email : emails) {
-                if (email.isPrimary()) {
-                    return email;
-                }
-            }
-        }
-        return null;
+    public String getLogin() {
+        return login;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<GithubUserEmail> getEmails() {
+        return emails;
     }
 }

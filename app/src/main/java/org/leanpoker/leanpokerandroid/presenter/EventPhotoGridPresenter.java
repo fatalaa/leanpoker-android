@@ -6,12 +6,14 @@ import android.util.Log;
 
 import org.leanpoker.data.model.GithubUser;
 import org.leanpoker.data.model.Photo;
+import org.leanpoker.data.store.MiscStorage;
 import org.leanpoker.data.store.UserStore;
 import org.leanpoker.domain.interactor.EventPhotoGridInteractor;
 import org.leanpoker.domain.interactor.GithubUserEmailsInteractor;
 import org.leanpoker.domain.interactor.GithubUserInteractor;
 import org.leanpoker.domain.interactor.ImageUploadInteractor;
 import org.leanpoker.domain.interactor.IsUserLoggedInInteractor;
+import org.leanpoker.leanpokerandroid.P;
 import org.leanpoker.leanpokerandroid.model.PhotoModel;
 import org.leanpoker.leanpokerandroid.modelmapper.EventPhotoGridDataMapper;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
@@ -22,10 +24,7 @@ import org.leanpoker.leanpokerandroid.view.dialog.ChoosePhotoAppDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by tmolnar on 21/09/15.
@@ -87,8 +86,7 @@ public class EventPhotoGridPresenter implements Presenter {
 		
 	}
 
-	public void navigateToFullScreenPhotoActivity(final String eventId,
-												  final int clickedPhotoIndex) {
+	public void navigateToFullScreenPhotoActivity(final int clickedPhotoIndex) {
 		Navigator.getInstance().navigateToFullScreenPhotoActivity(
 				mEventPhotoGridView.getContext(),
 				mPhotoModels,
@@ -100,16 +98,29 @@ public class EventPhotoGridPresenter implements Presenter {
 		if (appType == ChoosePhotoAppDialog.PhotoAppType.GALLERY) {
 			Navigator.getInstance().navigateToGalleryApp(activity);
 		} else {
+			//TODO refactor this to somewhere else
 			final Uri uri = GraphicsUtil.createImageUri();
+			MiscStorage.getInstance().put(P.Common.CAMERA_IMAGE_URI_KEY, uri);
 			Navigator.getInstance().navigateToCameraApp(activity, uri);
 		}
 	}
 
-	public void delegatePhotoUpload(final Uri data) {
+	public void delegatePhotoUpload(final Uri uri) {
 		ImageUploadInteractor uploadInteractor = new ImageUploadInteractor(
 				mEventPhotoGridView.getContext(),
-				data,
-				mEventId
+				uri,
+				mEventId,
+				false
+		);
+		uploadInteractor.execute(new ImageUploadSubscriber());
+	}
+
+	public void delegateCameraBackedPhotoUpload(final Uri uri) {
+		ImageUploadInteractor uploadInteractor = new ImageUploadInteractor(
+				mEventPhotoGridView.getContext(),
+				uri,
+				mEventId,
+				true
 		);
 		uploadInteractor.execute(new ImageUploadSubscriber());
 	}
@@ -132,8 +143,11 @@ public class EventPhotoGridPresenter implements Presenter {
 		@Override
 		public void onNext(final Boolean success) {
 			if (success) {
-				mEventPhotoGridView.showError("Sucessfully uploaded image, YEAAAA");
+				mEventPhotoGridView.showError("Sucessfully uploaded image");
+			} else {
+				mEventPhotoGridView.showError("Failed to upload image");
 			}
+			MiscStorage.getInstance().remove(P.Common.CAMERA_IMAGE_URI_KEY);
 		}
 	}
 

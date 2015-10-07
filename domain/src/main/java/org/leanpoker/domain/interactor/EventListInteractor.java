@@ -23,6 +23,6 @@ public class EventListInteractor extends BaseInteractor {
 
 	@Override
 	protected Observable buildInteractorObservable() {
-		return NetworkManager.getInstance().events();
+		return NetworkManager.getInstance().getEvents();
 	}
 }

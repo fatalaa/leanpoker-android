@@ -2,15 +2,17 @@ package org.leanpoker.leanpokerandroid.view.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.leanpoker.data.store.MiscStorage;
+import org.leanpoker.leanpokerandroid.P;
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.PhotoModel;
 import org.leanpoker.leanpokerandroid.presenter.EventPhotoGridPresenter;
@@ -104,6 +106,10 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
                     mEventPhotoGridPresenter.delegatePhotoUpload(data.getData());
                     break;
                 case REQUEST_IMAGE_CAPTURE:
+                    mEventPhotoGridPresenter.delegateCameraBackedPhotoUpload(
+                            (Uri) MiscStorage.getInstance().get(P.Common.CAMERA_IMAGE_URI_KEY)
+                    );
+                    break;
                 default:
                     mEventPhotoGridPresenter.delegateGithubUserFetch();
                     break;
@@ -195,6 +201,6 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void onPhotoClick(final int clickedPhotoIndex) {
-        mEventPhotoGridPresenter.navigateToFullScreenPhotoActivity(mEventId, clickedPhotoIndex);
+        mEventPhotoGridPresenter.navigateToFullScreenPhotoActivity(clickedPhotoIndex);
     }
 }

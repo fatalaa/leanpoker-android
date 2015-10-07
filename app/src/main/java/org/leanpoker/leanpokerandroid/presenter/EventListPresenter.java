@@ -36,6 +36,7 @@ public class EventListPresenter implements Presenter {
 	}
 
 	public void getEventList() {
+		mEventListView.showLoading();
 		mEventListInteractor.execute(new EventListSubscriber());
 	}
 
@@ -67,6 +68,7 @@ public class EventListPresenter implements Presenter {
 
 		@Override
 		public void onNext(final List<Event> events) {
+			EventListPresenter.this.hideViewLoading();
 			EventListPresenter.this.showEvents(events);
 		}
 	}

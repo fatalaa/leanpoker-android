@@ -29,7 +29,7 @@ public class EventActivity extends BaseActivity {
 
 	private void setupUI(final String eventId) {
 		if (TextUtils.isEmpty(eventId)) {
-			throw new RuntimeException("Invalid event id has been given!");
+			throw new RuntimeException("Invalid getEvent id has been given!");
 		}
 		mEventViewPagerAdapter = new EventViewPagerAdapter(getSupportFragmentManager(), eventId);
 		mViewPager = (ViewPager) findViewById(R.id.pager_event_pages);

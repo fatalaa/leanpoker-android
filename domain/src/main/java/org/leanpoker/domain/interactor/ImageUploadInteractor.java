@@ -26,17 +26,25 @@ public class ImageUploadInteractor extends BaseInteractor {
     private final Uri mUri;
     private final Context mContext;
     private final String mEventId;
+    private final boolean mCameraBased;
 
-    public ImageUploadInteractor(final Context context, final Uri uri, final String eventId) {
+    public ImageUploadInteractor(final Context context, final Uri uri, final String eventId,
+                                 final boolean cameraBased) {
         super();
         mContext = context;
         mUri = uri;
         mEventId = eventId;
+        mCameraBased = cameraBased;
     }
 
     @Override
     protected Observable buildInteractorObservable() {
-        String realPath = PathMagic.getRealPathFromUri(mContext, mUri);
+        String realPath;
+        if (mCameraBased) {
+            realPath = mUri.getPath();
+        } else {
+            realPath = PathMagic.getRealPathFromUri(mContext, mUri);
+        }
         File file = new File(realPath);
         if (file.canRead()) {
             Log.d(TAG, String.format("%s can be readed", file.getAbsolutePath()));
@@ -51,16 +59,15 @@ public class ImageUploadInteractor extends BaseInteractor {
                 .map(new Func1<UploadedFile,String>() {
                     @Override
                     public String call(final UploadedFile uploadedFile) {
-                        return String.format("https://ucarecdn.com/%s/nth/", uploadedFile.getUuid());
+                        return String.format("https://www.ucarecdn.com/%s/", uploadedFile.getUuid());
                     }
                 })
                 .map(new Func1<String, Boolean>() {
                     @Override
                     public Boolean call(final String imageUrl) {
-                        GithubUser githubUser = UserStore.getInstance().getUser();
                         return NetworkManager.getInstance().uploadPhotoToLeanPoker(
                                 mEventId,
-                                githubUser.getPrimaryEmail().getEmail(),
+                                UserStore.getInstance().getUser().getLogin(),
                                 TokenStore.getInstance().getAccessToken().getAccessToken(),
                                 imageUrl
                         );

@@ -11,12 +11,12 @@ import rx.Observable;
  * Created by tmolnar on 12/09/15.
  */
 public interface LeanPokerApi {
-	Observable<List<Event>> events();
-	Observable<Event> event(final String eventId);
-	Observable<List<Photo>> photos(final String eventId);
+	Observable<List<Event>> getEvents();
+	Observable<Event> getEvent(final String eventId);
+	Observable<List<Photo>> getPhotos(final String eventId);
 	Boolean uploadPhotoToLeanPoker(
 			final String tournamentId,
-			final String email,
+			final String login,
 			final String accessToken,
 			final String uploadedImageUrl
 	);

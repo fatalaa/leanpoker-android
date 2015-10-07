@@ -38,7 +38,7 @@ public class ChoosePhotoAppDialog extends DialogFragment implements Dialog.OnCli
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final String [] options = new String[]{"Gallery", "Camera"};
         builder.setTitle("Choose an app");
-//        builder.setMessage("You have to choose an app to uploadPhotoToUploadCare photos!");
+//        builder.setMessage("You have to choose an app to uploadPhotoToUploadCare getPhotos!");
 //        builder.setPositiveButton("Sign in", this);
         builder.setItems(options, this);
         builder.setNegativeButton("Cancel", this);

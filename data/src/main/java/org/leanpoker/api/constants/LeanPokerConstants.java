@@ -11,5 +11,5 @@ public class LeanPokerConstants {
     public static final String TOURNAMENT_ID_PATH_KEY   = "tournament_id";
     public static final String LOGIN_FIELD_KEY          = "login";
     public static final String TOKEN_FIELD_KEY          = "token";
-    public static final String IMAGE_FIELD_KEY          = "files";
+    public static final String IMAGE_FIELD_KEY          = "files[]";
 }

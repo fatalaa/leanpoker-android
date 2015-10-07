@@ -17,7 +17,7 @@ public class EventResponseModel {
 
     private String date;
 
-    @SerializedName("event-url")
+    @SerializedName("getEvent-url")
     private String eventUrl;
 
     @SerializedName("formated-date")

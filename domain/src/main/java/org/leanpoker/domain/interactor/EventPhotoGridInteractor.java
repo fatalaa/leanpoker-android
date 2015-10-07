@@ -18,6 +18,6 @@ public class EventPhotoGridInteractor extends BaseInteractor {
 
     @Override
     protected Observable buildInteractorObservable() {
-        return NetworkManager.getInstance().photos(mEventId);
+        return NetworkManager.getInstance().getPhotos(mEventId);
     }
 }

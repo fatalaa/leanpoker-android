@@ -2,6 +2,7 @@ package org.leanpoker.leanpokerandroid.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,15 @@ import butterknife.ButterKnife;
  * Created by tbalogh on 06/09/15.
  */
 public abstract class EventListFragment extends BaseFragment implements EventListView,
-		OnEventClickListener {
+		OnEventClickListener, SwipeRefreshLayout.OnRefreshListener {
 
 	private EventListLayoutManager mEventListLayoutManager;
 	private EventListPresenter  mEventListPresenter;
 
 	protected EventListAdapter mEventListAdapter;
+
+	@Bind(R.id.pull_to_refresh)
+	SwipeRefreshLayout mSwipeRefreshLayout;
 
 	@Bind(R.id.recyclerview_events)
 	RecyclerView mEventsRecyclerView;
@@ -77,12 +81,12 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 
 	@Override
 	public void showLoading() {
-
+		mSwipeRefreshLayout.setRefreshing(true);
 	}
 
 	@Override
 	public void hideLoading() {
-
+		mSwipeRefreshLayout.setRefreshing(false);
 	}
 
 	@Override
@@ -111,5 +115,11 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 		mEventListAdapter = new EventListAdapter(getActivity(), new ArrayList<EventModel>());
 		mEventListAdapter.setOnEventClickListener(this);
 		mEventsRecyclerView.setAdapter(mEventListAdapter);
+		mSwipeRefreshLayout.setOnRefreshListener(this);
+	}
+
+	@Override
+	public void onRefresh() {
+		loadEvents();
 	}
 }

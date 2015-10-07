@@ -30,7 +30,7 @@ public class LoginDialog extends DialogFragment implements Dialog.OnClickListene
 		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		builder.setTitle("Login");
-		builder.setMessage("You have to be signed in to uploadPhotoToUploadCare photos.");
+		builder.setMessage("You have to be signed in to uploadPhotoToUploadCare getPhotos.");
 		builder.setPositiveButton("Sign in", this);
 		builder.setNegativeButton("Cancel", this);
 		return builder.create();
