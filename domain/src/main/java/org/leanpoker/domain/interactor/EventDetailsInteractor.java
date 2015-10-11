@@ -7,11 +7,11 @@ import rx.Observable;
 /**
  * Created by tbalogh on 19/09/15.
  */
-public class EventWithDetailsInteractor extends BaseInteractor {
+public class EventDetailsInteractor extends BaseInteractor {
 
 	private final String mEventId;
 
-	public EventWithDetailsInteractor(final String eventId) {
+	public EventDetailsInteractor(final String eventId) {
 		super();
 		mEventId = eventId;
 	}
