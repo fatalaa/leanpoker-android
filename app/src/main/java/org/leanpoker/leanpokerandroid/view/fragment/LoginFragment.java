@@ -1,6 +1,5 @@
 package org.leanpoker.leanpokerandroid.view.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,11 +9,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import org.leanpoker.Utils;
+import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.leanpokerandroid.R;
-import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.presenter.LoginPresenter;
 import org.leanpoker.leanpokerandroid.view.LoginView;
-import org.leanpoker.api.constants.GithubConstants;
 
 import java.util.UUID;
 
@@ -89,16 +87,5 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     public static LoginFragment newInstance() {
         return new LoginFragment();
-    }
-
-    @Override
-    public void navigateToEventListAcitivity() {
-        Navigator.getInstance().naviateToEventListActivity(getActivity());
-    }
-
-    @Override
-    public void navigateToPreviousActivity() {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
     }
 }

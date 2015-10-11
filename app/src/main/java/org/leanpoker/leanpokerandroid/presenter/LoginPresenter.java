@@ -5,6 +5,7 @@ import android.util.Log;
 import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.store.TokenStore;
 import org.leanpoker.domain.interactor.LoginInteractor;
+import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.view.LoginView;
 
 import rx.Subscriber;
@@ -22,6 +23,11 @@ public class LoginPresenter implements Presenter {
         mLoginView = loginView;
     }
 
+	public void delegateTokenRequest(String accessCode, String state) {
+		mInteractor.setUpCredentials(accessCode, state);
+		mInteractor.execute(new LoginSubscriber());
+	}
+
     @Override
     public void resume() {
 
@@ -34,7 +40,7 @@ public class LoginPresenter implements Presenter {
 
     @Override
     public void destroy() {
-
+	    mInteractor.unsubscribe();
     }
 
     final class LoginSubscriber extends Subscriber<AccessToken> {
@@ -52,12 +58,7 @@ public class LoginPresenter implements Presenter {
         @Override
         public void onNext(final AccessToken accessToken) {
             TokenStore.getInstance().setAccessToken(accessToken);
-            mLoginView.navigateToPreviousActivity();
+	        Navigator.getInstance().finishActivityWithResultOK(mLoginView.getActivity());
         }
-    }
-
-    public void delegateTokenRequest(String accessCode, String state) {
-        mInteractor.setUpCredentials(accessCode, state);
-        mInteractor.execute(new LoginSubscriber());
     }
 }
