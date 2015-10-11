@@ -53,26 +53,6 @@ public class EventPhotoGridPresenter implements Presenter {
 		mEventPhotoGridView = eventPhotoGridView;
 	}
 
-	public void getPhotosGrid() {
-		mEventPhotoGridInteractor.execute(new EventPhotoGridSubscriber());
-	}
-
-	@Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void destroy() {
-        mEventPhotoGridInteractor.unsubscribe();
-		mGithubUserEmailsInteractor.unsubscribe();
-    }
-
 	public void uploadPhotos() {
 		mIsUserLoggedInInteractor.execute(new IsUserLoggedInSubscriber());
 	}
@@ -81,17 +61,9 @@ public class EventPhotoGridPresenter implements Presenter {
 		Navigator.getInstance().navigateToLoginActivity(mEventPhotoGridView.getContext());
 	}
 
-	public void delegateGithubUserFetch() {
-		mGithubUserInteractor.execute(new GithubUserSubscriber());
-		
-	}
-
 	public void navigateToFullScreenPhotoActivity(final int clickedPhotoIndex) {
-		Navigator.getInstance().navigateToFullScreenPhotoActivity(
-				mEventPhotoGridView.getContext(),
-				mPhotoModels,
-				clickedPhotoIndex
-		);
+		Navigator.getInstance().navigateToFullScreenPhotoActivity(mEventPhotoGridView.getContext(),
+		                                                          mPhotoModels, clickedPhotoIndex);
 	}
 
 	public void navigateToApp(final Activity activity, final ChoosePhotoAppDialog.PhotoAppType appType) {
@@ -103,6 +75,10 @@ public class EventPhotoGridPresenter implements Presenter {
 			MiscStorage.getInstance().put(P.Common.CAMERA_IMAGE_URI_KEY, uri);
 			Navigator.getInstance().navigateToCameraApp(activity, uri);
 		}
+	}
+
+	public void delegateGithubUserFetch() {
+		mGithubUserInteractor.execute(new GithubUserSubscriber());
 	}
 
 	public void delegatePhotoUpload(final Uri uri) {
@@ -125,6 +101,43 @@ public class EventPhotoGridPresenter implements Presenter {
 		uploadInteractor.execute(new ImageUploadSubscriber());
 	}
 
+	public void getPhotosGrid() {
+		mEventPhotoGridInteractor.execute(new EventPhotoGridSubscriber());
+	}
+
+	@Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void destroy() {
+        mEventPhotoGridInteractor.unsubscribe();
+		mGithubUserEmailsInteractor.unsubscribe();
+    }
+
+	private void showPhotos(List<Photo> photos) {
+		mPhotoModels = (ArrayList<PhotoModel>) mEventPhotoGridDataMapper.transform(photos);
+		mEventPhotoGridView.renderPhotoList(mPhotoModels);
+	}
+
+	private void hideViewLoading() {
+		mEventPhotoGridView.hideLoading();
+	}
+
+	private void showViewLoading() {
+		mEventPhotoGridView.showLoading();
+	}
+
+	private void showError() {
+		mEventPhotoGridView.showLoadingError("Photos cannot be loaded");
+	}
+
 	final class ImageUploadSubscriber extends Subscriber<Boolean> {
 
 		private final String TAG = ImageUploadSubscriber.class.getSimpleName();
@@ -143,9 +156,9 @@ public class EventPhotoGridPresenter implements Presenter {
 		@Override
 		public void onNext(final Boolean success) {
 			if (success) {
-				mEventPhotoGridView.showError("Sucessfully uploaded image");
+				mEventPhotoGridView.showLoadingError("Sucessfully uploaded image");
 			} else {
-				mEventPhotoGridView.showError("Failed to upload image");
+				mEventPhotoGridView.showLoadingError("Failed to upload image");
 			}
 			MiscStorage.getInstance().remove(P.Common.CAMERA_IMAGE_URI_KEY);
 		}
@@ -160,7 +173,7 @@ public class EventPhotoGridPresenter implements Presenter {
 
 		@Override
 		public void onError(final Throwable e) {
-			mEventPhotoGridView.showError(e.getMessage());
+			mEventPhotoGridView.showLoadingError(e.getMessage());
 		}
 
 		@Override
@@ -178,7 +191,7 @@ public class EventPhotoGridPresenter implements Presenter {
 
 		@Override
 		public void onError(final Throwable e) {
-			mEventPhotoGridView.showError(e.getMessage());
+			mEventPhotoGridView.showLoadingError(e.getMessage());
 		}
 
 		@Override
@@ -217,20 +230,4 @@ public class EventPhotoGridPresenter implements Presenter {
         }
     }
 
-    private void showPhotos(List<Photo> photos) {
-		mPhotoModels = (ArrayList<PhotoModel>) mEventPhotoGridDataMapper.transform(photos);
-		mEventPhotoGridView.renderPhotoList(mPhotoModels);
-    }
-
-    private void hideViewLoading() {
-        mEventPhotoGridView.hideLoading();
-    }
-
-    private void showViewLoading() {
-        mEventPhotoGridView.showLoading();
-    }
-
-    private void showError() {
-        mEventPhotoGridView.showError("Photos cannot be loaded");
-    }
 }

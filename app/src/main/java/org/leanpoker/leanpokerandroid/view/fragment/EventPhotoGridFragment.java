@@ -174,7 +174,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     }
 
     @Override
-    public void showError(final String message) {
+    public void showLoadingError(final String message) {
         super.showToastMessage(message);
     }
 

@@ -108,7 +108,7 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
     }
 
     @Override
-    public void showError(final String message) {
+    public void showLoadingError(final String message) {
 
     }
 
