@@ -14,12 +14,9 @@ import rx.Subscriber;
  */
 public class EventListPresenter implements Presenter {
 
-	private static final int M_MOCK_EVENT_COUNT = 50;
-	private final EventListInteractor mEventListInteractor;
+	private final EventListInteractor  mEventListInteractor;
 	private final EventModelDataMapper mEventModelDataMapper;
-
-
-	private EventListView mEventListView;
+	private       EventListView        mEventListView;
 
 	public EventListPresenter() {
 		mEventListInteractor = new EventListInteractor();
@@ -28,11 +25,6 @@ public class EventListPresenter implements Presenter {
 
 	public void setView(final EventListView eventListView) {
 		mEventListView = eventListView;
-	}
-
-	public void initialize() {
-		showViewLoading();
-		getEventList();
 	}
 
 	public void getEventList() {
@@ -53,6 +45,22 @@ public class EventListPresenter implements Presenter {
 		mEventListInteractor.unsubscribe();
 	}
 
+	private void showEvents(final List<Event> events) {
+		mEventListView.renderEventList(mEventModelDataMapper.transform(events));
+	}
+
+	private void showViewLoading() {
+		mEventListView.showLoading();
+	}
+
+	private void hideViewLoading() {
+		mEventListView.hideLoading();
+	}
+
+	private void showError() {
+		mEventListView.showLoadingError("Events can't be loaded!");
+	}
+
 	final class EventListSubscriber extends Subscriber<List<Event>> {
 
 		@Override
@@ -71,21 +79,5 @@ public class EventListPresenter implements Presenter {
 			EventListPresenter.this.hideViewLoading();
 			EventListPresenter.this.showEvents(events);
 		}
-	}
-
-	private void showEvents(final List<Event> events) {
-		mEventListView.renderEventList(mEventModelDataMapper.transform(events));
-	}
-
-	private void showViewLoading() {
-		mEventListView.showLoading();
-	}
-
-	private void hideViewLoading() {
-		mEventListView.hideLoading();
-	}
-
-	private void showError() {
-		mEventListView.showError("Events can't be loaded!");
 	}
 }
