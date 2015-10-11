@@ -1,7 +1,7 @@
 package org.leanpoker.leanpokerandroid.presenter;
 
 import org.leanpoker.data.model.Event;
-import org.leanpoker.domain.interactor.EventWithDetailsInteractor;
+import org.leanpoker.domain.interactor.EventDetailsInteractor;
 import org.leanpoker.leanpokerandroid.modelmapper.EventDetailsModelMapper;
 import org.leanpoker.leanpokerandroid.view.EventDetailsView;
 
@@ -12,12 +12,12 @@ import rx.Subscriber;
  */
 public class EventDetailsPresenter implements Presenter {
 
-	private final EventWithDetailsInteractor mEventWithDetailsInteractor;
-	private       EventDetailsView           mEventDetailsView;
-	private       EventDetailsModelMapper    mEventDetailsModelMapper;
+	private final EventDetailsInteractor  mEventDetailsInteractor;
+	private       EventDetailsView        mEventDetailsView;
+	private       EventDetailsModelMapper mEventDetailsModelMapper;
 
 	public EventDetailsPresenter(final String eventId) {
-		mEventWithDetailsInteractor = new EventWithDetailsInteractor(eventId);
+		mEventDetailsInteractor = new EventDetailsInteractor(eventId);
 		mEventDetailsModelMapper = new EventDetailsModelMapper();
 	}
 
@@ -26,7 +26,7 @@ public class EventDetailsPresenter implements Presenter {
 	}
 
 	public void loadEventDetails() {
-		mEventWithDetailsInteractor.execute(new EventDetailsSubscriber());
+		mEventDetailsInteractor.execute(new EventDetailsSubscriber());
 	}
 
 	final class EventDetailsSubscriber extends Subscriber<Event> {
@@ -59,6 +59,6 @@ public class EventDetailsPresenter implements Presenter {
 
 	@Override
 	public void destroy() {
-		mEventWithDetailsInteractor.unsubscribe();
+		mEventDetailsInteractor.unsubscribe();
 	}
 }

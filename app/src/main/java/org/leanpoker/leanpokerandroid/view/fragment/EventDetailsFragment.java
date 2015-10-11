@@ -26,6 +26,15 @@ public class EventDetailsFragment extends EventFragment implements EventDetailsV
 	private String                mEventId;
 	private EventDetailsPresenter mEventDetailsPresenter;
 
+	public void setEventId(final String eventId) {
+		mEventId = eventId;
+	}
+
+	@Override
+	public void renderEvent(final EventDetailsModel eventDetailsModel) {
+		mEventDetailIdTextView.setText(eventDetailsModel.getEventName());
+	}
+
 	@Nullable
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -36,6 +45,12 @@ public class EventDetailsFragment extends EventFragment implements EventDetailsV
 		return view;
 	}
 
+	@Override
+	public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		initialize();
+		loadDetails();
+	}
 
 	@Override
 	public void onResume() {
@@ -53,27 +68,6 @@ public class EventDetailsFragment extends EventFragment implements EventDetailsV
 	public void onDestroy() {
 		super.onDestroy();
 		mEventDetailsPresenter.destroy();
-	}
-
-	@Override
-	public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initialize();
-		loadDetails();
-	}
-
-	@Override
-	public void renderEvent(final EventDetailsModel eventDetailsModel) {
-		mEventDetailIdTextView.setText(eventDetailsModel.getEventName());
-	}
-
-	@Override
-	public void showError(final String errorMessage) {
-		showToastMessage(errorMessage);
-	}
-
-	public void setEventId(final String eventId) {
-		mEventId = eventId;
 	}
 
 	private void initialize() {
