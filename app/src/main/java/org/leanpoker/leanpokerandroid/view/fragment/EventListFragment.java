@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.leanpoker.data.model.Event.EventStatus;
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.EventModel;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
@@ -29,16 +30,20 @@ import butterknife.ButterKnife;
 public abstract class EventListFragment extends BaseFragment implements EventListView,
 		OnEventClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-	private EventListLayoutManager mEventListLayoutManager;
-	private EventListPresenter  mEventListPresenter;
-
-	protected EventListAdapter mEventListAdapter;
+	private   EventListLayoutManager mEventListLayoutManager;
+	private   EventListPresenter     mEventListPresenter;
+	protected EventListAdapter       mEventListAdapter;
 
 	@Bind(R.id.pull_to_refresh)
 	SwipeRefreshLayout mSwipeRefreshLayout;
 
 	@Bind(R.id.recyclerview_events)
 	RecyclerView mEventsRecyclerView;
+
+	@Override
+	public void renderEventList(final List<EventModel> eventModelList) {
+		mEventListAdapter.setEventModels(filter(eventModelList));
+	}
 
 	@Nullable
 	@Override
@@ -77,7 +82,9 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 	}
 
 	@Override
-	public abstract void renderEventList(final List<EventModel> eventModelList);
+	public void onRefresh() {
+		loadEvents();
+	}
 
 	@Override
 	public void showLoading() {
@@ -90,7 +97,7 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 	}
 
 	@Override
-	public void showError(final String message) {
+	public void showLoadingError(final String message) {
 		showToastMessage(message);
 	}
 
@@ -98,6 +105,8 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 	public void onEventClick(final String eventId) {
 		Navigator.getInstance().navigateToEventActivity(getActivity(), eventId);
 	}
+
+	protected abstract List<EventModel> filter(final List<EventModel> eventModelList);
 
 	private void initialize() {
 		mEventListPresenter = new EventListPresenter();
@@ -108,6 +117,17 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 		mEventListPresenter.getEventList();
 	}
 
+	protected static List<EventModel> filter(final List<EventModel> eventModelList,
+	                                         final EventStatus eventStatus) {
+		final List<EventModel> filteredEventModelList = new ArrayList<>();
+		for (final EventModel eventModel : eventModelList) {
+			if (eventModel.getEventStatus() == eventStatus) {
+				filteredEventModelList.add(eventModel);
+			}
+		}
+		return filteredEventModelList;
+	}
+
 	private void setupUI() {
 		mEventListLayoutManager = new EventListLayoutManager(getActivity());
 		mEventsRecyclerView.setLayoutManager(mEventListLayoutManager);
@@ -116,10 +136,5 @@ public abstract class EventListFragment extends BaseFragment implements EventLis
 		mEventListAdapter.setOnEventClickListener(this);
 		mEventsRecyclerView.setAdapter(mEventListAdapter);
 		mSwipeRefreshLayout.setOnRefreshListener(this);
-	}
-
-	@Override
-	public void onRefresh() {
-		loadEvents();
 	}
 }
