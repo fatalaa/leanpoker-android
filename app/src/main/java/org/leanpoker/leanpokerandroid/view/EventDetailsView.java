@@ -7,6 +7,4 @@ import org.leanpoker.leanpokerandroid.model.EventDetailsModel;
  */
 public interface EventDetailsView {
 	void renderEvent(final EventDetailsModel eventDetailsModel);
-
-	void showError(final String errorMessage);
 }
