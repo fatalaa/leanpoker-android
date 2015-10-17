@@ -1,7 +1,7 @@
 package org.leanpoker.leanpokerandroid.model;
 
+import org.joda.time.DateTime;
 import org.leanpoker.data.model.Address;
-import org.leanpoker.data.model.Date;
 import org.leanpoker.data.model.Event.EventStatus;
 import org.leanpoker.data.model.Facilitator;
 
@@ -12,15 +12,15 @@ public class EventDetailsModel {
 
 	private final String      mEventName;
 	private final Address     mAddress;
-	private final Date        mDate;
+	private final DateTime    mDateTime;
 	private final EventStatus mEventStatus;
 	private final Facilitator mFacilitator;
 
-	public EventDetailsModel(final String eventName, final Address address, final Date date,
+	public EventDetailsModel(final String eventName, final Address address, final DateTime dateTime,
 	                         final EventStatus eventStatus, final Facilitator facilitator) {
 		mEventName = eventName;
 		mAddress = address;
-		mDate = date;
+		mDateTime = dateTime;
 		mEventStatus = eventStatus;
 		mFacilitator = facilitator;
 	}
@@ -33,8 +33,8 @@ public class EventDetailsModel {
 		return mAddress;
 	}
 
-	public Date getDate() {
-		return mDate;
+	public DateTime getDateTime() {
+		return mDateTime;
 	}
 
 	public EventStatus getEventStatus() {

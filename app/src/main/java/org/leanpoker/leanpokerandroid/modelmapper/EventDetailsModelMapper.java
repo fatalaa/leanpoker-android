@@ -8,7 +8,7 @@ import org.leanpoker.leanpokerandroid.model.EventDetailsModel;
  */
 public class EventDetailsModelMapper {
 	public EventDetailsModel transform(final Event event) {
-		return new EventDetailsModel(event.getName(), event.getAddress(), event.getDate(),
+		return new EventDetailsModel(event.getName(), event.getAddress(), event.getDateTime(),
 		                             event.getEventStatus(), event.getFacilitator());
 	}
 }

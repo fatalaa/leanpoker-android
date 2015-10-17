@@ -1,13 +1,14 @@
 package org.leanpoker.data.datamapper;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.leanpoker.data.model.Address;
-import org.leanpoker.data.model.Date;
 import org.leanpoker.data.model.Event;
 import org.leanpoker.data.model.Facilitator;
 import org.leanpoker.data.model.Photo;
 import org.leanpoker.data.response.EventListResponseModel;
 import org.leanpoker.data.response.submodel.EventResponseModel;
-import org.leanpoker.data.response.submodel.MediaResponseModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,40 +31,36 @@ public class EventDataMapper {
 	}
 
 	public Event transform(final EventResponseModel eventResponseModel) {
-		return new Event(
-				eventResponseModel.getId(),
-				eventResponseModel.getHost(),
-				transformDate(eventResponseModel.getDate()),
-				new Facilitator(eventResponseModel.getOwner()),
-				new Address(eventResponseModel.getCity()),
-				eventResponseModel.getStatus(),
-				transformPhotos(eventResponseModel.getImages())
-		);
+		return new Event(eventResponseModel.getId(), eventResponseModel.getHost(),
+		                 transformDateTime(eventResponseModel.getDate()), new Facilitator(
+				eventResponseModel.getOwner()), new Address(eventResponseModel.getCity()),
+		                 eventResponseModel.getStatus(), transformPhotos(
+				eventResponseModel.getImages()));
 	}
 
-	private Date transformDate(final String dateString) {
+	private DateTime transformDateTime(final String dateTimeString) {
 		//2015-09-27T09:00:00+02:00
-		final String year = dateString.substring(0, 4);
-		final String month = dateString.substring(6, 7);
-		final String day = dateString.substring(9, 10);
-		return new Date(day, month, year);
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+		try {
+			return formatter.parseDateTime(dateTimeString);
+		} catch (final IllegalArgumentException ex) {
+			// TODO(tb): 17/10/15  Error handling
+			return new DateTime();
+		}
 	}
 
-	private List<Photo> transformPhotos(final List<Map<String,String>> mediaResponseModels) {
+	private List<Photo> transformPhotos(final List<Map<String, String>> mediaResponseModels) {
 		ArrayList<Photo> photos = new ArrayList<>();
 		if (mediaResponseModels != null) {
-			for (Map<String,String> mediaResponseModel : mediaResponseModels) {
+			for (Map<String, String> mediaResponseModel : mediaResponseModels) {
 				photos.add(transformPhoto(mediaResponseModel));
 			}
 		}
 		return photos;
 	}
 
-	private Photo transformPhoto(final Map<String,String> mediaResponseModel) {
-		return new Photo(
-				mediaResponseModel.get("owner"),
-				mediaResponseModel.get("uploaded"),
-				mediaResponseModel.get("url")
-		);
+	private Photo transformPhoto(final Map<String, String> mediaResponseModel) {
+		return new Photo(mediaResponseModel.get("owner"), mediaResponseModel.get("uploaded"),
+		                 mediaResponseModel.get("url"));
 	}
 }

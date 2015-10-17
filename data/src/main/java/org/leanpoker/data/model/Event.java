@@ -1,5 +1,7 @@
 package org.leanpoker.data.model;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 /**
@@ -8,18 +10,18 @@ import java.util.List;
 public class Event {
 	private final String      mEventId;
 	private final String      mName;
-	private final Date        mDate;
+	private final DateTime    mDateTime;
 	private final Facilitator mFacilitator;
 	private final Address     mAddress;
 	private final EventStatus mEventStatus;
 	private final List<Photo> mPhotos;
 
-	public Event(final String eventId, final String name, final Date date,
+	public Event(final String eventId, final String name, final DateTime dateTime,
 	             final Facilitator facilitator, final Address address, final String eventStatus,
 				 final List<Photo> photos) {
 		mEventId = eventId;
 		mName = name;
-		mDate = date;
+		mDateTime = dateTime;
 		mFacilitator = facilitator;
 		mAddress = address;
 		mEventStatus = EventStatus.valueOf(eventStatus.toUpperCase());
@@ -34,8 +36,8 @@ public class Event {
 		return mName;
 	}
 
-	public Date getDate() {
-		return mDate;
+	public DateTime getDateTime() {
+		return mDateTime;
 	}
 
 	public Facilitator getFacilitator() {

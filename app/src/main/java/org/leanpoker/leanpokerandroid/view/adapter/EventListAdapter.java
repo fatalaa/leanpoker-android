@@ -92,9 +92,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
 		public void update(final EventModel eventModel) {
 			mCityTextView.setText(eventModel.getAddress().getCity());
-			mDateDayTextView.setText(eventModel.getDate().getDay());
-			mDateMonthView.setText(eventModel.getDate().getMonth());
-			mDateYearView.setText(eventModel.getDate().getYear());
+			mDateDayTextView.setText(eventModel.getDay());
+			mDateMonthView.setText(eventModel.getMonth());
+			mDateYearView.setText(eventModel.getYear());
 			mEventNameView.setText(eventModel.getName());
 			mFacilitatorView.setText(eventModel.getFacilitator().getName());
 		}

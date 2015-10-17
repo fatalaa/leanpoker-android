@@ -1,10 +1,6 @@
 package org.leanpoker.domain.interactor;
 
 import org.leanpoker.api.NetworkManager;
-import org.leanpoker.data.model.Event;
-import org.leanpoker.domain.mock.EventListProviderMock;
-
-import java.util.List;
 
 import rx.Observable;
 /**
@@ -15,10 +11,6 @@ public class EventListInteractor extends BaseInteractor {
 
 	public EventListInteractor() {
 		super();
-	}
-
-	public List<Event> loadMockedEvents(final int eventCount) {
-		return EventListProviderMock.getMockEvents(eventCount);
 	}
 
 	@Override
