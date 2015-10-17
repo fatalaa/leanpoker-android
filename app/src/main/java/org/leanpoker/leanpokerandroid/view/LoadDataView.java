@@ -3,7 +3,7 @@ package org.leanpoker.leanpokerandroid.view;
 /**
  * Created by tbalogh on 06/09/15.
  */
-public interface LoadDataView {
+public interface LoadDataView extends BaseView {
 	void showLoading();
 
 	void hideLoading();
