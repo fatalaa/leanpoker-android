@@ -41,8 +41,11 @@ public class GithubDataMapper {
     }
 
     public List<GithubUserEmail> transform(GithubEmailsResponseModel githubEmailsResponseModel) {
-        ArrayList<GithubUserEmail> emails = new ArrayList<>();
-        for (GithubEmailResponseModel emailResponseModel : githubEmailsResponseModel) {
+	    if (githubEmailsResponseModel == null) {
+		    return new ArrayList<>();
+	    }
+	    ArrayList<GithubUserEmail> emails = new ArrayList<>();
+	    for (GithubEmailResponseModel emailResponseModel : githubEmailsResponseModel) {
             emails.add(transform(emailResponseModel));
         }
         return emails;
