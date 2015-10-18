@@ -6,9 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.leanpoker.leanpokerandroid.view.fragment.EventListFragment;
-import org.leanpoker.leanpokerandroid.view.fragment.EventListLiveFragment;
-import org.leanpoker.leanpokerandroid.view.fragment.EventListPastFragment;
-import org.leanpoker.leanpokerandroid.view.fragment.EventListUpcomingsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +15,9 @@ import java.util.List;
  */
 public class EventListViewPagerAdapter extends FragmentPagerAdapter {
 
-	private static final int M_EVENTS_FRAGMENT_COUNT = 3;
+	private static final int M_EVENTS_FRAGMENT_COUNT = 1;
 	private final List<EventListFragment> mEventListFragments;
-	private String tabTitles[] = new String[]{"UPCOMING", "LIVE", "PAST"};
+	private String tabTitles[] = new String[]{"EVENTS"};
 
 	public EventListViewPagerAdapter(final FragmentManager fragmentManager) {
 		super(fragmentManager);
@@ -30,9 +27,7 @@ public class EventListViewPagerAdapter extends FragmentPagerAdapter {
 	@NonNull
 	private List<EventListFragment> createEventFragments() {
 		final List<EventListFragment> eventListFragments = new ArrayList<>();
-		eventListFragments.add(EventListUpcomingsFragment.newInstance());
-		eventListFragments.add(EventListLiveFragment.newInstance());
-		eventListFragments.add(EventListPastFragment.newInstance());
+		eventListFragments.add(EventListFragment.newInstance());
 		return eventListFragments;
 	}
 
