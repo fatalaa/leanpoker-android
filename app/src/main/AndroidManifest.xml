@@ -22,8 +22,7 @@
                   android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".view.activity.FullScreenPhotoActivity"
-                  android:screenOrientation="portrait">
+        <activity android:name=".view.activity.FullScreenPhotoActivity">
         </activity>
 
         <activity

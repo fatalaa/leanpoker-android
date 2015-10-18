@@ -17,9 +17,17 @@
             android:id="@+id/textview_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
             android:capitalize="characters"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/textview_event_status"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:capitalize="characters"
+            android:textColor="@color/green"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 
