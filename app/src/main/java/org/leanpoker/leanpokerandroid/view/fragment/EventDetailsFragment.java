@@ -32,7 +32,7 @@ public class EventDetailsFragment extends EventFragment implements EventDetailsV
 
 	@Override
 	public void renderEvent(final EventDetailsModel eventDetailsModel) {
-		mEventDetailIdTextView.setText(eventDetailsModel.getEventName());
+		// mEventDetailIdTextView.setText(eventDetailsModel.getEventName());
 	}
 
 	@Nullable
