@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.EventModel;
+import org.leanpoker.leanpokerandroid.model.EventModelComparator;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -26,9 +28,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 	private OnEventClickListener mOnEventClickListener;
 
 	public EventListAdapter(final Context context, final List<EventModel> eventModels) {
-		validateEvents(eventModels);
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		mEventModels = eventModels;
+		setEventModels(eventModels);
 	}
 
 	public void setOnEventClickListener(final OnEventClickListener onEventClickListener) {
@@ -57,6 +58,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 	public void setEventModels(List<EventModel> eventModels) {
 		validateEvents(eventModels);
 		mEventModels = eventModels;
+		sortEventModels();
 		notifyDataSetChanged();
 	}
 
@@ -68,6 +70,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
 	private String getEventId(final int position) {
 		return mEventModels.get(position).getEventId();
+	}
+
+	private void sortEventModels() {
+		Collections.sort(mEventModels, new EventModelComparator());
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
