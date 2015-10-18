@@ -102,6 +102,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (mEventPhotoGridPresenter == null) {
             mEventPhotoGridPresenter = new EventPhotoGridPresenter(mEventId);
+            mEventPhotoGridPresenter.setEventPhotoGridView(this);
         }
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
