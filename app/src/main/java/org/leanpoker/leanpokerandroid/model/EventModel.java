@@ -44,7 +44,7 @@ public class EventModel {
 	}
 
 	public String getMonth() {
-		return String.valueOf(mDateTime.getMonthOfYear());
+		return mDateTime.toString("MMM");
 	}
 
 	public String getYear() {
