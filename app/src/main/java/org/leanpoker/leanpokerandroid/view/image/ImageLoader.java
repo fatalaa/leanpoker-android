@@ -35,7 +35,7 @@ public class ImageLoader {
         if (mPicasso == null) {
             throw new IllegalStateException("Tried to access un-initialized Picasso instance");
         }
-        mPicasso.load(url).fit().into(imageView);
+        mPicasso.load(url).fit().centerCrop().into(imageView);
     }
 
     public void load(String url, ImageView imageView, Callback callback) {
