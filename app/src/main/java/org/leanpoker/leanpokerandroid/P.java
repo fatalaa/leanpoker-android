@@ -7,6 +7,7 @@ public final class P {
 
     public static final class Common {
         public static final String EVENT_ID_KEY         = "event_id_key";
+	    public static final String EVENT_NAME_KEY         = "event_name_key";
         public static final String CAMERA_IMAGE_URI_KEY = "camera_image_uri_key";
     }
 

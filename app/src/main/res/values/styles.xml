@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/purple_lean_poker</item>
+        <item name="colorAccent">@color/purple_lean_poker</item>
     </style>
 
 </resources>

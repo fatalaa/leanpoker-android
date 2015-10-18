@@ -33,9 +33,13 @@ public class EventDataMapper {
 	public Event transform(final EventResponseModel eventResponseModel) {
 		return new Event(eventResponseModel.getId(), eventResponseModel.getHost(),
 		                 transformDateTime(eventResponseModel.getDate()), new Facilitator(
-				eventResponseModel.getOwner()), new Address(eventResponseModel.getCity()),
-		                 eventResponseModel.getStatus(), transformPhotos(
-				eventResponseModel.getImages()));
+				eventResponseModel.getOwner()), new Address(eventResponseModel.getAddress(),
+		                                                    eventResponseModel.getCounty(),
+		                                                    eventResponseModel.getCity(),
+		                                                    eventResponseModel.getLatitude(),
+		                                                    eventResponseModel.getLongitude()),
+		                 eventResponseModel.getStatus(), eventResponseModel.getTeams().size(),
+		                 transformPhotos(eventResponseModel.getImages()));
 	}
 
 	private DateTime transformDateTime(final String dateTimeString) {

@@ -3,7 +3,6 @@ package org.leanpoker.leanpokerandroid.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
@@ -29,8 +28,9 @@ public class EventListActivity extends BaseActivity {
 		mViewPagerAdapter = new EventListViewPagerAdapter(getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager_events_by_time);
 		mViewPager.setAdapter(mViewPagerAdapter);
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-		tabLayout.setupWithViewPager(mViewPager);
+//		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+//		tabLayout.setupWithViewPager(mViewPager);
+		setTitle("Events");
 	}
 
 	@Override

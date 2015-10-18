@@ -5,5 +5,8 @@
     <color name="blue_light">#0288D1</color>
     <color name="blue_dark">#01579B</color>
     <color name="light_grey">#DDDDDD</color>
+    <color name="lightest_grey">#E0E0E0</color>
     <color name="green">#43A047</color>
+    <color name="purple_lean_poker">#33355F</color>
+    <color name="grey_dark">#212121</color>
 </resources>

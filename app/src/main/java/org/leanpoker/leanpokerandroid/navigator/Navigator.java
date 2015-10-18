@@ -35,11 +35,12 @@ public class Navigator {
         }
     }
 
-	public void navigateToEventActivity(final Context context, final String eventId) {
+	public void navigateToEventActivity(final Context context, final String eventId,
+	                                    final String eventName) {
 		if (context == null || eventId == null) {
 			return;
 		}
-		context.startActivity(EventActivity.createIntent(context, eventId));
+		context.startActivity(EventActivity.createIntent(context, eventId, eventName));
 	}
 
 	public void navigateToLoginActivity(final Context context) {

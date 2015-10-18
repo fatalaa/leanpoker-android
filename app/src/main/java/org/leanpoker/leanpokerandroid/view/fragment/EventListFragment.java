@@ -41,7 +41,7 @@ public class EventListFragment extends BaseFragment implements EventListView,
 
 	@Override
 	public void renderEventList(final List<EventModel> eventModelList) {
-		mEventListAdapter.setEventModels(eventModelList);
+		mEventListAdapter.setItemList(eventModelList);
 	}
 
 	@Nullable
@@ -101,8 +101,8 @@ public class EventListFragment extends BaseFragment implements EventListView,
 	}
 
 	@Override
-	public void onEventClick(final String eventId) {
-		Navigator.getInstance().navigateToEventActivity(getActivity(), eventId);
+	public void onEventClick(final String eventId, final String eventName) {
+		Navigator.getInstance().navigateToEventActivity(getActivity(), eventId, eventName);
 	}
 
 	private void initialize() {

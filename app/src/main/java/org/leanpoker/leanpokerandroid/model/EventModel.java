@@ -17,6 +17,7 @@ public class EventModel {
 	private final Facilitator mFacilitator;
 	private final Address     mAddress;
 	private final EventStatus mEventStatus;
+	private final int         mTeamCount;
 
 	public EventModel(final Event event) {
 		mEventId = event.getEventId();
@@ -25,6 +26,7 @@ public class EventModel {
 		mFacilitator = event.getFacilitator();
 		mAddress = event.getAddress();
 		mEventStatus = event.getEventStatus();
+		mTeamCount = event.getTeamCount();
 	}
 
 	public String getEventId() {
@@ -61,5 +63,27 @@ public class EventModel {
 
 	public EventStatus getEventStatus() {
 		return mEventStatus;
+	}
+
+	public String getMonthAndYear() {
+		// TODO(tb): 18/10/15  must be a better solution :D
+		return mDateTime.toString("MMMMMMMMMMMMM YYYY");
+	}
+
+	public String getMonthAndDay() {
+		return mDateTime.toString("MMM") + " " + String.valueOf(mDateTime.getDayOfMonth());
+	}
+
+	public String getFormattedDateTime() {
+		// TODO(tb): 18/10/15  must be a better solution :D
+		return mDateTime.toString("YYYY MMMMMMMMMMMM ") + getDay() + ", " + getTime();
+	}
+
+	public String getTime() {
+		return mDateTime.toString("HH:mm");
+	}
+
+	public int getTeamCount() {
+		return mTeamCount;
 	}
 }

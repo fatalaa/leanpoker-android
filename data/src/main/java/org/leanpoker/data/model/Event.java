@@ -14,17 +14,19 @@ public class Event {
 	private final Facilitator mFacilitator;
 	private final Address     mAddress;
 	private final EventStatus mEventStatus;
+	private final int         mTeamCount;
 	private final List<Photo> mPhotos;
 
 	public Event(final String eventId, final String name, final DateTime dateTime,
 	             final Facilitator facilitator, final Address address, final String eventStatus,
-				 final List<Photo> photos) {
+	             final int teamCount, final List<Photo> photos) {
 		mEventId = eventId;
 		mName = name;
 		mDateTime = dateTime;
 		mFacilitator = facilitator;
 		mAddress = address;
 		mEventStatus = EventStatus.valueOf(eventStatus.toUpperCase());
+		mTeamCount = teamCount;
 		mPhotos = photos;
 	}
 
@@ -54,6 +56,10 @@ public class Event {
 
 	public List<Photo> getPhotos() {
 		return mPhotos;
+	}
+
+	public int getTeamCount() {
+		return mTeamCount;
 	}
 
 	public enum EventStatus {

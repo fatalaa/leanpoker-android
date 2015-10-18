@@ -11,6 +11,6 @@ public class Facilitator {
 	}
 
 	public String getName() {
-		return mName;
+		return mName.replace(mName.charAt(0), Character.toUpperCase(mName.charAt(0)));
 	}
 }
