@@ -186,8 +186,17 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			mEventNameView.setText(eventModel.getName());
 			mEventDateView.setText(eventModel.getFormattedDateTime());
 			mFacilitatorView.setText("Facilitator: " + eventModel.getFacilitator().getName());
-			mTeamNumberTextView.setText(String.valueOf(eventModel.getTeamCount()) + " Teams");
+			updateTeamNumber(eventModel.getTeamCount());
 			updateEventStatus(eventModel.getEventStatus());
+		}
+
+		private void updateTeamNumber(final int teamCount) {
+			if (teamCount == 0) {
+				mTeamNumberTextView.setVisibility(View.GONE);
+			} else {
+				mTeamNumberTextView.setVisibility(View.VISIBLE);
+				mTeamNumberTextView.setText(String.valueOf(teamCount) + " Teams");
+			}
 		}
 
 		private void updateEventStatus(final EventStatus eventStatus) {

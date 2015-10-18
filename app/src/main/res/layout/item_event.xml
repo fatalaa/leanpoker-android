@@ -25,8 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:capitalize="characters"
-            android:textColor="@color/purple_lean_poker"
-            android:textSize="14sp"/>
+            android:textColor="@color/green"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 
