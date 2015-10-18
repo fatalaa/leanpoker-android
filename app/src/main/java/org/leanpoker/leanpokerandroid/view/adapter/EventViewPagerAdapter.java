@@ -20,7 +20,7 @@ public class EventViewPagerAdapter extends FragmentPagerAdapter {
 	private final int M_EVENT_FRAGMENTS_COUNT = 4;
 	private final String mEventId;
 
-	private final String[] mPageTitles = {"Details", "Wall", "Scores", "Gallery"};
+	private final String[] mPageTitles = {"Gallery", "Wall", "Scores", "Details"};
 
 	private final List<BaseFragment> mEventFragments;
 
@@ -32,10 +32,10 @@ public class EventViewPagerAdapter extends FragmentPagerAdapter {
 
 	private List<BaseFragment> createFragments() {
 		final List<BaseFragment> eventFragments = new ArrayList<>(M_EVENT_FRAGMENTS_COUNT);
-		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
-		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
-		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
 		eventFragments.add(EventPhotoGridFragment.newInstance(mEventId));
+		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
+		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
+		eventFragments.add(EventDetailsFragment.newInstance(mEventId));
 		return eventFragments;
 	}
 

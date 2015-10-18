@@ -43,7 +43,7 @@ public class ImageUploadInteractor extends BaseInteractor {
         if (mCameraBased) {
             realPath = mUri.getPath();
         } else {
-            realPath = PathMagic.getRealPathFromUri(mContext, mUri);
+            realPath = PathMagic.getPath(mContext, mUri);
         }
         File file = new File(realPath);
         if (file.canRead()) {
