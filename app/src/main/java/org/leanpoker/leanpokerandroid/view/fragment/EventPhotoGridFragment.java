@@ -100,6 +100,9 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (mEventPhotoGridPresenter == null) {
+            mEventPhotoGridPresenter = new EventPhotoGridPresenter(mEventId);
+        }
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_GALLERY_CAPTURE:
