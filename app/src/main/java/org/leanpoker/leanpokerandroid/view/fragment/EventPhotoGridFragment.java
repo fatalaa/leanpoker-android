@@ -39,7 +39,7 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
         ChoosePhotoAppDialogListener,
         EventPhotoGridAdapter.OnPhotoClickListener {
 
-    private static final int ADAPTER_COLUMN_COUNT = 2;
+    private static final int ADAPTER_COLUMN_COUNT = 3;
     private static final String TAG = EventPhotoGridFragment.class.getSimpleName();
 
     private EventPhotoGridLayoutManager mEventPhotoGridLayoutManager;
