@@ -121,8 +121,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	private List<Object> buildItemList(final List<EventModel> eventModels) {
 		final List<Object> itemList = new ArrayList<>();
 		final List<EventModel> sortedEventModels = sortEventModels(eventModels);
-		sortedEventModels.addAll(sortedEventModels);
-		sortedEventModels.addAll(sortedEventModels);
 		int currentYear = -1;
 		int currentMonth = -1;
 		for (final EventModel eventModel : sortedEventModels) {
