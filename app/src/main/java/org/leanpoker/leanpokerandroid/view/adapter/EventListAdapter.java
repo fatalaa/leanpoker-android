@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.leanpoker.data.model.Event.EventStatus;
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.EventModel;
 import org.leanpoker.leanpokerandroid.model.EventModelComparator;
@@ -163,6 +164,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			View.OnClickListener {
 		@Bind(R.id.textview_city)
 		TextView mCityTextView;
+		@Bind(R.id.textview_event_status)
+		TextView mEventStatusTextView;
 		@Bind(R.id.textview_event_name)
 		TextView mEventNameView;
 		@Bind(R.id.textview_event_date)
@@ -184,6 +187,21 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			mEventDateView.setText(eventModel.getFormattedDateTime());
 			mFacilitatorView.setText("Facilitator: " + eventModel.getFacilitator().getName());
 			mTeamNumberTextView.setText(String.valueOf(eventModel.getTeamCount()) + " Teams");
+			updateEventStatus(eventModel.getEventStatus());
+		}
+
+		private void updateEventStatus(final EventStatus eventStatus) {
+			if (eventStatus.equals(EventStatus.FUTURE)) {
+				mEventStatusTextView.setVisibility(View.VISIBLE);
+				mEventStatusTextView.setText("upcoming!");
+			} else {
+				if (eventStatus.equals(EventStatus.LIVE)) {
+					mEventStatusTextView.setVisibility(View.VISIBLE);
+					mEventStatusTextView.setText("live!");
+				} else {
+					mEventStatusTextView.setVisibility(View.GONE);
+				}
+			}
 		}
 
 		@Override

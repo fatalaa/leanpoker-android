@@ -18,8 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:capitalize="characters"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/textview_event_status"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:capitalize="characters"
+            android:textColor="@color/purple_lean_poker"
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
