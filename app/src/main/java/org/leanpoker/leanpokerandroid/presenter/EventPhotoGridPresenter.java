@@ -31,26 +31,32 @@ import rx.Subscriber;
  */
 public class EventPhotoGridPresenter implements Presenter {
 
-	private final 	EventPhotoGridInteractor 		mEventPhotoGridInteractor;
-	private final 	IsUserLoggedInInteractor 		mIsUserLoggedInInteractor;
-	private final 	GithubUserInteractor	   		mGithubUserInteractor;
-	private final 	GithubUserEmailsInteractor 		mGithubUserEmailsInteractor;
-	private final 	EventPhotoGridDataMapper 		mEventPhotoGridDataMapper;
-	private       	EventPhotoGridView       		mEventPhotoGridView;
-	private 		ArrayList<PhotoModel> 			mPhotoModels;
-	private final 	String 							mEventId;
+	private final EventPhotoGridInteractor   mEventPhotoGridInteractor;
+	private final IsUserLoggedInInteractor   mIsUserLoggedInInteractor;
+	private final GithubUserInteractor       mGithubUserInteractor;
+	private final GithubUserEmailsInteractor mGithubUserEmailsInteractor;
+	private final EventPhotoGridDataMapper   mEventPhotoGridDataMapper;
+	private       EventPhotoGridView         mEventPhotoGridView;
+	private       ArrayList<PhotoModel>      mPhotoModels;
+	private final String                     mEventId;
+
+	private Uri mPhotoUri;
 
 	public EventPhotoGridPresenter(final String eventId) {
 		mEventId = eventId;
-		mEventPhotoGridInteractor 	= new EventPhotoGridInteractor(mEventId);
-		mEventPhotoGridDataMapper 	= new EventPhotoGridDataMapper();
-		mIsUserLoggedInInteractor 	= new IsUserLoggedInInteractor();
-		mGithubUserInteractor	  	= new GithubUserInteractor();
+		mEventPhotoGridInteractor = new EventPhotoGridInteractor(mEventId);
+		mEventPhotoGridDataMapper = new EventPhotoGridDataMapper();
+		mIsUserLoggedInInteractor = new IsUserLoggedInInteractor();
+		mGithubUserInteractor = new GithubUserInteractor();
 		mGithubUserEmailsInteractor = new GithubUserEmailsInteractor();
 	}
 
 	public void setEventPhotoGridView(final EventPhotoGridView eventPhotoGridView) {
 		mEventPhotoGridView = eventPhotoGridView;
+	}
+
+	public Uri getPhotoUri() {
+		return mPhotoUri;
 	}
 
 	public void uploadPhotos() {
@@ -66,14 +72,24 @@ public class EventPhotoGridPresenter implements Presenter {
 		                                                          mPhotoModels, clickedPhotoIndex);
 	}
 
-	public void navigateToApp(final Activity activity, final ChoosePhotoAppDialog.PhotoAppType appType) {
+	public void navigateToApp(final Activity activity,
+	                          final ChoosePhotoAppDialog.PhotoAppType appType) {
 		if (appType == ChoosePhotoAppDialog.PhotoAppType.GALLERY) {
 			Navigator.getInstance().navigateToGalleryApp(activity);
 		} else {
 			//TODO refactor this to somewhere else
-			final Uri uri = GraphicsUtil.createImageUri();
-			MiscStorage.getInstance().put(P.Common.CAMERA_IMAGE_URI_KEY, uri);
-			Navigator.getInstance().navigateToCameraApp(activity, uri);
+			// Temporary change: Save the uri always at the presenter and start the camera app with this uri.
+			// Expected: There is no chance the user can interact with the fragment again before the fragments onActivityResult method will call.
+			//           So the mPhotoUri value will be always valid.
+			// The problem with the MiscStore is the following:
+			// 1. One photo taken requested -> put a uri in the MiscStore
+			// 2. Photo has been taken and we start uploading.
+			// 3. Another photo request taken before the photo upload request served -> put another uri in the MiscStore
+			// 4. While we are taking our second picture the first photo upload request served -> remove uri from MiscStore
+			// 5. We taken the second photo, activity is trying to access the uri but it has been removed in the 4. step
+			mPhotoUri = GraphicsUtil.createImageUri();
+			//MiscStorage.getInstance().put(P.Common.CAMERA_IMAGE_URI_KEY, uri);
+			Navigator.getInstance().navigateToCameraApp(activity, mPhotoUri);
 		}
 	}
 
@@ -83,21 +99,13 @@ public class EventPhotoGridPresenter implements Presenter {
 
 	public void delegatePhotoUpload(final Uri uri) {
 		ImageUploadInteractor uploadInteractor = new ImageUploadInteractor(
-				mEventPhotoGridView.getContext(),
-				uri,
-				mEventId,
-				false
-		);
+				mEventPhotoGridView.getContext(), uri, mEventId, false);
 		uploadInteractor.execute(new ImageUploadSubscriber());
 	}
 
 	public void delegateCameraBackedPhotoUpload(final Uri uri) {
 		ImageUploadInteractor uploadInteractor = new ImageUploadInteractor(
-				mEventPhotoGridView.getContext(),
-				uri,
-				mEventId,
-				true
-		);
+				mEventPhotoGridView.getContext(), uri, mEventId, true);
 		uploadInteractor.execute(new ImageUploadSubscriber());
 	}
 
@@ -106,20 +114,20 @@ public class EventPhotoGridPresenter implements Presenter {
 	}
 
 	@Override
-    public void resume() {
+	public void resume() {
 
-    }
+	}
 
-    @Override
-    public void pause() {
+	@Override
+	public void pause() {
 
-    }
+	}
 
-    @Override
-    public void destroy() {
-        mEventPhotoGridInteractor.unsubscribe();
+	@Override
+	public void destroy() {
+		mEventPhotoGridInteractor.unsubscribe();
 		mGithubUserEmailsInteractor.unsubscribe();
-    }
+	}
 
 	private void showPhotos(List<Photo> photos) {
 		mPhotoModels = (ArrayList<PhotoModel>) mEventPhotoGridDataMapper.transform(photos);
@@ -197,11 +205,10 @@ public class EventPhotoGridPresenter implements Presenter {
 		@Override
 		public void onNext(final Boolean isLoggedIn) {
 			if (isLoggedIn) {
-				GithubUser loggedInUser =
-						UserStore.getInstance().getUser();
+				GithubUser loggedInUser = UserStore.getInstance().getUser();
 				if (loggedInUser == null) {
-					EventPhotoGridPresenter.this.mGithubUserInteractor
-							.execute(new GithubUserSubscriber());
+					EventPhotoGridPresenter.this.mGithubUserInteractor.execute(
+							new GithubUserSubscriber());
 				} else {
 					mEventPhotoGridView.showChoosePhotoAppDialog();
 				}
@@ -213,21 +220,21 @@ public class EventPhotoGridPresenter implements Presenter {
 
 	final class EventPhotoGridSubscriber extends Subscriber<List<Photo>> {
 
-        @Override
-        public void onCompleted() {
-            EventPhotoGridPresenter.this.hideViewLoading();
-        }
+		@Override
+		public void onCompleted() {
+			EventPhotoGridPresenter.this.hideViewLoading();
+		}
 
-        @Override
-        public void onError(final Throwable e) {
-            EventPhotoGridPresenter.this.hideViewLoading();
-            EventPhotoGridPresenter.this.showError();
-        }
+		@Override
+		public void onError(final Throwable e) {
+			EventPhotoGridPresenter.this.hideViewLoading();
+			EventPhotoGridPresenter.this.showError();
+		}
 
-        @Override
-        public void onNext(final List<Photo> photos) {
-            EventPhotoGridPresenter.this.showPhotos(photos);
-        }
-    }
+		@Override
+		public void onNext(final List<Photo> photos) {
+			EventPhotoGridPresenter.this.showPhotos(photos);
+		}
+	}
 
 }
