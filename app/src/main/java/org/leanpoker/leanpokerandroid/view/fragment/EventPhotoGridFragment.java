@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.leanpoker.leanpokerandroid.R;
 import org.leanpoker.leanpokerandroid.model.PhotoModel;
 import org.leanpoker.leanpokerandroid.presenter.EventPhotoGridPresenter;
@@ -78,14 +80,14 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
 	@Override
 	public void onResume() {
-		super.onResume();
 		mEventPhotoGridPresenter.resume();
+		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		super.onPause();
 		mEventPhotoGridPresenter.pause();
+		super.onPause();
 	}
 
 	@Override
@@ -97,6 +99,8 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 	@Override
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 		if (mEventPhotoGridPresenter == null) {
+			Crashlytics.logException(new Exception(
+					"EventPhotoGridFragment's onActivityResult called with an uninitialized presenter"));
 			mEventPhotoGridPresenter = new EventPhotoGridPresenter(mEventId);
 			mEventPhotoGridPresenter.setEventPhotoGridView(this);
 		}
