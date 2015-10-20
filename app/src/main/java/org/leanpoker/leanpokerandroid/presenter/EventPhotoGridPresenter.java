@@ -130,8 +130,12 @@ public class EventPhotoGridPresenter implements Presenter {
 	}
 
 	private void showPhotos(List<Photo> photos) {
-		mPhotoModels = (ArrayList<PhotoModel>) mEventPhotoGridDataMapper.transform(photos);
-		mEventPhotoGridView.renderPhotoList(mPhotoModels);
+		if (photos == null || photos.size() == 0) {
+			mEventPhotoGridView.renderNoPhotoAvailable();
+		} else {
+			mPhotoModels = (ArrayList<PhotoModel>) mEventPhotoGridDataMapper.transform(photos);
+			mEventPhotoGridView.renderPhotoList(mPhotoModels);
+		}
 	}
 
 	private void hideViewLoading() {

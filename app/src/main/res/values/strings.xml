@@ -4,4 +4,5 @@
     <string name="events_activity_label">Events</string>
     <string name="login_activity_label">Login</string>
     <string name="title_choose_message">Choose an app</string>
+    <string name="no_photos_yet">No photos yet.</string>
 </resources>

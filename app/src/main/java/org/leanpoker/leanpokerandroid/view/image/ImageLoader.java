@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.leanpoker.leanpokerandroid.MainApplication;
+import org.leanpoker.leanpokerandroid.R;
 
 /**
  * Created by tmolnar on 21/09/15.
@@ -31,11 +31,11 @@ public class ImageLoader {
         return mInstance;
     }
 
-    public void load(String url, ImageView imageView) {
+    public void load(String url, ImageView imageView, int placeHolderId) {
         if (mPicasso == null) {
             throw new IllegalStateException("Tried to access un-initialized Picasso instance");
         }
-        mPicasso.load(url).fit().centerCrop().into(imageView);
+        mPicasso.load(url).fit().centerCrop().placeholder(placeHolderId).into(imageView);
     }
 
     public void load(String url, ImageView imageView, Callback callback) {

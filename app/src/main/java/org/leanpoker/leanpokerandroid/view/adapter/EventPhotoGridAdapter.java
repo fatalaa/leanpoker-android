@@ -79,7 +79,7 @@ public class EventPhotoGridAdapter extends RecyclerView.Adapter<EventPhotoGridAd
         }
 
         public void update(final PhotoModel photoModel) {
-            ImageLoader.getInstance().load(photoModel.getUrl(), mPhotoView);
+            ImageLoader.getInstance().load(photoModel.getUrl(), mPhotoView, R.color.item_event_bottom_divider);
         }
 
         @Override

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -50,6 +51,9 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
 	@Bind(R.id.recyclerview_photos)
 	RecyclerView mPhotoGridRecyclerView;
+
+	@Bind(R.id.textview_no_photos_available)
+	TextView mNoPhotosAvailableTextView;
 
 	@Bind(R.id.add_photos_fab)
 	FloatingActionButton mUploadPhotosButton;
@@ -161,7 +165,15 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 
 	@Override
 	public void renderPhotoList(final List<PhotoModel> photoModelList) {
+		mNoPhotosAvailableTextView.setVisibility(View.GONE);
+		mPhotoGridRecyclerView.setVisibility(View.VISIBLE);
 		mEventPhotoGridAdapter.setPhotoModels(photoModelList);
+	}
+
+	@Override
+	public void renderNoPhotoAvailable() {
+		mPhotoGridRecyclerView.setVisibility(View.GONE);
+		mNoPhotosAvailableTextView.setVisibility(View.VISIBLE);
 	}
 
 	@Override

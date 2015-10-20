@@ -10,4 +10,6 @@ import java.util.List;
 public interface EventPhotoGridView extends LoadDataView, LoginDialogHostView,
 		ChoosePhotoAppDialogHostView {
 	void renderPhotoList(List<PhotoModel> photoModelList);
+
+	void renderNoPhotoAvailable();
 }
