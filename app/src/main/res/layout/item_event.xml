@@ -2,32 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginBottom="10dp"
-              android:layout_marginLeft="10dp"
-              android:layout_marginRight="10dp"
-              android:layout_marginTop="10dp"
+              android:paddingLeft="@dimen/list_item_padding_left"
+              android:paddingRight="@dimen/list_item_padding_right"
+              android:paddingTop="@dimen/list_item_padding_top"
+              android:paddingBottom="@dimen/list_item_padding_bottom"
+              android:background="@drawable/divider"
               android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="90dp"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textview_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"
             android:capitalize="characters"
-            android:textSize="18sp"/>
+            android:inputType="textNoSuggestions"
+            android:textSize="16sp"/>
+
         <TextView
             android:id="@+id/textview_event_status"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:capitalize="characters"
             android:textColor="@color/green"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 
@@ -35,6 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_marginLeft="6dp"
         android:orientation="vertical">
 
         <TextView
@@ -42,24 +46,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/grey_dark"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/textview_event_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="italic"/>
-
-        <TextView
-            android:id="@+id/textview_event_faciliator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/textview_team_number"
+            android:id="@+id/textview_event_faciliator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"/>

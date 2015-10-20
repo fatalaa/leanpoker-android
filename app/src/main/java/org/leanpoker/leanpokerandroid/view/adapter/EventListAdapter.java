@@ -170,8 +170,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 		TextView mEventDateView;
 		@Bind(R.id.textview_event_faciliator)
 		TextView mFacilitatorView;
-		@Bind(R.id.textview_team_number)
-		TextView mTeamNumberTextView;
 
 		public EventModelViewHolder(final View itemView) {
 			super(itemView);
@@ -183,18 +181,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			mCityTextView.setText(eventModel.getAddress().getCity());
 			mEventNameView.setText(eventModel.getName());
 			mEventDateView.setText(eventModel.getFormattedDateTime());
-			mFacilitatorView.setText("Facilitator: " + eventModel.getFacilitator().getName());
-			updateTeamNumber(eventModel.getTeamCount());
+			mFacilitatorView.setText(eventModel.getFacilitator().getName());
 			updateEventStatus(eventModel.getEventStatus());
-		}
-
-		private void updateTeamNumber(final int teamCount) {
-			if (teamCount == 0) {
-				mTeamNumberTextView.setVisibility(View.GONE);
-			} else {
-				mTeamNumberTextView.setVisibility(View.VISIBLE);
-				mTeamNumberTextView.setText(String.valueOf(teamCount) + " Teams");
-			}
 		}
 
 		private void updateEventStatus(final EventStatus eventStatus) {

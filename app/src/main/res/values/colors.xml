@@ -5,8 +5,11 @@
     <color name="blue_light">#0288D1</color>
     <color name="blue_dark">#01579B</color>
     <color name="light_grey">#DDDDDD</color>
-    <color name="lightest_grey">#E0E0E0</color>
+    <color name="lightest_grey">#E6E6E6</color>
     <color name="green">#43A047</color>
+    <color name="grey_dark">#313131</color>
     <color name="purple_lean_poker">#33355F</color>
-    <color name="grey_dark">#212121</color>
+    <color name="item_event_divider_background">#8833355F</color>
+    <color name="item_event_bottom_divider">#1133355F</color>
+    <color name="item_event_divider_text">#EDEDED</color>
 </resources>

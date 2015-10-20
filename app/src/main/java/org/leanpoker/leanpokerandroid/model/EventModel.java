@@ -67,7 +67,7 @@ public class EventModel {
 
 	public String getMonthAndYear() {
 		// TODO(tb): 18/10/15  must be a better solution :D
-		return mDateTime.toString("MMMMMMMMMMMMM YYYY");
+		return mDateTime.toString("MMMMMMMMMMM YYYY");
 	}
 
 	public String getMonthAndDay() {
@@ -76,7 +76,7 @@ public class EventModel {
 
 	public String getFormattedDateTime() {
 		// TODO(tb): 18/10/15  must be a better solution :D
-		return mDateTime.toString("YYYY MMMMMMMMMMMM ") + getDay() + ", " + getTime();
+		return mDateTime.toString("MMM ") + getDay() + ", " + getYear();
 	}
 
 	public String getTime() {
