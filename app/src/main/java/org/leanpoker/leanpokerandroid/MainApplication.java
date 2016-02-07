@@ -5,17 +5,13 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.onesignal.OneSignal;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.orhanobut.hawk.LogLevel;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
-import com.parse.SaveCallback;
 
+import org.json.JSONObject;
 import org.leanpoker.UserManager;
-import org.leanpoker.api.NetworkManager;
 import org.leanpoker.leanpokerandroid.view.image.ImageLoader;
 
 import io.fabric.sdk.android.Fabric;
@@ -37,21 +33,33 @@ public class MainApplication extends Application {
         initManagers();
         initHawk();
         initImageLoader();
+        OneSignal
+                .startInit(this)
+                .setNotificationOpenedHandler(new OneSignal.NotificationOpenedHandler() {
+                    @Override
+                    public void notificationOpened(String message,
+                                                   JSONObject additionalData,
+                                                   boolean isActive) {
+                        try {
+                            if (additionalData != null) {
+                                if (additionalData.has("actionSelected"))
+                                    Log.d("OneSignalExample", "OneSignal notification button with id " + additionalData.getString("actionSelected") + " pressed");
+
+                                Log.d("OneSignalExample", "Full additionalData:\n" + additionalData.toString());
+                            }
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
+                    }
+                })
+                .init();
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.DEBUG, OneSignal.LOG_LEVEL.DEBUG);
     }
 
     private void initAnalytics() {
         Fabric.with(this, new Crashlytics());
         FlurryAgent.init(this, "6F94F8GCZZ2Q3NFJ4PB2");
         FlurryAgent.setCaptureUncaughtExceptions(false);
-        Parse.initialize(this, "LzrBjiRx1KJeuD6q5kAYVd0JioPEj20ZGhPZ752F",
-                "Tp249eqGUk8p4rqbCjSsKzae7bCS9zKt5laPOc3i");
-        ParsePush.subscribeInBackground("default", new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                Log.d(TAG, "done() called with: " + "e = [" + e + "]");
-            }
-        });
-        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     private void initHawk() {
