@@ -1,16 +1,13 @@
 package org.leanpoker.leanpokerandroid;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
-import com.onesignal.OneSignal;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.orhanobut.hawk.LogLevel;
 
-import org.json.JSONObject;
 import org.leanpoker.UserManager;
 import org.leanpoker.leanpokerandroid.view.image.ImageLoader;
 
@@ -33,27 +30,6 @@ public class MainApplication extends Application {
         initManagers();
         initHawk();
         initImageLoader();
-        OneSignal
-                .startInit(this)
-                .setNotificationOpenedHandler(new OneSignal.NotificationOpenedHandler() {
-                    @Override
-                    public void notificationOpened(String message,
-                                                   JSONObject additionalData,
-                                                   boolean isActive) {
-                        try {
-                            if (additionalData != null) {
-                                if (additionalData.has("actionSelected"))
-                                    Log.d("OneSignalExample", "OneSignal notification button with id " + additionalData.getString("actionSelected") + " pressed");
-
-                                Log.d("OneSignalExample", "Full additionalData:\n" + additionalData.toString());
-                            }
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    }
-                })
-                .init();
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.DEBUG, OneSignal.LOG_LEVEL.DEBUG);
     }
 
     private void initAnalytics() {
