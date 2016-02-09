@@ -1,8 +1,6 @@
 package org.leanpoker.api;
 
-import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -13,6 +11,7 @@ import com.squareup.okhttp.Response;
 import org.leanpoker.EventsCache;
 import org.leanpoker.EventsCache.ValidationStrategy;
 import org.leanpoker.JsonMapper;
+import org.leanpoker.api.constants.GithubAuthService;
 import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.api.constants.LeanPokerConstants;
 import org.leanpoker.api.constants.UploadCareConstants;
@@ -32,14 +31,16 @@ import org.leanpoker.data.response.GithubEmailsResponseModel;
 import org.leanpoker.data.response.UploadCareFileUploadResponseModel;
 import org.leanpoker.data.store.TokenStore;
 import org.leanpoker.data.store.UserStore;
+import org.leanpoker.di.DaggerNetworkComponent;
+import org.leanpoker.di.NetworkComponent;
+import org.leanpoker.di.module.NetworkModule;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import okio.Buffer;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
@@ -51,57 +52,29 @@ public class NetworkManager implements LeanPokerApi, UploadCareApi, GithubApi {
 
 	private static final String         TAG       = NetworkManager.class.getSimpleName();
 	private static       NetworkManager mInstance = new NetworkManager();
-	private final OkHttpClient mHttpClient;
 
-	private final LeanPokerService mLeanPokerService;
-	private final GithubService    mGithubOauthService;
-	private final GithubService    mGithubApiService;
+	@Inject
+	protected LeanPokerService mLeanPokerService;
 
-	private static String bodyToString(final Request request) {
+	@Inject
+	protected GithubAuthService mGithubOauthService;
 
-		try {
-			final Request copy = request.newBuilder().build();
-			final Buffer buffer = new Buffer();
-			copy.body().writeTo(buffer);
-			return buffer.readUtf8();
-		} catch (final IOException e) {
-			return "did not work";
-		}
-	}
+	@Inject
+	protected GithubService    mGithubApiService;
+
+	@Inject
+	protected UploadCareService mUploadCareService;
+
+	@Inject
+	protected OkHttpClient mHttpClient;
 
 	private NetworkManager() {
 
-		mHttpClient = new OkHttpClient();
-		mHttpClient.interceptors().add(new Interceptor() {
-			@Override
-			public Response intercept(final Chain chain) throws IOException {
-				//				Log.d(TAG, bodyToString(chain.request()));
-				return chain.proceed(chain.request());
-			}
-		});
-		final Gson gson = JsonMapper.GSON;
-		final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
-
-		final Retrofit.Builder leanPokerBuilder = new Retrofit.Builder();
-		leanPokerBuilder.baseUrl(LeanPokerConstants.BASE_URL);
-		leanPokerBuilder.client(mHttpClient);
-		leanPokerBuilder.addConverterFactory(gsonConverterFactory);
-
-		mLeanPokerService = leanPokerBuilder.build().create(LeanPokerService.class);
-
-		final Retrofit.Builder githubBuilder = new Retrofit.Builder();
-		githubBuilder.baseUrl(GithubConstants.GITHUB_OAUTH_API_BASE_URL);
-		githubBuilder.client(mHttpClient);
-		githubBuilder.addConverterFactory(gsonConverterFactory);
-
-		mGithubOauthService = githubBuilder.build().create(GithubService.class);
-
-		final Retrofit.Builder githubApiBuilder = new Retrofit.Builder();
-		githubApiBuilder.baseUrl(GithubConstants.GITHUB_API_BASE_URL);
-		githubApiBuilder.client(mHttpClient);
-		githubApiBuilder.addConverterFactory(gsonConverterFactory);
-
-		mGithubApiService = githubApiBuilder.build().create(GithubService.class);
+		NetworkComponent networkComponent =
+				DaggerNetworkComponent.builder()
+						.networkModule(new NetworkModule())
+						.build();
+		networkComponent.inject(this);
 	}
 
 	public static NetworkManager getInstance() {
