@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.leanpoker.api.NetworkManager;
-import org.leanpoker.data.model.GithubUser;
 import org.leanpoker.data.model.UploadedFile;
 import org.leanpoker.data.store.TokenStore;
 import org.leanpoker.data.store.UserStore;
@@ -14,8 +13,8 @@ import org.leanpoker.domain.util.PathMagic;
 
 import java.io.File;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 
 /**
  * Created by tmolnar on 01/10/15.
@@ -56,15 +55,15 @@ public class ImageUploadInteractor extends BaseInteractor {
         return NetworkManager
                 .getInstance()
                 .uploadPhotoToUploadCare(file, mimeType)
-                .map(new Func1<UploadedFile,String>() {
+                .map(new Function<UploadedFile,String>() {
                     @Override
-                    public String call(final UploadedFile uploadedFile) {
+                    public String apply(final UploadedFile uploadedFile) {
                         return String.format("https://www.ucarecdn.com/%s/", uploadedFile.getUuid());
                     }
                 })
-                .map(new Func1<String, Boolean>() {
+                .map(new Function<String, Boolean>() {
                     @Override
-                    public Boolean call(final String imageUrl) {
+                    public Boolean apply(final String imageUrl) {
                         return NetworkManager.getInstance().uploadPhotoToLeanPoker(
                                 mEventId,
                                 UserStore.getInstance().getUser().getLogin(),

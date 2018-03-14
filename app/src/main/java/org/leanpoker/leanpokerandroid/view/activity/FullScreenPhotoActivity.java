@@ -11,10 +11,9 @@ import org.leanpoker.leanpokerandroid.model.PhotoModel;
 import org.leanpoker.leanpokerandroid.view.adapter.FullScreenPhotoPagerAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -22,7 +21,7 @@ import butterknife.ButterKnife;
  */
 public class FullScreenPhotoActivity extends BaseActivity {
 
-    @Bind(R.id.fullscreen_photo_viewpager)
+    @BindView(R.id.fullscreen_photo_viewpager)
     ViewPager                           mViewPager;
     private FullScreenPhotoPagerAdapter mFullScreenPhotoPagerAdapter;
 

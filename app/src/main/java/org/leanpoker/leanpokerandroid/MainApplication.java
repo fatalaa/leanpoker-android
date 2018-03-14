@@ -3,7 +3,6 @@ package org.leanpoker.leanpokerandroid;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
-import com.flurry.android.FlurryAgent;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.orhanobut.hawk.LogLevel;
@@ -26,7 +25,9 @@ public class MainApplication extends Application {
     }
 
     private void init() {
-        initAnalytics();
+        if (BuildConfig.DEBUG) {
+            initAnalytics();
+        }
         initManagers();
         initHawk();
         initImageLoader();
@@ -34,8 +35,6 @@ public class MainApplication extends Application {
 
     private void initAnalytics() {
         Fabric.with(this, new Crashlytics());
-        FlurryAgent.init(this, "6F94F8GCZZ2Q3NFJ4PB2");
-        FlurryAgent.setCaptureUncaughtExceptions(false);
     }
 
     private void initHawk() {

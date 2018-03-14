@@ -5,7 +5,7 @@ import org.leanpoker.data.model.Photo;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by tmolnar on 12/09/15.

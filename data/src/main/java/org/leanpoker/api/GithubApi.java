@@ -3,7 +3,7 @@ package org.leanpoker.api;
 import org.leanpoker.data.model.AccessToken;
 import org.leanpoker.data.model.GithubUser;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by tmolnar on 17/09/15.

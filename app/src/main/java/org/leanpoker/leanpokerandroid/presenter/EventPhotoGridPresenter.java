@@ -24,7 +24,8 @@ import org.leanpoker.leanpokerandroid.view.dialog.ChoosePhotoAppDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by tmolnar on 21/09/15.
@@ -150,13 +151,13 @@ public class EventPhotoGridPresenter implements Presenter {
 		mEventPhotoGridView.showLoadingError("Photos cannot be loaded");
 	}
 
-	final class ImageUploadSubscriber extends Subscriber<Boolean> {
+	final class ImageUploadSubscriber extends DisposableObserver<Boolean> {
 
 		private final String TAG = ImageUploadSubscriber.class.getSimpleName();
 
 		@Override
-		public void onCompleted() {
-			Log.d(TAG, "COMPLETED");
+		public void onComplete() {
+			Log.d(TAG, "COMPLETE");
 		}
 
 		@Override
@@ -176,10 +177,10 @@ public class EventPhotoGridPresenter implements Presenter {
 		}
 	}
 
-	final class GithubUserSubscriber extends Subscriber<GithubUser> {
+	final class GithubUserSubscriber extends DisposableObserver<GithubUser> {
 
 		@Override
-		public void onCompleted() {
+		public void onComplete() {
 
 		}
 
@@ -195,9 +196,9 @@ public class EventPhotoGridPresenter implements Presenter {
 		}
 	}
 
-	final class IsUserLoggedInSubscriber extends Subscriber<Boolean> {
+	final class IsUserLoggedInSubscriber extends DisposableObserver<Boolean> {
 		@Override
-		public void onCompleted() {
+		public void onComplete() {
 
 		}
 
@@ -222,10 +223,10 @@ public class EventPhotoGridPresenter implements Presenter {
 		}
 	}
 
-	final class EventPhotoGridSubscriber extends Subscriber<List<Photo>> {
+	final class EventPhotoGridSubscriber extends DisposableObserver<List<Photo>> {
 
 		@Override
-		public void onCompleted() {
+		public void onComplete() {
 			EventPhotoGridPresenter.this.hideViewLoading();
 		}
 

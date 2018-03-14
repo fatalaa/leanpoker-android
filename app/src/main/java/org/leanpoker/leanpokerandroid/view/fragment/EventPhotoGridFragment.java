@@ -28,7 +28,7 @@ import org.leanpoker.leanpokerandroid.view.dialog.LoginDialog.LoginDialogListene
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -49,13 +49,13 @@ public class EventPhotoGridFragment extends BaseFragment implements EventPhotoGr
 	public static final int REQUEST_IMAGE_CAPTURE   = 1;
 	public static final int REQUEST_GALLERY_CAPTURE = 2;
 
-	@Bind(R.id.recyclerview_photos)
+	@BindView(R.id.recyclerview_photos)
 	RecyclerView mPhotoGridRecyclerView;
 
-	@Bind(R.id.textview_no_photos_available)
+	@BindView(R.id.textview_no_photos_available)
 	TextView mNoPhotosAvailableTextView;
 
-	@Bind(R.id.add_photos_fab)
+	@BindView(R.id.add_photos_fab)
 	FloatingActionButton mUploadPhotosButton;
 
 	public EventPhotoGridFragment() {

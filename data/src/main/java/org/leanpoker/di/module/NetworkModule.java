@@ -1,7 +1,7 @@
 package org.leanpoker.di.module;
 
-import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.OkHttpClient;
+
+import com.orhanobut.hawk.LogLevel;
 
 import org.leanpoker.JsonMapper;
 import org.leanpoker.api.GithubService;
@@ -12,10 +12,16 @@ import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.api.constants.LeanPokerConstants;
 import org.leanpoker.api.constants.UploadCareConstants;
 
+import java.io.IOException;
+
 import dagger.Module;
 import dagger.Provides;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by tmolnar on 07/02/16.
@@ -30,7 +36,9 @@ public class NetworkModule {
 
     @Provides
     public OkHttpClient provideHttpClient() {
-        return new OkHttpClient();
+        return new OkHttpClient.Builder()
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .build();
     }
 
     @Provides

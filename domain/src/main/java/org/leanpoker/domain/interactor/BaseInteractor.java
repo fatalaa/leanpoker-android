@@ -1,11 +1,11 @@
 package org.leanpoker.domain.interactor;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by tbalogh on 06/09/15.
@@ -16,22 +16,24 @@ Abstract base class of Interactors. Interactors are not generalized yet but they
  */
 public abstract class BaseInteractor {
 
-	private Subscription mSubscription;
+	private CompositeDisposable mSubscription;
 
 	protected BaseInteractor() {
-		mSubscription = Subscriptions.empty();
+		mSubscription = new CompositeDisposable();
 	}
 
-	public void execute(final Subscriber useCaseSubscriber) {
-		mSubscription = this.buildInteractorObservable()
-		                    .subscribeOn(Schedulers.io())
-		                    .observeOn(AndroidSchedulers.mainThread())
-		                    .subscribe(useCaseSubscriber);
+	public void execute(final Observer useCaseSubscriber) {
+
+		Observable observable = this.buildInteractorObservable()
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread());
+
+		mSubscription.add((Disposable) observable.subscribeWith(useCaseSubscriber));
 	}
 
 	public void unsubscribe() {
-		if (!mSubscription.isUnsubscribed()) {
-			mSubscription.unsubscribe();
+		if (!mSubscription.isDisposed()) {
+			mSubscription.dispose();
 		}
 	}
 

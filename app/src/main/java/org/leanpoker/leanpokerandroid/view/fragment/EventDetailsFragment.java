@@ -12,7 +12,7 @@ import org.leanpoker.leanpokerandroid.model.EventDetailsModel;
 import org.leanpoker.leanpokerandroid.presenter.EventDetailsPresenter;
 import org.leanpoker.leanpokerandroid.view.EventDetailsView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  */
 public class EventDetailsFragment extends EventFragment implements EventDetailsView {
 
-	@Bind(R.id.event_detail_id)
+	@BindView(R.id.event_detail_id)
 	TextView mEventDetailIdTextView;
 
 	private String                mEventId;

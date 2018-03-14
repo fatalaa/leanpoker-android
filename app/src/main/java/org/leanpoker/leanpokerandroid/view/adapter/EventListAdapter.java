@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -160,15 +160,15 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 	public class EventModelViewHolder extends RecyclerView.ViewHolder implements
 			View.OnClickListener {
-		@Bind(R.id.textview_city)
+		@BindView(R.id.textview_city)
 		TextView mCityTextView;
-		@Bind(R.id.textview_event_status)
+		@BindView(R.id.textview_event_status)
 		TextView mEventStatusTextView;
-		@Bind(R.id.textview_event_name)
+		@BindView(R.id.textview_event_name)
 		TextView mEventNameView;
-		@Bind(R.id.textview_event_date)
+		@BindView(R.id.textview_event_date)
 		TextView mEventDateView;
-		@Bind(R.id.textview_event_faciliator)
+		@BindView(R.id.textview_event_faciliator)
 		TextView mFacilitatorView;
 
 		public EventModelViewHolder(final View itemView) {
@@ -210,7 +210,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 	public class DividerDateViewHolder extends RecyclerView.ViewHolder {
 
-		@Bind(R.id.txt_date_divider)
+		@BindView(R.id.txt_date_divider)
 		TextView mDateDividerTextView;
 
 		public DividerDateViewHolder(final View itemView) {

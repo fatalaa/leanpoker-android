@@ -5,7 +5,7 @@ import org.leanpoker.domain.interactor.EventDetailsInteractor;
 import org.leanpoker.leanpokerandroid.modelmapper.EventDetailsModelMapper;
 import org.leanpoker.leanpokerandroid.view.EventDetailsView;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by tbalogh on 19/09/15.
@@ -29,16 +29,16 @@ public class EventDetailsPresenter implements Presenter {
 		mEventDetailsInteractor.execute(new EventDetailsSubscriber());
 	}
 
-	final class EventDetailsSubscriber extends Subscriber<Event> {
-
-		@Override
-		public void onCompleted() {
-
-		}
+	final class EventDetailsSubscriber extends DisposableObserver<Event> {
 
 		@Override
 		public void onError(final Throwable e) {
 			mEventDetailsView.showError("Couldn't load details!");
+		}
+
+		@Override
+		public void onComplete() {
+
 		}
 
 		@Override

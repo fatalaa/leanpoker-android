@@ -16,7 +16,7 @@ import org.leanpoker.leanpokerandroid.view.LoginView;
 
 import java.util.UUID;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -27,7 +27,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private WebViewClient mWebViewClient;
     private LoginPresenter mPresenter;
 
-    @Bind(R.id.login_webview)
+    @BindView(R.id.login_webview)
     protected WebView mWebView;
 
     @Nullable

@@ -16,7 +16,7 @@ import org.leanpoker.leanpokerandroid.presenter.FullScreenPhotoPresenter;
 import org.leanpoker.leanpokerandroid.view.FullScreenPhotoView;
 import org.leanpoker.leanpokerandroid.view.image.ImageLoader;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -30,16 +30,16 @@ public class FullScreenPhotoFragment extends BaseFragment implements FullScreenP
     private FullScreenPhotoPresenter    mFullScreenPhotoPresenter;
     private PhotoModel                  mPhotoModel;
 
-    @Bind(R.id.fullscreen_photo)
+    @BindView(R.id.fullscreen_photo)
     PhotoView mPhotoView;
 
-    @Bind(R.id.fullscreen_photo_overlay)
+    @BindView(R.id.fullscreen_photo_overlay)
     LinearLayout mOverlay;
 
-    @Bind(R.id.fullscreen_photo_uploaded_at)
+    @BindView(R.id.fullscreen_photo_uploaded_at)
     TextView mUploadedAt;
 
-    @Bind(R.id.fullscreen_photo_uploaded_by)
+    @BindView(R.id.fullscreen_photo_uploaded_by)
     TextView mUploadedBy;
 
     public FullScreenPhotoFragment() {}

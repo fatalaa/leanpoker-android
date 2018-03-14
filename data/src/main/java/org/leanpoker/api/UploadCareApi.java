@@ -4,7 +4,7 @@ import org.leanpoker.data.model.UploadedFile;
 
 import java.io.File;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by tmolnar on 14/09/15.

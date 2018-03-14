@@ -4,9 +4,9 @@ import org.leanpoker.api.constants.GithubConstants;
 import org.leanpoker.data.response.GithubAuthenticatedUserResponseModel;
 import org.leanpoker.data.response.GithubEmailsResponseModel;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Header;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 
 /**
  * Created by tmolnar on 17/09/15.

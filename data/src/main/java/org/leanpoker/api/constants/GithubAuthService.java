@@ -2,10 +2,10 @@ package org.leanpoker.api.constants;
 
 import org.leanpoker.data.response.GithubAccessTokenResponseModel;
 
-import retrofit.Call;
-import retrofit.http.Header;
-import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by tmolnar on 07/02/16.

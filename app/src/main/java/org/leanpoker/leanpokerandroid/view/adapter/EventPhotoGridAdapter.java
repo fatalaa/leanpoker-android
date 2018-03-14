@@ -13,7 +13,7 @@ import org.leanpoker.leanpokerandroid.view.image.ImageLoader;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -69,7 +69,7 @@ public class EventPhotoGridAdapter extends RecyclerView.Adapter<EventPhotoGridAd
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.imageview_photo)
+        @BindView(R.id.imageview_photo)
         ImageView mPhotoView;
 
         public ViewHolder(final View itemView) {

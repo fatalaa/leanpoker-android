@@ -8,7 +8,9 @@ import org.leanpoker.domain.interactor.LoginInteractor;
 import org.leanpoker.leanpokerandroid.navigator.Navigator;
 import org.leanpoker.leanpokerandroid.view.LoginView;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by tmolnar on 18/09/15.
@@ -43,16 +45,16 @@ public class LoginPresenter implements Presenter {
 	    mInteractor.unsubscribe();
     }
 
-    final class LoginSubscriber extends Subscriber<AccessToken> {
-
-        @Override
-        public void onCompleted() {
-            Log.i("ONCOMPLETE", "ASD");
-        }
+    final class LoginSubscriber extends DisposableObserver<AccessToken> {
 
         @Override
         public void onError(final Throwable e) {
             Log.e("ASD", e.getMessage());
+        }
+
+        @Override
+        public void onComplete() {
+            Log.i("ONCOMPLETE", "ASD");
         }
 
         @Override

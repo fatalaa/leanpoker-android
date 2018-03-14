@@ -1,6 +1,7 @@
 package org.leanpoker.leanpokerandroid.view.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,7 @@ import org.leanpoker.leanpokerandroid.view.adapter.EventListLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -33,10 +34,10 @@ public class EventListFragment extends BaseFragment implements EventListView,
 	private   EventListPresenter     mEventListPresenter;
 	protected EventListAdapter       mEventListAdapter;
 
-	@Bind(R.id.pull_to_refresh)
+	@BindView(R.id.pull_to_refresh)
 	SwipeRefreshLayout mSwipeRefreshLayout;
 
-	@Bind(R.id.recyclerview_events)
+	@BindView(R.id.recyclerview_events)
 	RecyclerView mEventsRecyclerView;
 
 	@Override
@@ -46,8 +47,8 @@ public class EventListFragment extends BaseFragment implements EventListView,
 
 	@Nullable
 	@Override
-	public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-	                         final Bundle savedInstanceState) {
+	public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container,
+							 final Bundle savedInstanceState) {
 		final View fragmentView = inflater.inflate(R.layout.fragment_event_list, container, false);
 		ButterKnife.bind(this, fragmentView);
 		setupUI();

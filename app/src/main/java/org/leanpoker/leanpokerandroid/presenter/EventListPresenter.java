@@ -7,7 +7,7 @@ import org.leanpoker.leanpokerandroid.view.EventListView;
 
 import java.util.List;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by tbalogh on 06/09/15.
@@ -61,10 +61,10 @@ public class EventListPresenter implements Presenter {
 		mEventListView.showLoadingError("Events can't be loaded!");
 	}
 
-	final class EventListSubscriber extends Subscriber<List<Event>> {
+	final class EventListSubscriber extends DisposableObserver<List<Event>> {
 
 		@Override
-		public void onCompleted() {
+		public void onComplete() {
 			EventListPresenter.this.hideViewLoading();
 		}
 
